@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Volume2, BookMarked, Check, Shuffle, RotateCcw } from 'lucide-react'
+import { Volume2, BookMarked, Check, Shuffle, RotateCcw, Search } from 'lucide-react'
 import { PageHeader } from '../../components/Layout'
 import SpeakerButton from '../../components/SpeakerButton'
 import { useStore } from '../../stores/useStore'
@@ -55,7 +55,15 @@ function Browse() {
   const [scene, setScene] = useState(sceneVocab[0].scene)
   const [topic, setTopic] = useState(topicVocab[0].topic)
   const [view, setView] = useState<'scene' | 'topic'>('scene')
+  const [q, setQ] = useState('')
   const list = view === 'scene' ? sceneVocab.find((g) => g.scene === scene)!.words : topicVocab.find((g) => g.topic === topic)!.words
+  const filtered = useMemo(() => {
+    if (!q.trim()) return list
+    const kw = q.trim().toLowerCase()
+    return list.filter(
+      (w) => w.word.toLowerCase().includes(kw) || w.chinese.includes(q.trim()) || w.phonetic.toLowerCase().includes(kw)
+    )
+  }, [list, q])
   return (
     <div>
       <div className="flex gap-2 mb-3 flex-wrap items-center">
@@ -68,25 +76,33 @@ function Browse() {
             <option key={g.scene || g.topic} value={g.scene || g.topic}>{g.scene || g.topic}</option>
           ))}
         </select>
-        <span className="text-xs text-gray-400">{list.length} 词</span>
+        <div className="relative flex-1 min-w-[160px]">
+          <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="搜索英文 / 中文 / 音标" className="inp w-full pl-9" />
+        </div>
+        <span className="text-xs text-gray-400 whitespace-nowrap">{filtered.length} 词</span>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        {list.map((w, i) => (
-          <div key={i} className="bg-white rounded-card shadow-card p-3 flex items-center justify-between gap-2">
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="font-semibold text-gray-800">{w.word}</span>
-                <SpeakerButton text={w.word} category="ielts" size={13} />
-                <span className="text-xs text-gray-400">{w.phonetic}</span>
-                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-cream text-gray-500">{w.pos}</span>
+      {filtered.length === 0 ? (
+        <div className="text-center text-gray-400 py-12">没有匹配的单词，换个关键词试试～</div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {filtered.map((w, i) => (
+            <div key={i} className="bg-white rounded-card shadow-card p-3 flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-semibold text-gray-800">{w.word}</span>
+                  <SpeakerButton text={w.word} category="ielts" size={13} />
+                  <span className="text-xs text-gray-400">{w.phonetic}</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-cream text-gray-500">{w.pos}</span>
+                </div>
+                <div className="text-sm text-gray-600">{w.chinese}</div>
+                <div className="text-xs text-gray-400 truncate">{w.example}</div>
               </div>
-              <div className="text-sm text-gray-600">{w.chinese}</div>
-              <div className="text-xs text-gray-400 truncate">{w.example}</div>
+              <AddBtn w={w} />
             </div>
-            <AddBtn w={w} />
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
