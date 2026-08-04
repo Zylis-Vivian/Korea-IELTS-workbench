@@ -1,0 +1,39 @@
+{
+  "name": "lavender-study",
+  "private": true,
+  "version": "1.1.0",
+  "type": "module",
+  "description": "韩语 + 雅思双轨学习工作台（含多方案 TTS 发音引擎）",
+  "scripts": {
+    "dev": "concurrently -k -n VITE,API -c magenta,cyan \"vite\" \"node server/index.js\"",
+    "server": "node server/index.js",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "edge-tts-universal": "^1.4.0",
+    "express": "^4.19.2",
+    "framer-motion": "^11.3.19",
+    "lucide-react": "^0.417.0",
+    "pdfjs-dist": "^4.10.38",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0",
+    "recharts": "^2.12.7",
+    "zustand": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "concurrently": "^8.2.2",
+    "dotenv": "^16.4.5",
+    "postcss": "^8.4.40",
+    "tailwindcss": "^3.4.7",
+    "typescript": "^5.5.4",
+    "vite": "^5.3.5"
+  }
+}

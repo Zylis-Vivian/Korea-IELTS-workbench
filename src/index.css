@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --lavender: #b19cd9;
+  --lavender-light: #e6dff5;
+  --lavender-deep: #7b5ea7;
+  --cream: #fff8f0;
+  --mint: #a8e6cf;
+  --coral: #ff8b94;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Noto Sans SC', 'PingFang SC', 'Inter', sans-serif;
+  background: var(--cream);
+  color: #3a3346;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 薰衣草花瓣飘落背景（低性能消耗） */
+.petal-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.petal {
+  position: absolute;
+  top: -10%;
+  font-size: 14px;
+  opacity: 0.35;
+  animation: fall linear infinite;
+}
+@keyframes fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+  }
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--lavender);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.korean-font {
+  font-family: 'Nanum Gothic', sans-serif;
+}
+
+/* 富文本讲解通用样式 */
+.rich h1,
+.rich h2,
+.rich h3,
+.rich h4 {
+  font-weight: 700;
+  color: var(--lavender-deep);
+  margin: 12px 0 8px;
+}
+.rich h1 {
+  font-size: 22px;
+}
+.rich h2 {
+  font-size: 19px;
+}
+.rich h3 {
+  font-size: 17px;
+}
+.rich p {
+  margin: 8px 0;
+  line-height: 1.8;
+}
+.rich ul,
+.rich ol {
+  margin: 8px 0;
+  padding-left: 22px;
+  line-height: 1.8;
+}
+.rich table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
+  font-size: 14px;
+}
+.rich th,
+.rich td {
+  border: 1px solid var(--lavender-light);
+  padding: 8px 10px;
+  text-align: left;
+}
+.rich th {
+  background: var(--lavender-light);
+  color: var(--lavender-deep);
+}
+.rich blockquote {
+  border-left: 4px solid var(--lavender);
+  background: #faf6ff;
+  margin: 10px 0;
+  padding: 8px 14px;
+  border-radius: 0 8px 8px 0;
+  color: #6b6280;
+}
+.rich code {
+  background: #f3eefb;
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-family: 'Nanum Gothic', monospace;
+  color: var(--lavender-deep);
+}
+.rich .kw {
+  color: var(--lavender-deep);
+  border-bottom: 1px dashed var(--lavender);
+  cursor: pointer;
+}
+
+.fade-in {
+  animation: fadeIn 0.35s ease;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 表单输入框通用样式 */
+.inp {
+  width: 100%;
+  background: var(--cream);
+  border: 1px solid var(--lavender-light);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.inp:focus {
+  border-color: var(--lavender);
+}
