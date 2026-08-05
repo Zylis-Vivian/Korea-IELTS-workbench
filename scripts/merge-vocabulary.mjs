@@ -311,6 +311,13 @@ function normalize(record, fileName) {
   const synonym = pick(lookup, 'synonym')
   const part = pick(lookup, 'part')
 
+  const originType = pick(lookup, 'originType')
+  const originDetail = pick(lookup, 'originDetail')
+  const posZh = pick(lookup, 'posZh')
+  const posKo = pick(lookup, 'posKo')
+  const pronunciation = pick(lookup, 'pronunciation')
+  const grammar = pick(lookup, 'grammar')
+
   const hint = sourceHint(fileName)
 
   // 1) 口语题库
@@ -351,12 +358,18 @@ function normalize(record, fileName) {
         english: english || '',
         chinese: chinese || '',
         romanization: rom,
-        partOfSpeech: pos || '',
+        partOfSpeech: pos || posZh || '',
+        posZh: posZh || pos || '',
+        posKo: posKo || '',
+        originType: originType || '',
+        originDetail: originDetail || grammar || '',
+        pronunciation: pronunciation || phonetic || '',
         level: level || '',
         topic: topic || '',
         book: book || '',
-        phonetic: phonetic || '',
+        phonetic: phonetic || pronunciation || '',
         exampleSentences: examples,
+        grammar: grammar || originDetail || '',
         source
       }
     }
@@ -419,6 +432,11 @@ function parseYonseiJSON(data, fileName) {
         chinese: (r.chinese || '').trim(),
         romanization: romanizeKo(korean), // 保证 100% 罗马音覆盖
         partOfSpeech: (r.pos_zh || '').trim(),
+        posZh: (r.pos_zh || '').trim(),
+        posKo: (r.pos || '').trim(),
+        originType: (r.origin_type || '').trim(),
+        originDetail: (r.origin_detail || '').trim(),
+        pronunciation: (r.pronunciation || '').trim(),
         level: '', // 延世源无 TOPIK 等级，不硬套
         topic,
         book: `延世韩国语${v}`,
@@ -748,7 +766,9 @@ function finalizeArr(items, prefix, shape) {
 
 const KOREAN_SHAPE = (r) => ({
   korean: r.korean, english: r.english, chinese: r.chinese, romanization: r.romanization,
-  partOfSpeech: r.partOfSpeech, level: r.level, topic: r.topic, book: r.book,
+  partOfSpeech: r.partOfSpeech, posZh: r.posZh, posKo: r.posKo,
+  originType: r.originType, originDetail: r.originDetail, pronunciation: r.pronunciation,
+  level: r.level, topic: r.topic, book: r.book,
   phonetic: r.phonetic, exampleSentences: r.exampleSentences || [], grammar: r.grammar || ''
 })
 const IELTS_SHAPE = (r) => ({

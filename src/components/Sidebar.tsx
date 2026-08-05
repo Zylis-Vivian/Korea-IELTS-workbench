@@ -20,6 +20,7 @@ import {
     Settings as SettingsIcon,
     Flower2,
     Award,
+    GraduationCap,
 } from 'lucide-react'
 import { useStore } from '../stores/useStore'
 
@@ -34,6 +35,7 @@ const korean: NavItem[] = [
   { to: '/korean/alphabet', label: '四十音图', icon: Grid3x3 },
   { to: '/korean/daily', label: '每日学习', icon: CalendarDays },
   { to: '/korean/vocab', label: '词汇学习', icon: BookOpen },
+  { to: '/korean/yonsei', label: '延世韩国语', icon: GraduationCap },
   { to: '/korean/grammar', label: '语法大全', icon: ScrollText },
   { to: '/korean/dialogue', label: '情景对话', icon: MessagesSquare },
   { to: '/korean/pronunciation', label: '发音拼写法则', icon: AudioLines },

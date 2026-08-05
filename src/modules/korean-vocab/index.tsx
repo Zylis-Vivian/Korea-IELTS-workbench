@@ -1,12 +1,12 @@
 import { useMemo, useState, useEffect } from 'react'
-import { Search, RotateCcw, Check, X, BookOpen } from 'lucide-react'
+import { Search, RotateCcw, Check, X } from 'lucide-react'
 import { PageHeader } from '../../components/Layout'
 import SpeakerButton from '../../components/SpeakerButton'
 import AddWordButton from '../../components/AddWordButton'
 import WordDeck from '../../components/WordDeck'
 import DictionarySwitcher from '../../components/DictionarySwitcher'
 import { VOCAB } from '../../data/vocab'
-import { YONSEI_TOPICS, YONSEI_WORDS, type KoreanTopic, type DictMeta } from '../../data/yonseiVocab'
+import { type KoreanTopic, type DictMeta } from '../../data/yonseiVocab'
 import { FLASH_TOPICS, FLASH_WORDS } from '../../data/flashcardsVocab'
 import { TOPIC_TOPICS, TOPIC_WORDS } from '../../data/topikVocab'
 import type { VocabWord } from '../../types'
@@ -17,7 +17,7 @@ const LEVELS = ['1', '2', '3', '4', '5', '6']
 const DAILY_COUNT = 12
 const STUDY_COUNT = 12
 type Mode = 'preview' | 'study' | 'daily' | 'all'
-type Lib = 'core' | 'yonsei' | 'flashcards' | 'topik'
+type Lib = 'core' | 'flashcards' | 'topik'
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -31,10 +31,10 @@ function shuffle<T>(arr: T[]): T[] {
 // 核心词库（VOCAB）的结构与 KoreanTopic 同形，统一按 KoreanTopic 处理
 const CORE_TOPICS = VOCAB as unknown as KoreanTopic[]
 
-// 四套韩语词库数据源（核心 / 延世 / flashcards / TOPIK），不修改 VOCAB 现有词条，仅切换。
+// 三套韩语词库数据源（核心 / flashcards / TOPIK），不修改 VOCAB 现有词条，仅切换。
+// 延世韩国语已独立为 /korean/yonsei 教材页，避免四库混用导致面板混乱。
 const LIB_MAP: Record<Lib, KoreanTopic[]> = {
   core: CORE_TOPICS,
-  yonsei: YONSEI_TOPICS,
   flashcards: FLASH_TOPICS,
   topik: TOPIC_TOPICS,
 }
@@ -46,19 +46,9 @@ export default function KoreanVocab() {
   // 当前词库数据源（不修改 VOCAB 现有词条，仅切换数据源）
   const activeVocab: KoreanTopic[] = LIB_MAP[lib]
 
-  // 册次筛选（仅延世词库可用）
-  const [bookFilter, setBookFilter] = useState('')
-  const books = useMemo(() => {
-    if (lib !== 'yonsei') return []
-    const set = new Set<string>()
-    for (const t of YONSEI_TOPICS) for (const w of t.words) if (w.book) set.add(w.book)
-    return Array.from(set).sort()
-  }, [lib])
-
-  // 切换词库时重置主题与册次
+  // 切换词库时重置主题与搜索
   useEffect(() => {
     setTopic(activeVocab[0]?.topic || '')
-    setBookFilter('')
     setQ('')
   }, [lib]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -73,11 +63,8 @@ export default function KoreanVocab() {
   const markDaily = useStore((s) => s.markDaily)
   const markFlash = useStore((s) => s.markFlash)
 
-  // 全量词表（受词库 + 册次筛选影响）
-  const allWords = useMemo(() => {
-    const base = activeVocab.flatMap((t) => t.words)
-    return bookFilter ? base.filter((w) => w.book === bookFilter) : base
-  }, [activeVocab, bookFilter])
+  // 全量词表
+  const allWords = useMemo(() => activeVocab.flatMap((t) => t.words), [activeVocab])
   const TOTAL_WORDS = allWords.length
   const TOPICS = activeVocab.map((t) => t.topic)
 
@@ -110,11 +97,10 @@ export default function KoreanVocab() {
     return list
   }, [data, level, q])
 
-  // 词库清单（按四套数据源动态填数量）
+  // 词库清单（按三套数据源动态填数量）
   const dictionaries: DictMeta[] = useMemo(
     () => [
       { id: 'core', name: '核心词库', category: '韩语', length: CORE_TOPICS.flatMap((t) => t.words).length, language: 'ko' },
-      { id: 'yonsei', name: '延世韩国语 1-6', category: '韩语教材', length: YONSEI_WORDS.length, language: 'ko' },
       { id: 'flashcards', name: 'Korean Flashcards', category: '韩语日常', length: FLASH_WORDS.length, language: 'ko' },
       { id: 'topik', name: 'TOPIK 词库', category: '韩语考试', length: TOPIC_WORDS.length, language: 'ko' },
     ],
@@ -132,14 +118,13 @@ export default function KoreanVocab() {
     </button>
   )
 
-  const libName =
-    lib === 'yonsei' ? '延世韩国语 1-6' : lib === 'flashcards' ? 'Korean Flashcards' : lib === 'topik' ? 'TOPIK 词库' : '核心词库'
+  const libName = lib === 'flashcards' ? 'Korean Flashcards' : lib === 'topik' ? 'TOPIK 词库' : '核心词库'
 
   return (
     <div className="fade-in">
       <PageHeader
         title="词汇学习"
-        desc={`按主题 + TOPIK 等级分类，当前词库「${libName}」共 ${activeVocab.length} 个主题 / ${TOTAL_WORDS} 词。支持「词汇预览」浏览、「学习模式」翻卡自测、「每日刷新」每日自动更新、「单词总汇」滑卡刷词；点击 🔊 听发音，可一键收藏到单词本。`}
+        desc={`按主题 + TOPIK 等级分类，当前词库「${libName}」共 ${activeVocab.length} 个主题 / ${TOTAL_WORDS} 词。支持「词汇预览」浏览、「学习模式」翻卡自测、「每日刷新」每日自动更新、「单词总汇」滑卡刷词；点击 🔊 听发音，可一键收藏到单词本。延世韩国语教材学习请使用侧边栏「延世韩国语」。`}
       />
 
       {/* 词库切换器 */}
@@ -155,24 +140,7 @@ export default function KoreanVocab() {
         <Tab id="all" label="单词总汇" />
       </div>
 
-      {/* 册次筛选（仅延世词库） */}
-      {lib === 'yonsei' && books.length > 0 && (
-        <div className="flex items-center gap-2 mb-3">
-          <BookOpen size={15} className="text-gray-400" />
-          <select
-            value={bookFilter}
-            onChange={(e) => setBookFilter(e.target.value)}
-            className="inp text-sm py-1.5"
-          >
-            <option value="">全部教材</option>
-            {books.map((b) => (
-              <option key={b} value={b}>
-                {b}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+      {/* 延世韩国语已独立为 /korean/yonsei，此处不再混入，避免面板混乱 */}
 
       {/* —— 词汇预览 —— */}
       {mode === 'preview' && (
@@ -225,7 +193,6 @@ export default function KoreanVocab() {
 
           <div className="text-xs text-gray-400 mb-2">
             {topic} · {topicWords.length} 词
-            {bookFilter && ` · ${bookFilter}`}
             {level !== 'all' && ` · TOPIK ${level}`}
             {q.trim() && ` · 搜索「${q.trim()}」`}
           </div>

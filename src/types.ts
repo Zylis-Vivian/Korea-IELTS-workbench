@@ -21,7 +21,9 @@ export interface VocabWord {
   korean: string
   romanization: string
   chinese: string
-  pos?: string // 词性
+  pos?: string // 词性（通用/中文）
+  posZh?: string // 中文词性（延世源提供，如「名」「动」「表达」）
+  posKo?: string // 韩文词性（延世源提供，如「명사」「동사」「표현」）
   example?: string
   exampleZh?: string
   grammar?: string // 例句涉及的语法点说明（如「-아/어요 礼貌陈述式」）
@@ -36,6 +38,10 @@ export interface VocabWord {
   topics?: string[] // 多标签
   audioSrc?: string // 对应 manifest.json 音频路径
   english?: string // 英文释义（延世等外源词库提供）
+  // —— 延世韩国语词源字段 ——
+  originType?: 'hanja' | 'native' | 'loanword' | 'hybrid' | 'expression' | 'grammar' | string
+  originDetail?: string // 词源追溯/源词（如「安寧 + 하다」「computer」）
+  pronunciation?: string // 发音提示（韩文音标）
 }
 
 export interface GrammarPoint {

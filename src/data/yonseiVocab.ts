@@ -16,9 +16,16 @@ interface RawYonsei {
   chinese: string
   romanization: string
   partOfSpeech: string
+  posZh: string
+  posKo: string
+  originType: string
+  originDetail: string
+  pronunciation: string
   level: string
   topic: string
   book: string
+  phonetic: string
+  exampleSentences: { korean: string; english: string; chinese: string }[]
   grammar: string
   source: string
 }
@@ -38,6 +45,8 @@ function toVocabWord(r: RawYonsei): VocabWord {
     romanization: r.romanization,
     chinese: r.chinese || r.english,
     pos: r.partOfSpeech || undefined,
+    posZh: r.posZh || undefined,
+    posKo: r.posKo || undefined,
     grammar: r.grammar || undefined,
     level: levelFromBook(r.book),
     topic: r.topic,
@@ -45,6 +54,9 @@ function toVocabWord(r: RawYonsei): VocabWord {
     category: '延世韩国语',
     source: r.source || undefined,
     english: r.english || undefined,
+    originType: r.originType || undefined,
+    originDetail: r.originDetail || undefined,
+    pronunciation: r.pronunciation || undefined,
   }
 }
 

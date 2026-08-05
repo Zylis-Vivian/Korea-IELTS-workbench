@@ -31,6 +31,8 @@ import PDFReader from './modules/book-center/PDFReader'
 
 // 韩语词汇模块含 ~1.5MB 延世词库 JSON，按需懒加载以移出首屏主包
 const KoreanVocab = lazy(() => import('./modules/korean-vocab'))
+// 延世韩国语独立教材页（表格视图 + 词源标记）
+const KoreanYonsei = lazy(() => import('./modules/korean-yonsei'))
 
 export default function App() {
   const setPronStatus = useStore((s) => s.setPronStatus)
@@ -72,6 +74,14 @@ export default function App() {
               element={
                 <Suspense fallback={<div className="p-8 text-center text-gray-400">加载中…</div>}>
                   <KoreanVocab />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/korean/yonsei"
+              element={
+                <Suspense fallback={<div className="p-8 text-center text-gray-400">加载中…</div>}>
+                  <KoreanYonsei />
                 </Suspense>
               }
             />
