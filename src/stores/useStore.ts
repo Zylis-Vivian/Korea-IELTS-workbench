@@ -44,6 +44,10 @@ interface State {
     report?: TestReport
     lastTest?: number
   }
+  // 刷词（单词总汇）掌握标记：词key(korean) -> 状态
+  flashState: Record<string, 'known' | 'unknown'>
+  // 每日刷词进度：日期(YYYY-MM-DD) -> 词key -> 状态（每日自动更新词表）
+  dailyState: Record<string, Record<string, 'known' | 'unknown'>>
 
   setMastery: (char: string, m: Mastery) => void
   recordHandwriting: (char: string, score: number) => void
@@ -91,10 +95,10 @@ function load(): Partial<State> {
   }
 }
 function save(s: State) {
-  const { mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings } = s
+  const { mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState } = s
   localStorage.setItem(
     KEY,
-    JSON.stringify({ mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings })
+    JSON.stringify({ mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState })
   )
 }
 
@@ -111,6 +115,8 @@ export const useStore = create<State>((set, get) => ({
   wrongbook: init.wrongbook || [],
   settings: init.settings || { fontSize: 16, showVideo: true, ttsSpeed: 1, ttsEngine: 'auto', ttsGender: 'female', audioConfig: { ximalayaKey: '', qingtingId: '', qingtingSecret: '' } },
   pronStatus: init.pronStatus || { level: 'unknown', webVoices: [] },
+  flashState: init.flashState || {},
+  dailyState: init.dailyState || {},
 
   setMastery: (char, m) =>
     set((s) => {
@@ -215,6 +221,19 @@ export const useStore = create<State>((set, get) => ({
     }),
   setPronStatus: (s2) =>
     set((s) => ({ ...s, pronStatus: { ...s.pronStatus, ...s2 } })),
+  markFlash: (korean, status) =>
+    set((s) => {
+      const ns = { ...s, flashState: { ...s.flashState, [korean]: status } }
+      save(ns)
+      return ns
+    }),
+  markDaily: (date, korean, status) =>
+    set((s) => {
+      const dayMap = { ...(s.dailyState[date] || {}), [korean]: status }
+      const ns = { ...s, dailyState: { ...s.dailyState, [date]: dayMap } }
+      save(ns)
+      return ns
+    }),
 }))
 
 // 辅助：连续打卡天数
