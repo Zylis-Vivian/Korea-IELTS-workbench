@@ -1,21 +1,37 @@
 import { useMemo, useState } from 'react'
-import { Search } from 'lucide-react'
+import { Search, Shuffle, RotateCcw, Check, X } from 'lucide-react'
 import { PageHeader } from '../../components/Layout'
 import SpeakerButton from '../../components/SpeakerButton'
 import AddWordButton from '../../components/AddWordButton'
 import WordDeck from '../../components/WordDeck'
 import { VOCAB } from '../../data/vocab'
+import type { VocabWord } from '../../types'
 import { useStore } from '../../stores/useStore'
 import { todayStr, getDailyWords, getDailyProgress } from '../../utils/dailyWords'
 
 const LEVELS = ['1', '2', '3', '4', '5', '6']
 const DAILY_COUNT = 12
-type Mode = 'topic' | 'daily' | 'all'
+const STUDY_COUNT = 12
+type Mode = 'preview' | 'study' | 'daily' | 'all'
+
+// 全量韩语词表（静态，模块级计算一次）
+const ALL_WORDS: VocabWord[] = VOCAB.flatMap((t) => t.words)
+const TOTAL_WORDS = ALL_WORDS.length
+const TOPICS = VOCAB.map((t) => t.topic)
+
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
 
 export default function KoreanVocab() {
-  const [mode, setMode] = useState<Mode>('topic')
+  const [mode, setMode] = useState<Mode>('preview')
 
-  // —— 主题学习（原有）——
+  // —— 词汇预览（主题学习，原「主题学习」重构）——
   const [topic, setTopic] = useState(VOCAB[0].topic)
   const [level, setLevel] = useState<string>('all')
   const [q, setQ] = useState('')
@@ -26,12 +42,9 @@ export default function KoreanVocab() {
   const markDaily = useStore((s) => s.markDaily)
   const markFlash = useStore((s) => s.markFlash)
 
-  const allFlat = useMemo(() => VOCAB.flatMap((t) => t.words), [])
-  const totalWords = useMemo(() => allFlat.length, [allFlat])
-
   // 每日刷新：基于日期确定性选词（换天自动更新）
   const dateStr = todayStr()
-  const dailyWords = useMemo(() => getDailyWords(allFlat, dateStr, DAILY_COUNT), [allFlat, dateStr])
+  const dailyWords = useMemo(() => getDailyWords(ALL_WORDS, dateStr, DAILY_COUNT), [dateStr])
   const dailyProg = getDailyProgress(dailyState, dateStr, dailyWords)
 
   // 单词总汇：全量词卡，可只看未掌握
@@ -39,9 +52,9 @@ export default function KoreanVocab() {
   const allDeck = useMemo(
     () =>
       flashFilter === 'unknown'
-        ? allFlat.filter((w) => flashState[w.korean] !== 'known')
-        : allFlat,
-    [allFlat, flashFilter, flashState]
+        ? ALL_WORDS.filter((w) => flashState[w.korean] !== 'known')
+        : ALL_WORDS,
+    [flashFilter, flashState]
   )
 
   const data = VOCAB.find((t) => t.topic === topic)!
@@ -77,18 +90,19 @@ export default function KoreanVocab() {
     <div className="fade-in">
       <PageHeader
         title="词汇学习"
-        desc={`按主题 + TOPIK 等级分类，共 ${VOCAB.length} 个主题 / ${totalWords} 词。支持「每日刷新」每日自动更新词表、「单词总汇」滑卡刷词；点击 🔊 听发音，可一键收藏到单词本。`}
+        desc={`按主题 + TOPIK 等级分类，共 ${VOCAB.length} 个主题 / ${TOTAL_WORDS} 词。支持「词汇预览」浏览、「学习模式」翻卡自测、「每日刷新」每日自动更新、「单词总汇」滑卡刷词；点击 🔊 听发音，可一键收藏到单词本。`}
       />
 
-      {/* 三栏切换 */}
+      {/* 四栏切换（参考雅思学习板块：预览 + 学习模式 + 每日 + 总汇） */}
       <div className="flex flex-wrap gap-2 mb-4">
-        <Tab id="topic" label="主题学习" />
+        <Tab id="preview" label="词汇预览" />
+        <Tab id="study" label="学习模式" />
         <Tab id="daily" label="每日刷新" />
         <Tab id="all" label="单词总汇" />
       </div>
 
-      {/* —— 主题学习 —— */}
-      {mode === 'topic' && (
+      {/* —— 词汇预览 —— */}
+      {mode === 'preview' && (
         <>
           <div className="flex flex-col sm:flex-row gap-2 mb-3">
             <div className="relative flex-1">
@@ -170,6 +184,11 @@ export default function KoreanVocab() {
         </>
       )}
 
+      {/* —— 学习模式（参考雅思 study：翻卡自测） —— */}
+      {mode === 'study' && (
+        <Study markFlash={markFlash} flashState={flashState} />
+      )}
+
       {/* —— 每日刷新 —— */}
       {mode === 'daily' && (
         <div className="flex flex-col items-center">
@@ -205,7 +224,7 @@ export default function KoreanVocab() {
       {mode === 'all' && (
         <div className="flex flex-col items-center">
           <div className="w-full max-w-md mb-4 flex items-center justify-between">
-            <span className="text-xs text-gray-400">全量 {allFlat.length} 词 · 滑卡刷词</span>
+            <span className="text-xs text-gray-400">全量 {ALL_WORDS.length} 词 · 滑卡刷词</span>
             <div className="inline-flex rounded-full bg-white shadow-card p-1">
               <button
                 onClick={() => setFlashFilter('all')}
@@ -229,6 +248,123 @@ export default function KoreanVocab() {
           />
         </div>
       )}
+    </div>
+  )
+}
+
+// ── 学习模式：随机选词 + 翻卡自测（认识标记联动「单词总汇」未掌握） ──
+function Study({
+  markFlash,
+  flashState,
+}: {
+  markFlash: (k: string, s: 'known' | 'unknown') => void
+  flashState: Record<string, 'known' | 'unknown'>
+}) {
+  const [topic, setTopic] = useState('全部')
+  const [list, setList] = useState<VocabWord[]>(() => pick(topic))
+  const [idx, setIdx] = useState(0)
+  const [flipped, setFlipped] = useState(false)
+  const [known, setKnown] = useState(0)
+
+  function pick(t: string) {
+    const pool = t === '全部' ? ALL_WORDS : ALL_WORDS.filter((w) => w.topic === t)
+    return shuffle(pool).slice(0, Math.min(STUDY_COUNT, pool.length))
+  }
+  const restart = (t = topic) => {
+    setList(pick(t))
+    setIdx(0)
+    setFlipped(false)
+    setKnown(0)
+  }
+  const next = () => {
+    if (idx < list.length - 1) {
+      setIdx(idx + 1)
+      setFlipped(false)
+    } else restart()
+  }
+  const cur = list[idx]
+
+  return (
+    <div className="max-w-md mx-auto">
+      <div className="flex items-center justify-between mb-3">
+        <div className="inline-flex rounded-full bg-white shadow-card p-1 overflow-x-auto">
+          <button
+            onClick={() => {
+              setTopic('全部')
+              restart('全部')
+            }}
+            className={`px-3 py-1 rounded-full text-xs whitespace-nowrap ${topic === '全部' ? 'bg-lavender text-white' : 'text-gray-500'}`}
+          >
+            全部主题
+          </button>
+          {TOPICS.map((t) => (
+            <button
+              key={t}
+              onClick={() => {
+                setTopic(t)
+                restart(t)
+              }}
+              className={`px-3 py-1 rounded-full text-xs whitespace-nowrap ${topic === t ? 'bg-lavender text-white' : 'text-gray-500'}`}
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-between text-xs text-gray-400 mb-2">
+        <span>进度 {idx + 1}/{list.length}</span>
+        <span>已掌握 {known}</span>
+        <button onClick={() => restart()} className="flex items-center gap-1 text-lavender-deep">
+          <RotateCcw size={12} /> 换一批
+        </button>
+      </div>
+
+      <div
+        onClick={() => setFlipped((f) => !f)}
+        className="bg-white rounded-card shadow-card p-8 text-center cursor-pointer min-h-[200px] flex flex-col items-center justify-center select-none"
+      >
+        <div className="flex items-center gap-2 mb-3">
+          <SpeakerButton text={cur.korean} category="korean" size={20} />
+          <span className="text-[10px] bg-lavender-light text-lavender-deep rounded px-2 py-0.5">
+            TOPIK {cur.level || '-'}
+          </span>
+        </div>
+        {!flipped ? (
+          <div className="text-3xl font-bold korean-font text-lavender-deep">{cur.korean}</div>
+        ) : (
+          <div>
+            <div className="text-sm text-gray-400">{cur.romanization}</div>
+            <div className="text-xl text-lavender-deep mt-1">{cur.chinese}</div>
+            {cur.example && <div className="text-xs text-gray-400 mt-2">💡 {cur.example}</div>}
+            {cur.exampleZh && <div className="text-xs text-gray-300">　{cur.exampleZh}</div>}
+            {cur.grammar && <div className="text-xs text-lavender-deep/80 mt-2">📝 语法：{cur.grammar}</div>}
+          </div>
+        )}
+        <div className="text-xs text-gray-300 mt-4">点击卡片翻面</div>
+      </div>
+
+      <div className="flex gap-2 mt-3">
+        <button
+          onClick={() => {
+            markFlash(cur.korean, 'known')
+            setKnown(known + 1)
+            next()
+          }}
+          className="flex-1 py-2 rounded-xl bg-emerald-500 text-white text-sm flex items-center justify-center gap-1"
+        >
+          <Check size={15} /> 认识
+        </button>
+        <button
+          onClick={next}
+          className="flex-1 py-2 rounded-xl bg-cream text-gray-600 text-sm flex items-center justify-center gap-1"
+        >
+          <X size={15} /> 不认识，跳过
+        </button>
+      </div>
+      <p className="text-[11px] text-gray-400 text-center mt-2">
+        点「认识」会把该词标记为已掌握，可在「单词总汇 · 只看未掌握」中隐藏。
+      </p>
     </div>
   )
 }
