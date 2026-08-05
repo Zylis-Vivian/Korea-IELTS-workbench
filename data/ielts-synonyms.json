@@ -1,0 +1,2634 @@
+[
+  {
+    "id": "sy_787903b0aa",
+    "word": "resemble",
+    "synonym": "like / look / be similar to",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_395f8f1272",
+    "word": "recognize",
+    "synonym": "perceive / acknowledge / realize / appreciate / admit / identify / comprehend / understand / know",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ef13cfa6df",
+    "word": "adjust",
+    "synonym": "change / modify / shift / alter",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_47ffeffdbd",
+    "word": "approach",
+    "synonym": "method / way",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e689aa2072",
+    "word": "fundamental",
+    "synonym": "rudimentary / preliminary / basic",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fe179f49c9",
+    "word": "rely on",
+    "synonym": "depend on",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6015480ed0",
+    "word": "domestic",
+    "synonym": "home / local / national",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a56a47635c",
+    "word": "measure",
+    "synonym": "calculate / assess / evaluate",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_60ae595654",
+    "word": "trait",
+    "synonym": "characteristic / feature / property",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a9a6ea3b3a",
+    "word": "coin",
+    "synonym": "first used / invent",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a395cfbfe2",
+    "word": "artificial",
+    "synonym": "synthetic / man-made",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_42af9065a7",
+    "word": "prompt",
+    "synonym": "initiate / immediately",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c4fc36495d",
+    "word": "exchange",
+    "synonym": "share / swap / trade",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5b3d23dd2f",
+    "word": "underlie",
+    "synonym": "based on / ground / root",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_06c59c8265",
+    "word": "ignore",
+    "synonym": "neglect / overlook / underestimate",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_7c1d53d682",
+    "word": "fertiliser",
+    "synonym": "chemical / toxic / unnatural",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a27872363c",
+    "word": "that*",
+    "synonym": "this / it / they / those / these / such",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b7b4a7dc7a",
+    "word": "and*",
+    "synonym": "or / as well as / both…and / not only…but also… / other than / in addition / besides / on the one hand…on the other hand… / neither…nor…",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_222c90c6dc",
+    "word": "rather than*",
+    "synonym": "but / yet / however / whereas / nonetheless / nevertheless / although / notwithstanding / though / instead",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_9e776e0a0e",
+    "word": "thanks to*",
+    "synonym": "stem from / derive / owing to / due to / according to / because of / on account of / as a result of / leading to / because / since / for / in that / as / therefore / hence",
+    "group": "第 1 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_9eb8a0034e",
+    "word": "diversity",
+    "synonym": "variety / difference",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e1cf7e0d33",
+    "word": "detect",
+    "synonym": "find / look for / seek / search",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_470fce64e2",
+    "word": "isolate",
+    "synonym": "inaccessible",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fe06d66a35",
+    "word": "avoid",
+    "synonym": "escape / evitable",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_aa7cfa44f0",
+    "word": "budget",
+    "synonym": "fund / financial",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_8fc940a993",
+    "word": "adapt to",
+    "synonym": "fit / suit",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_953fda50c9",
+    "word": "alternative",
+    "synonym": "substitute",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_8346128989",
+    "word": "compensate",
+    "synonym": "make up / offset",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_8f1f8f11e1",
+    "word": "component",
+    "synonym": "proportion",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_bf2bb6655d",
+    "word": "military",
+    "synonym": "weapon / army",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b73ea36ff3",
+    "word": "criteria",
+    "synonym": "standard",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_1a7d98d342",
+    "word": "curriculum",
+    "synonym": "syllabus / course of study",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5b78545cab",
+    "word": "feasible",
+    "synonym": "realistic / viable",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ca7cdda39f",
+    "word": "constrain",
+    "synonym": "stop / control",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e642cdf17f",
+    "word": "deficiency",
+    "synonym": "shortage / defect / weakness",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_f1f0e5bef8",
+    "word": "supplement",
+    "synonym": "provision",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ad51d75fbe",
+    "word": "distinguish",
+    "synonym": "separate / differentiate",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c5993b8774",
+    "word": "analyze",
+    "synonym": "examine / diagnose",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_607b6fb81d",
+    "word": "emphasize",
+    "synonym": "focus on / stress",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_1ac3722c5c",
+    "word": "enormous",
+    "synonym": "massive / large",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ac9e59c0e7",
+    "word": "imitate",
+    "synonym": "mimic / copy",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0bfd7dfe1a",
+    "word": "impair",
+    "synonym": "damage / diminish / decrease",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_3b557bc188",
+    "word": "hinder",
+    "synonym": "impede / prevent / deter / obstacle",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_38684c5415",
+    "word": "legitimate",
+    "synonym": "legal",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_04934c40cf",
+    "word": "limitation",
+    "synonym": "restriction",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_f2668d3ec0",
+    "word": "convention",
+    "synonym": "method; tradition",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_2baf5c95c4",
+    "word": "demanding",
+    "synonym": "troublesome",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ec1dc4ebb6",
+    "word": "determine",
+    "synonym": "decide",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_780845ca89",
+    "word": "accelerate",
+    "synonym": "speed up",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a287120bd2",
+    "word": "ancient",
+    "synonym": "aged / old",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_11d55b9e58",
+    "word": "beneficial",
+    "synonym": "helpful / advantageous / wholesome",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_50c1ee6a0b",
+    "word": "chronic",
+    "synonym": "lasting",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_edd582972a",
+    "word": "conscious",
+    "synonym": "aware / knowing",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_2618242891",
+    "word": "minimize",
+    "synonym": "reduce / lessen",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a18a8c1584",
+    "word": "immunity",
+    "synonym": "resistance",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_7428c3aea2",
+    "word": "Imperative",
+    "synonym": "compelling / necessary / urgent",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_cc6832c11f",
+    "word": "secrete",
+    "synonym": "discharge / exude",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5dfec10834",
+    "word": "exaggerate",
+    "synonym": "overstate",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_245304d026",
+    "word": "transmit",
+    "synonym": "pass / send / transfer",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_9ee7c68066",
+    "word": "extinct",
+    "synonym": "die out / lost",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_8d2fd30afa",
+    "word": "exclusive",
+    "synonym": "only",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_218739f660",
+    "word": "guarantee",
+    "synonym": "assure",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_56d9d59c15",
+    "word": "inherit",
+    "synonym": "receive",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_271c613f34",
+    "word": "witness",
+    "synonym": "view / see",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_3f08b52366",
+    "word": "magnetic",
+    "synonym": "attractive",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b32389a8dc",
+    "word": "loss",
+    "synonym": "waste / gone",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_be4f14e6ae",
+    "word": "option",
+    "synonym": "choice",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c43b23c066",
+    "word": "prefer to",
+    "synonym": "rather",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_86249dd0fa",
+    "word": "priority",
+    "synonym": "preference / preferential",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_38ad63d46b",
+    "word": "primary",
+    "synonym": "principle / main",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_88601e1fd1",
+    "word": "principle",
+    "synonym": "rule",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_4987938ceb",
+    "word": "potential",
+    "synonym": "possibility",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fe2522d1bb",
+    "word": "quantity",
+    "synonym": "number",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_76471046ad",
+    "word": "settle",
+    "synonym": "fix / figure out",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_2df985a2e4",
+    "word": "sophisticate",
+    "synonym": "complicate",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_4e87528bad",
+    "word": "specific",
+    "synonym": "detailed / particular",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_38a43800eb",
+    "word": "survive",
+    "synonym": "remain",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c4e3607681",
+    "word": "swift",
+    "synonym": "quick / rapid",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_633f8e6575",
+    "word": "unexpectedly",
+    "synonym": "surprising",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_28546a0301",
+    "word": "surrounding",
+    "synonym": "setting / environment",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_478f649f8e",
+    "word": "attempt",
+    "synonym": "try / test",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c45da38606",
+    "word": "expertise",
+    "synonym": "knowledge / skill",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_610478fb64",
+    "word": "faculty",
+    "synonym": "ability",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_91d7aed796",
+    "word": "donate",
+    "synonym": "contribute",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_9368574ea0",
+    "word": "dynamics",
+    "synonym": "energy / force / move",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_7749579bf4",
+    "word": "incentive",
+    "synonym": "motive / stimulus",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_11638e6b3a",
+    "word": "mortality",
+    "synonym": "death",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_89b50764d8",
+    "word": "peripheral",
+    "synonym": "unimportant / minor",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_1006c9af8c",
+    "word": "vicinity",
+    "synonym": "neighbourhood / nearby",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0e15e3ff7b",
+    "word": "threaten",
+    "synonym": "endanger / jeopardize / risk / hazard",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_19fbc0ec4f",
+    "word": "practice",
+    "synonym": "method / exercise",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_1c3baf13b8",
+    "word": "bacteria",
+    "synonym": "virus / germ / microbe",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_f41d5d3df3",
+    "word": "be subject to",
+    "synonym": "face",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_9fa777d86f",
+    "word": "be liable to",
+    "synonym": "potential",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_9212dbf89e",
+    "word": "innate",
+    "synonym": "built-in / inborn",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c9300cf080",
+    "word": "pattern",
+    "synonym": "formation",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_38081ba7e2",
+    "word": "therapy",
+    "synonym": "treatment",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_45cdfe7140",
+    "word": "original",
+    "synonym": "initial / first",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_2e567669fa",
+    "word": "confidential",
+    "synonym": "undisclosed / secret / hidden",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_41eaa30230",
+    "word": "cognitive",
+    "synonym": "mental",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_f8e2696a56",
+    "word": "comply with",
+    "synonym": "obey",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_7fd934410d",
+    "word": "consult",
+    "synonym": "ask for advice",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_2f2ce78a0c",
+    "word": "superior",
+    "synonym": "higher / upper",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0e6b0ac338",
+    "word": "co-operation",
+    "synonym": "support / work together",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0b1ef9b612",
+    "word": "co-ordinate",
+    "synonym": "organize / harmonize",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_9dbc0282b0",
+    "word": "differ",
+    "synonym": "vary",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_60fa329fc6",
+    "word": "cue",
+    "synonym": "hint / clue",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_9f93263310",
+    "word": "signal",
+    "synonym": "symbol / mark / sign",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a700b1c2f6",
+    "word": "abandon",
+    "synonym": "quit / give up / forsake / derelict",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_2eca19586e",
+    "word": "halt",
+    "synonym": "stop / quit",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ede35d176d",
+    "word": "fragile",
+    "synonym": "vulnerable",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_564fc7d694",
+    "word": "retain",
+    "synonym": "maintain",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_4f7386992b",
+    "word": "vanish",
+    "synonym": "disappear",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c4c6b5c3be",
+    "word": "delivery",
+    "synonym": "dispatch",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_add6a24721",
+    "word": "erode",
+    "synonym": "wear away / corrode / degrade",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b41aa9d584",
+    "word": "induce",
+    "synonym": "cause / lead to",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_df55d3c42d",
+    "word": "stable",
+    "synonym": "constant / unchanged",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5b1a64d7e1",
+    "word": "integrate",
+    "synonym": "combine / incorporate",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6f0c675c3c",
+    "word": "equal",
+    "synonym": "equivalent / matching / capable",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_3e8d7dd0f8",
+    "word": "grant",
+    "synonym": "award / provide / approve funding",
+    "group": "第 2 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_97e2d7fd1b",
+    "word": "accumulate",
+    "synonym": "gather",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_71f0a8e16c",
+    "word": "addictive",
+    "synonym": "habit",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e15422592d",
+    "word": "adversity",
+    "synonym": "trouble",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_f1670b3ba1",
+    "word": "aggression",
+    "synonym": "attack",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_dc612e84af",
+    "word": "agreeable",
+    "synonym": "pleasant",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_d01d3a1ba1",
+    "word": "aid",
+    "synonym": "help",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_1661653b99",
+    "word": "allergic",
+    "synonym": "irritate",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_f50523e377",
+    "word": "altitude",
+    "synonym": "height",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_70b0a802e5",
+    "word": "application",
+    "synonym": "utilization",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_8e07dff744",
+    "word": "approve",
+    "synonym": "agree",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_09d974c8d1",
+    "word": "array",
+    "synonym": "order",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e8d77748e4",
+    "word": "assign",
+    "synonym": "allocate",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_d32d5849de",
+    "word": "association",
+    "synonym": "union",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b67d86ef8d",
+    "word": "attitude",
+    "synonym": "opinion",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_410e7edd52",
+    "word": "authority",
+    "synonym": "government",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_f1998cbb56",
+    "word": "be consistent with",
+    "synonym": "compatible",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6884d37e18",
+    "word": "bear",
+    "synonym": "tolerate",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_f0a410bbf3",
+    "word": "blight",
+    "synonym": "damage / ruin / wither",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_77ad6f3fe7",
+    "word": "boundary",
+    "synonym": "barrier",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_358ad6b5d5",
+    "word": "bungle",
+    "synonym": "mishandle",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a15837463a",
+    "word": "burden",
+    "synonym": "load",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_2db6ec7543",
+    "word": "calamity",
+    "synonym": "disaster",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0aaf7544ef",
+    "word": "capacity",
+    "synonym": "volume",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_afdbf2b415",
+    "word": "catastrophic",
+    "synonym": "disastrous",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_bd0124c211",
+    "word": "cater",
+    "synonym": "serve",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_03b20ce07b",
+    "word": "certify",
+    "synonym": "verify",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0a6bef108f",
+    "word": "civic",
+    "synonym": "municipal / civil",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_94caef4673",
+    "word": "comment",
+    "synonym": "remark",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_62a0edf843",
+    "word": "commitment",
+    "synonym": "engagement",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c69d13eaa0",
+    "word": "communal",
+    "synonym": "public",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fa1a90ae41",
+    "word": "commute",
+    "synonym": "travel",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_bf8b974f21",
+    "word": "compare",
+    "synonym": "contrast",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fb99096358",
+    "word": "conceal",
+    "synonym": "hide",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e631038a32",
+    "word": "concentrate",
+    "synonym": "focus",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_61b865734e",
+    "word": "concur",
+    "synonym": "agree",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ce7a6f636a",
+    "word": "confer",
+    "synonym": "grant",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b94f9fc980",
+    "word": "conflict",
+    "synonym": "unharmonious",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_d4f8a71559",
+    "word": "confuse",
+    "synonym": "puzzle",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c0a8a28993",
+    "word": "conservative",
+    "synonym": "traditional",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6c50251bcd",
+    "word": "considerable",
+    "synonym": "significant",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e873a00be6",
+    "word": "contingent",
+    "synonym": "uncertain",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fd89fc0e16",
+    "word": "controversial",
+    "synonym": "disputable",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_dba06376e0",
+    "word": "correlation",
+    "synonym": "link",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_23293c8870",
+    "word": "courtship",
+    "synonym": "mate",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_2c229e457e",
+    "word": "crash",
+    "synonym": "collapse",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_12df322205",
+    "word": "credibility",
+    "synonym": "reliance",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ab5f03c5b5",
+    "word": "criminal",
+    "synonym": "offender / delinquent",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e9e974d47d",
+    "word": "crisis",
+    "synonym": "risk",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_7194a61418",
+    "word": "criticism",
+    "synonym": "critique / disapproval",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b0c565b84a",
+    "word": "curb",
+    "synonym": "restrict",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0a8a48a280",
+    "word": "damp",
+    "synonym": "wet",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_4a7d8b5da1",
+    "word": "dazzle",
+    "synonym": "flash",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e2cd67df9a",
+    "word": "deadline",
+    "synonym": "limit",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_44eb4649d5",
+    "word": "delay",
+    "synonym": "postpone",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_31f734999c",
+    "word": "democratic",
+    "synonym": "participatory",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_9af1fe5b8d",
+    "word": "demographic",
+    "synonym": "population statistic",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_d72b34f79c",
+    "word": "dental",
+    "synonym": "teeth",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_48a5c2c348",
+    "word": "depression",
+    "synonym": "frustration",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6daa0c32b7",
+    "word": "designate",
+    "synonym": "appoint / assign / mark",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_1482718aa3",
+    "word": "detain",
+    "synonym": "hold",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_4bfda1f277",
+    "word": "devastate",
+    "synonym": "wreck",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a3a2193dbf",
+    "word": "disclose",
+    "synonym": "expose",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b67c290a65",
+    "word": "disparate",
+    "synonym": "different",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5f5fed92e9",
+    "word": "display",
+    "synonym": "show",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_14577060ee",
+    "word": "disrupt",
+    "synonym": "destroy",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_242f3adeba",
+    "word": "distract",
+    "synonym": "divert",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0872413d4a",
+    "word": "distribute",
+    "synonym": "spread",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0e048c4631",
+    "word": "documentation",
+    "synonym": "record",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_7694652975",
+    "word": "domain",
+    "synonym": "field",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_8856ec7b93",
+    "word": "dominant",
+    "synonym": "overbearing",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_859ca55904",
+    "word": "dramatic",
+    "synonym": "striking",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5b32c6475b",
+    "word": "drought",
+    "synonym": "dry",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_81f47fa6d2",
+    "word": "durable",
+    "synonym": "lasting",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_acdf53721c",
+    "word": "eco-friendly",
+    "synonym": "environmentally-friendly",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_97c64875be",
+    "word": "elaborate",
+    "synonym": "illustrate",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_49ab919cde",
+    "word": "elderly",
+    "synonym": "aged",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a7d2c3cc65",
+    "word": "eliminate",
+    "synonym": "dispose",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_218ed00bb3",
+    "word": "elusive",
+    "synonym": "hard",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_039f577ba5",
+    "word": "encyclopaedia",
+    "synonym": "entire range of knowledge",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_bc8531472d",
+    "word": "entrepreneur",
+    "synonym": "boss",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_27e957cab2",
+    "word": "equator",
+    "synonym": "geography",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_17c6cab2af",
+    "word": "erratically",
+    "synonym": "unpredictably",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fefc5e98cd",
+    "word": "established",
+    "synonym": "built",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_23624e6536",
+    "word": "estate",
+    "synonym": "property",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_8eb5f7ab66",
+    "word": "ethical",
+    "synonym": "moral",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_68657482cc",
+    "word": "eventually",
+    "synonym": "finally",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_adf543282c",
+    "word": "evidence",
+    "synonym": "proof",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_06d75e0bcd",
+    "word": "evolve",
+    "synonym": "develop",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ec846b2e85",
+    "word": "exhausted",
+    "synonym": "fatigue",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fce32e1412",
+    "word": "experiment",
+    "synonym": "test",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_8899c137d3",
+    "word": "exceptional",
+    "synonym": "extreme / utmost",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_f182ef625b",
+    "word": "explicit",
+    "synonym": "clear",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5b8cebe478",
+    "word": "exploit",
+    "synonym": "use",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b8241df6d4",
+    "word": "extend",
+    "synonym": "expand",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_944229bb79",
+    "word": "extract",
+    "synonym": "quotation",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b95f2936ae",
+    "word": "famine",
+    "synonym": "hunger",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_d0fde242ea",
+    "word": "finite",
+    "synonym": "limited",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5eff9d5233",
+    "word": "fitness",
+    "synonym": "physical condition / health",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_533174b35b",
+    "word": "foe",
+    "synonym": "enemy",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_8f3ff3f1c0",
+    "word": "format",
+    "synonym": "structure",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_d590da1587",
+    "word": "fragment",
+    "synonym": "piece",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_78c06c246d",
+    "word": "freeze",
+    "synonym": "chill",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a50cd4bb09",
+    "word": "fulfill",
+    "synonym": "execute",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_2e91902dc1",
+    "word": "gene",
+    "synonym": "factor",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_81eb453050",
+    "word": "gifted",
+    "synonym": "talented",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_334a87cb89",
+    "word": "graphic",
+    "synonym": "picture",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_9284f4ea62",
+    "word": "habitat",
+    "synonym": "residence",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_04bfaaaeff",
+    "word": "harbor",
+    "synonym": "hold",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ea24db959c",
+    "word": "hardship",
+    "synonym": "difficult",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fa2ef69c95",
+    "word": "harsh",
+    "synonym": "rough",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_67c71cfcf0",
+    "word": "hypothesis",
+    "synonym": "assumption",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ec88366191",
+    "word": "impact",
+    "synonym": "influence",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_707fc13c50",
+    "word": "impressive",
+    "synonym": "touching",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a41a8bf0fa",
+    "word": "in accordance with",
+    "synonym": "conform",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_45f33a6683",
+    "word": "inaccurate",
+    "synonym": "incorrect",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a35bf97eb6",
+    "word": "inactive",
+    "synonym": "passive",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_905c408ccf",
+    "word": "inappropriate",
+    "synonym": "hard",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_079f8ac36c",
+    "word": "indulge",
+    "synonym": "spoil",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_14525b25bd",
+    "word": "infest",
+    "synonym": "plague",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_20cf31a275",
+    "word": "installment",
+    "synonym": "regular/periodic payment",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a1eaec334f",
+    "word": "intelligence",
+    "synonym": "mind",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_390b9c7445",
+    "word": "intense",
+    "synonym": "strong",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_09d1034851",
+    "word": "interaction",
+    "synonym": "social activities",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_1e9cbac933",
+    "word": "interference",
+    "synonym": "interposition / disruption",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_224804d50d",
+    "word": "interior",
+    "synonym": "inner",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_71789dd653",
+    "word": "interrupt",
+    "synonym": "stop",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_44537812e7",
+    "word": "introverted",
+    "synonym": "reserved / inward-looking",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c8bd58912a",
+    "word": "involve",
+    "synonym": "associate",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a4c36b5b2d",
+    "word": "keen",
+    "synonym": "eager / enthusiastic",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_006725bcdf",
+    "word": "label",
+    "synonym": "display",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6617863ad9",
+    "word": "lack",
+    "synonym": "shortage",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_203f954eb7",
+    "word": "landscape",
+    "synonym": "scene",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5ea49d6756",
+    "word": "likelihood",
+    "synonym": "chance",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_028c5d6490",
+    "word": "limb",
+    "synonym": "arm or leg",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5dda95a960",
+    "word": "linguistic",
+    "synonym": "language",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0313bfca0e",
+    "word": "log",
+    "synonym": "record / logging",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_45da529c1f",
+    "word": "look-in",
+    "synonym": "opportunity / chance",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5da4bcedea",
+    "word": "lopsided",
+    "synonym": "uneven",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_816f579615",
+    "word": "mainly",
+    "synonym": "primarily",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_003b818cea",
+    "word": "malfunction",
+    "synonym": "breakdown",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e7b65f6750",
+    "word": "mammal",
+    "synonym": "creature",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fa1a73ebb4",
+    "word": "manage to do",
+    "synonym": "success",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_f9718d8653",
+    "word": "manifest",
+    "synonym": "obvious",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_1ea823e342",
+    "word": "manufacture",
+    "synonym": "produce",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_32204bb68e",
+    "word": "marine",
+    "synonym": "sea",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5861e2eb65",
+    "word": "mate",
+    "synonym": "partner / spouse",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_cd62e3e8c4",
+    "word": "mechanism",
+    "synonym": "method",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_331b4dd5b0",
+    "word": "mental",
+    "synonym": "psychological / cognitive",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5d8ad5cfd9",
+    "word": "mercury",
+    "synonym": "liquid metal",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_42411bfb21",
+    "word": "meteorological",
+    "synonym": "weather",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_8fc992a53b",
+    "word": "migrate",
+    "synonym": "move",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b4d4f797ce",
+    "word": "moisture",
+    "synonym": "humidity",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_cdf68e7f90",
+    "word": "monitor",
+    "synonym": "surveillance",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_7322a63cf4",
+    "word": "motif",
+    "synonym": "theme",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b4d5721038",
+    "word": "mould",
+    "synonym": "form",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_31750c01bb",
+    "word": "native",
+    "synonym": "original",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_eb83e2d5f9",
+    "word": "nocturnal",
+    "synonym": "night",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c240f0a0b5",
+    "word": "norm",
+    "synonym": "regulation",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e24b574fbf",
+    "word": "notoriety",
+    "synonym": "famous",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_1849a46adb",
+    "word": "objective",
+    "synonym": "goal",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fbfe0b7ca2",
+    "word": "obligation",
+    "synonym": "responsibility",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c0f99a0267",
+    "word": "obscure",
+    "synonym": "blur / cloud / obscure",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6a6d306e56",
+    "word": "obtain",
+    "synonym": "get",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_92d5f0243d",
+    "word": "odd",
+    "synonym": "strange",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b39e36441b",
+    "word": "odour",
+    "synonym": "smell",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_1f1c4a4189",
+    "word": "offensive",
+    "synonym": "hostile",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_9405052964",
+    "word": "official",
+    "synonym": "authority",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e140f78655",
+    "word": "optimum",
+    "synonym": "best",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5a79c986ef",
+    "word": "ordinary",
+    "synonym": "common",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ef0019b92e",
+    "word": "organ",
+    "synonym": "a part of a body",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_7d5007abdc",
+    "word": "out of the question",
+    "synonym": "impossible / not an option",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c302c23308",
+    "word": "overcome",
+    "synonym": "defeat",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a50e70a06a",
+    "word": "overtake",
+    "synonym": "surpass",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_1fc0893dec",
+    "word": "paralyse",
+    "synonym": "disable / incapacitate",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0ee1a44242",
+    "word": "paramount",
+    "synonym": "principal",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_93a894a47b",
+    "word": "participate",
+    "synonym": "join",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_927a555adb",
+    "word": "patient",
+    "synonym": "tolerant / calm / ill person",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6c67aa9313",
+    "word": "peak",
+    "synonym": "top",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_30479c7125",
+    "word": "permit",
+    "synonym": "allow",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ff4988cf78",
+    "word": "persuade",
+    "synonym": "influence",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6a33c0fd06",
+    "word": "pessimistic",
+    "synonym": "negative",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e81ae30a17",
+    "word": "phase",
+    "synonym": "process",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e5aa664377",
+    "word": "physical",
+    "synonym": "body",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0a4901faa3",
+    "word": "plagiarise",
+    "synonym": "copy",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6eda5ae0a3",
+    "word": "plenty of",
+    "synonym": "many",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_2236bd967c",
+    "word": "plot",
+    "synonym": "plan",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_17a8e85fc8",
+    "word": "pose",
+    "synonym": "cause",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_48ca45a5ac",
+    "word": "portable",
+    "synonym": "conveyable",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_520f78e879",
+    "word": "poverty",
+    "synonym": "poor",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_dad1ebe97a",
+    "word": "praise",
+    "synonym": "commend",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_d3574313a2",
+    "word": "predict",
+    "synonym": "expect",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_dd264ea48d",
+    "word": "pressing",
+    "synonym": "urgent",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_909f7b4cf2",
+    "word": "private",
+    "synonym": "personal",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e5bea3112d",
+    "word": "prohibit",
+    "synonym": "forbid / ban",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_662a0063c7",
+    "word": "prolong",
+    "synonym": "extend",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_142447cd63",
+    "word": "promote",
+    "synonym": "improve",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5c50d779f8",
+    "word": "prosper",
+    "synonym": "success",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c0383b294c",
+    "word": "purify",
+    "synonym": "clean",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_460dbe26c4",
+    "word": "qualify",
+    "synonym": "fulfill",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_d783fccc71",
+    "word": "radical",
+    "synonym": "utmost",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0726ae3cd1",
+    "word": "range",
+    "synonym": "scope",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5441a1bff9",
+    "word": "rare",
+    "synonym": "unusual",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a4032ad7f6",
+    "word": "rate",
+    "synonym": "rank / measure",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0ccde10783",
+    "word": "react",
+    "synonym": "respond",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_7e2b903b0f",
+    "word": "recreation",
+    "synonym": "entertainment",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_612288727f",
+    "word": "reduction",
+    "synonym": "decrease",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e6a6db47b4",
+    "word": "refer to",
+    "synonym": "talk about",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_d2d1095642",
+    "word": "rehearsal",
+    "synonym": "preparation",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e7919b1b46",
+    "word": "reject",
+    "synonym": "exclude",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b3f1a1488b",
+    "word": "relevant",
+    "synonym": "relative",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5f72ddc584",
+    "word": "religious",
+    "synonym": "sacred",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c4e897baf0",
+    "word": "reluctant",
+    "synonym": "unwilling",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_571663e09d",
+    "word": "reproduce",
+    "synonym": "breed",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c6e54817f0",
+    "word": "responsible",
+    "synonym": "liable",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6383b9de66",
+    "word": "revision",
+    "synonym": "editing",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_d285159853",
+    "word": "revive",
+    "synonym": "renaissance",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a44b8c4d01",
+    "word": "ruin",
+    "synonym": "destroy",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_b787f74731",
+    "word": "scenic",
+    "synonym": "beautiful",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_3c12e919e1",
+    "word": "shade",
+    "synonym": "shelter",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0dc3d3e6b6",
+    "word": "skepticism",
+    "synonym": "doubt",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_c2498b1257",
+    "word": "soar",
+    "synonym": "increase",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_00bdec58c8",
+    "word": "solely",
+    "synonym": "alone",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_8535a06202",
+    "word": "solicitor",
+    "synonym": "lawyer",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_4220c447c9",
+    "word": "steer",
+    "synonym": "manage",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_478960f91f",
+    "word": "stimulate",
+    "synonym": "motivate",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_13cea523b5",
+    "word": "stride",
+    "synonym": "progress",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0cbd36c900",
+    "word": "succumb",
+    "synonym": "yield",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fa2ee6119f",
+    "word": "subdivide",
+    "synonym": "break down",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e03c374641",
+    "word": "subtle",
+    "synonym": "delicate",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fb53997938",
+    "word": "substance",
+    "synonym": "matter",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_a495eae372",
+    "word": "sufficiency",
+    "synonym": "enough",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_0aabfb8972",
+    "word": "supersede",
+    "synonym": "replace",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_4cca4ee1ab",
+    "word": "suppress",
+    "synonym": "hold",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_687a788c32",
+    "word": "supremacy",
+    "synonym": "priority",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_588a6eedf7",
+    "word": "suspicious",
+    "synonym": "odd",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6da7e4a456",
+    "word": "sustainable",
+    "synonym": "long-term",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_cdea89b138",
+    "word": "symptom",
+    "synonym": "sign",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_ab3f344343",
+    "word": "tension",
+    "synonym": "upset",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_df366b3062",
+    "word": "term",
+    "synonym": "word",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_61c59922d4",
+    "word": "throughout",
+    "synonym": "anywhere",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_fd5a944168",
+    "word": "toll",
+    "synonym": "charge",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_e31fec69e6",
+    "word": "trace",
+    "synonym": "track",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_6547ef46f8",
+    "word": "transcend",
+    "synonym": "excel",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_41206de8ef",
+    "word": "transit",
+    "synonym": "send",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_5cf59c4d23",
+    "word": "tremendous",
+    "synonym": "vast",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_17350fef8d",
+    "word": "trigger",
+    "synonym": "begin",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_544e40f15b",
+    "word": "tropical",
+    "synonym": "hot",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_241ac84ddb",
+    "word": "unbiased",
+    "synonym": "fair",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_aa7385711f",
+    "word": "uniform",
+    "synonym": "consistent",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_808573988e",
+    "word": "valuable",
+    "synonym": "benefit",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_2f48ac43aa",
+    "word": "versatile",
+    "synonym": "all-around",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_02c1018207",
+    "word": "view",
+    "synonym": "overlook",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_216878990b",
+    "word": "violent",
+    "synonym": "fierce",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_f2fa54fd53",
+    "word": "visible",
+    "synonym": "see",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_d91627b20c",
+    "word": "visual",
+    "synonym": "image",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  },
+  {
+    "id": "sy_932002a7b3",
+    "word": "well-being",
+    "synonym": "health / happiness / welfare",
+    "group": "第 3 类考点词",
+    "source": "my-ielts-538"
+  }
+]

@@ -1,34 +1,46 @@
 import { useMemo, useState } from 'react'
-import { Volume2, BookMarked, Check, Shuffle, RotateCcw, Search } from 'lucide-react'
+import { Volume2, BookMarked, Check, Shuffle, RotateCcw, Search, MessageCircle } from 'lucide-react'
 import { PageHeader } from '../../components/Layout'
 import SpeakerButton from '../../components/SpeakerButton'
 import { useStore } from '../../stores/useStore'
-import { sceneVocab, topicVocab, synonyms, roots, type SceneWord } from '../../data/ieltsVocabData'
+import { sceneVocab, roots, topicVocab, type SceneWord } from '../../data/ieltsVocabData'
+import { ALL_TOPIC_GROUPS, ALL_SYNONYMS, SPEAKING_GROUPS, type SpeakItem } from '../../data/ieltsVocabNew'
 
-type Tab = 'browse' | 'study' | 'synonym' | 'root'
+type Tab = 'browse' | 'study' | 'synonym' | 'root' | 'speaking'
 const allWords: SceneWord[] = [
   ...sceneVocab.flatMap((g) => g.words.map((w) => ({ ...w, group: g.scene }))),
-  ...topicVocab.flatMap((g) => g.words.map((w) => ({ ...w, group: g.topic }))),
+  ...ALL_TOPIC_GROUPS.flatMap((g) => g.words.map((w) => ({ ...w, group: g.topic }))),
 ]
 
 export default function IeltsVocab() {
   const [tab, setTab] = useState<Tab>('browse')
   return (
     <div className="fade-in">
-      <PageHeader title="📚 雅思词汇学习" desc="场景词库 + 同义替换 + 词根词缀 + 多种练习模式，一键存入雅思单词本。" />
+      <PageHeader title="📚 雅思词汇学习" desc="场景词库 + 同义替换 + 词根词缀 + 口语题库 + 多种练习模式，一键存入雅思单词本。" />
       <div className="flex gap-1 mb-4 bg-white rounded-full p-1 shadow-card overflow-x-auto">
-        {([['browse', '词库浏览'], ['study', '学习模式'], ['synonym', '同义替换'], ['root', '词根词缀']] as [Tab, string][]).map(
-          ([k, l]) => (
-            <button key={k} onClick={() => setTab(k)} className={`flex-1 px-3 py-2 rounded-full text-sm whitespace-nowrap ${tab === k ? 'bg-lavender text-white shadow-soft' : 'text-gray-500'}`}>
-              {l}
-            </button>
-          )
-        )}
+        {([
+          ['browse', '词库浏览'],
+          ['study', '学习模式'],
+          ['synonym', '同义替换'],
+          ['root', '词根词缀'],
+          ['speaking', '口语题库'],
+        ] as [Tab, string][]).map(([k, l]) => (
+          <button
+            key={k}
+            onClick={() => setTab(k)}
+            className={`flex-1 px-3 py-2 rounded-full text-sm whitespace-nowrap ${
+              tab === k ? 'bg-lavender text-white shadow-soft' : 'text-gray-500'
+            }`}
+          >
+            {l}
+          </button>
+        ))}
       </div>
       {tab === 'browse' && <Browse />}
       {tab === 'study' && <Study />}
       {tab === 'synonym' && <Synonym />}
       {tab === 'root' && <Root />}
+      {tab === 'speaking' && <Speaking />}
     </div>
   )
 }
@@ -41,9 +53,11 @@ function AddBtn({ w }: { w: SceneWord }) {
     <button
       disabled={inBook}
       onClick={() =>
-        addWord({ source: '雅思词汇', category: 'ielts', korean: '', romanization: '', chinese: w.chinese, english: w.word, phonetic: w.phonetic, pos: w.pos, example: w.example, exampleZh: w.exampleCn })
+        addWord({ source: '雅思词汇', category: 'ielts', korean: '', romanization: '', chinese: w.chinese, english: w.word, phonetic: w.phonetic, pos: w.pos, example: w.example, exampleZh: w.exampleZh })
       }
-      className={`shrink-0 px-2 py-1 rounded-lg text-xs flex items-center gap-1 ${inBook ? 'bg-emerald-50 text-emerald-500' : 'bg-lavender text-white'}`}
+      className={`shrink-0 px-2 py-1 rounded-lg text-xs flex items-center gap-1 ${
+        inBook ? 'bg-emerald-50 text-emerald-500' : 'bg-lavender text-white'
+      }`}
     >
       {inBook ? <Check size={13} /> : <BookMarked size={13} />}
       {inBook ? '已存' : '存入'}
@@ -53,10 +67,14 @@ function AddBtn({ w }: { w: SceneWord }) {
 
 function Browse() {
   const [scene, setScene] = useState(sceneVocab[0].scene)
-  const [topic, setTopic] = useState(topicVocab[0].topic)
+  const [topic, setTopic] = useState(ALL_TOPIC_GROUPS[0].topic)
   const [view, setView] = useState<'scene' | 'topic'>('scene')
+  const [src, setSrc] = useState<'builtin' | 'zhenting'>('builtin')
   const [q, setQ] = useState('')
-  const list = view === 'scene' ? sceneVocab.find((g) => g.scene === scene)!.words : topicVocab.find((g) => g.topic === topic)!.words
+  // 词库源：内置精选 / 词汇真经全量（my-ielts 词汇真经 + 听力179）
+  // 词库源：内置精选（仅 topicVocab）/ 词汇真经全量（topicVocab + my-ielts 词汇真经 + 听力179）
+  const topicGroups = src === 'zhenting' ? ALL_TOPIC_GROUPS : topicVocab
+  const list = view === 'scene' ? sceneVocab.find((g) => g.scene === scene)!.words : topicGroups.find((g) => g.topic === topic)!.words
   const filtered = useMemo(() => {
     if (!q.trim()) return list
     const kw = q.trim().toLowerCase()
@@ -68,17 +86,53 @@ function Browse() {
     <div>
       <div className="flex gap-2 mb-3 flex-wrap items-center">
         <div className="inline-flex rounded-full bg-white shadow-card p-1">
-          <button onClick={() => setView('scene')} className={`px-3 py-1 rounded-full text-sm ${view === 'scene' ? 'bg-lavender text-white' : 'text-gray-500'}`}>场景词</button>
-          <button onClick={() => setView('topic')} className={`px-3 py-1 rounded-full text-sm ${view === 'topic' ? 'bg-lavender text-white' : 'text-gray-500'}`}>话题词</button>
+          <button
+            onClick={() => setView('scene')}
+            className={`px-3 py-1 rounded-full text-sm ${view === 'scene' ? 'bg-lavender text-white' : 'text-gray-500'}`}
+          >
+            场景词
+          </button>
+          <button
+            onClick={() => setView('topic')}
+            className={`px-3 py-1 rounded-full text-sm ${view === 'topic' ? 'bg-lavender text-white' : 'text-gray-500'}`}
+          >
+            话题词
+          </button>
         </div>
-        <select className="inp" value={view === 'scene' ? scene : topic} onChange={(e) => (view === 'scene' ? setScene(e.target.value) : setTopic(e.target.value))}>
-          {(view === 'scene' ? sceneVocab : topicVocab).map((g) => (
-            <option key={g.scene || g.topic} value={g.scene || g.topic}>{g.scene || g.topic}</option>
+        {/* 词库源切换 */}
+        <div className="inline-flex rounded-full bg-white shadow-card p-1">
+          <button
+            onClick={() => setSrc('builtin')}
+            className={`px-3 py-1 rounded-full text-sm ${src === 'builtin' ? 'bg-lavender text-white' : 'text-gray-500'}`}
+          >
+            内置精选
+          </button>
+          <button
+            onClick={() => setSrc('zhenting')}
+            className={`px-3 py-1 rounded-full text-sm ${src === 'zhenting' ? 'bg-lavender text-white' : 'text-gray-500'}`}
+          >
+            词汇真经全量
+          </button>
+        </div>
+        <select
+          className="inp"
+          value={view === 'scene' ? scene : topic}
+          onChange={(e) => (view === 'scene' ? setScene(e.target.value) : setTopic(e.target.value))}
+        >
+          {(view === 'scene' ? sceneVocab : topicGroups).map((g) => (
+            <option key={g.scene || g.topic} value={g.scene || g.topic}>
+              {g.scene || g.topic}
+            </option>
           ))}
         </select>
         <div className="relative flex-1 min-w-[160px]">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="搜索英文 / 中文 / 音标" className="inp w-full pl-9" />
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="搜索英文 / 中文 / 音标"
+            className="inp w-full pl-9"
+          />
         </div>
         <span className="text-xs text-gray-400 whitespace-nowrap">{filtered.length} 词</span>
       </div>
@@ -130,9 +184,14 @@ function Study() {
       <div className="flex justify-between text-xs text-gray-400 mb-2">
         <span>进度 {idx + 1}/{list.length}</span>
         <span>已掌握 {known}</span>
-        <button onClick={restart} className="flex items-center gap-1 text-lavender-deep"><RotateCcw size={12} /> 换一批</button>
+        <button onClick={restart} className="flex items-center gap-1 text-lavender-deep">
+          <RotateCcw size={12} /> 换一批
+        </button>
       </div>
-      <div onClick={() => setFlipped((f) => !f)} className="bg-white rounded-card shadow-card p-8 text-center cursor-pointer min-h-[180px] flex flex-col items-center justify-center select-none">
+      <div
+        onClick={() => setFlipped((f) => !f)}
+        className="bg-white rounded-card shadow-card p-8 text-center cursor-pointer min-h-[180px] flex flex-col items-center justify-center select-none"
+      >
         <SpeakerButton text={cur.word} category="ielts" size={20} className="mb-3" />
         {!flipped ? (
           <div className="text-2xl font-bold text-gray-800">{cur.word}</div>
@@ -146,8 +205,18 @@ function Study() {
         <div className="text-xs text-gray-300 mt-4">点击卡片翻面</div>
       </div>
       <div className="flex gap-2 mt-3">
-        <button onClick={() => { setKnown(known + 1); next() }} className="flex-1 py-2 rounded-xl bg-emerald-500 text-white text-sm">认识 ✓</button>
-        <button onClick={next} className="flex-1 py-2 rounded-xl bg-cream text-gray-600 text-sm">不认识，跳过</button>
+        <button
+          onClick={() => {
+            setKnown(known + 1)
+            next()
+          }}
+          className="flex-1 py-2 rounded-xl bg-emerald-500 text-white text-sm"
+        >
+          认识 ✓
+        </button>
+        <button onClick={next} className="flex-1 py-2 rounded-xl bg-cream text-gray-600 text-sm">
+          不认识，跳过
+        </button>
       </div>
     </div>
   )
@@ -156,14 +225,16 @@ function Study() {
 function Synonym() {
   return (
     <div className="space-y-2">
-      <div className="text-xs text-gray-400 mb-1">共 {synonyms.length} 组高频替换（写作/阅读核心）</div>
-      {synonyms.map((s, i) => (
+      <div className="text-xs text-gray-400 mb-1">共 {ALL_SYNONYMS.length} 组高频替换（写作/阅读核心，含内置 + 词汇真经 538）</div>
+      {ALL_SYNONYMS.map((s, i) => (
         <div key={i} className="bg-white rounded-card shadow-card p-3">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-medium text-lavender-deep">{s.base}</span>
             <span className="text-gray-300">→</span>
             {s.replaces.map((r) => (
-              <span key={r} className="text-sm text-gray-700 bg-cream rounded-full px-2 py-0.5">{r}</span>
+              <span key={r} className="text-sm text-gray-700 bg-cream rounded-full px-2 py-0.5">
+                {r}
+              </span>
             ))}
           </div>
           <div className="text-xs text-gray-400 mt-1">{s.note}</div>
@@ -178,10 +249,39 @@ function Root() {
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
       {roots.map((r, i) => (
         <div key={i} className="bg-white rounded-card shadow-card p-3">
-          <div className="font-medium text-lavender-deep">-{r.root}- <span className="text-sm text-gray-500">({r.meaning})</span></div>
+          <div className="font-medium text-lavender-deep">
+            -{r.root}- <span className="text-sm text-gray-500">({r.meaning})</span>
+          </div>
           <div className="flex flex-wrap gap-1 mt-2">
             {r.words.map((w) => (
-              <span key={w.word} className="text-xs bg-cream rounded-lg px-2 py-1 text-gray-700">{w.word} <span className="text-gray-400">{w.chinese}</span></span>
+              <span key={w.word} className="text-xs bg-cream rounded-lg px-2 py-1 text-gray-700">
+                {w.word} <span className="text-gray-400">{w.chinese}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Speaking() {
+  return (
+    <div className="space-y-4">
+      <div className="text-xs text-gray-400">共 {SPEAKING_GROUPS.reduce((s, g) => s + g.items.length, 0)} 题（Part 1–3，源自 IELTS-Speaking-AI）</div>
+      {SPEAKING_GROUPS.map((g) => (
+        <div key={g.part}>
+          <div className="flex items-center gap-2 mb-2">
+            <MessageCircle size={15} className="text-lavender-deep" />
+            <h3 className="font-semibold text-gray-700">{g.part}</h3>
+            <span className="text-xs text-gray-400">{g.items.length} 题</span>
+          </div>
+          <div className="space-y-2">
+            {g.items.map((it: SpeakItem, i) => (
+              <div key={i} className="bg-white rounded-card shadow-card p-3">
+                <div className="text-sm text-gray-800 whitespace-pre-line">{it.question}</div>
+                <div className="text-xs text-gray-400 mt-1">{it.topic}</div>
+              </div>
             ))}
           </div>
         </div>

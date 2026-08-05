@@ -1,0 +1,522 @@
+[
+  {
+    "id": "tp_000000",
+    "korean": "안녕하세요",
+    "english": "Hello; Hi",
+    "chinese": "",
+    "romanization": "annyeonghaseyo",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "안녕하세요, 반갑습니다.",
+        "english": "Hello, nice to meet you.",
+        "chinese": ""
+      },
+      {
+        "korean": "좋은 아침입니다.",
+        "english": "Good morning.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000001",
+    "korean": "감사합니다",
+    "english": "Thank you; Thanks",
+    "chinese": "",
+    "romanization": "gamsahamnida",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "도와주셔서 감사합니다.",
+        "english": "Thank you for your help.",
+        "chinese": ""
+      },
+      {
+        "korean": "식사 맛있게 했습니다.",
+        "english": "The food was delicious.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000002",
+    "korean": "물",
+    "english": "Water",
+    "chinese": "",
+    "romanization": "mul",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "물 한 잔 주세요.",
+        "english": "Please give me a glass of water.",
+        "chinese": ""
+      },
+      {
+        "korean": "나는 매일 물을 마신다.",
+        "english": "I drink water every day.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000003",
+    "korean": "밥",
+    "english": "Rice; Meal",
+    "chinese": "",
+    "romanization": "bap",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "밥을 먹어요.",
+        "english": "I eat rice.",
+        "chinese": ""
+      },
+      {
+        "korean": "밥 먹었어요?",
+        "english": "Have you eaten?",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000004",
+    "korean": "학교",
+    "english": "School",
+    "chinese": "",
+    "romanization": "hakgyo",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "학교에 가요.",
+        "english": "I go to school.",
+        "chinese": ""
+      },
+      {
+        "korean": "나는 학교 학생이에요.",
+        "english": "I am a school student.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000005",
+    "korean": "친구",
+    "english": "Friend",
+    "chinese": "",
+    "romanization": "chingu",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "친구와 함께 놀아요.",
+        "english": "I play with friends.",
+        "chinese": ""
+      },
+      {
+        "korean": "좋은 친구를 사귀었어요.",
+        "english": "I made a good friend.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000006",
+    "korean": "가족",
+    "english": "Family",
+    "chinese": "",
+    "romanization": "gajok",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "가족과 함께 있어요.",
+        "english": "I am with my family.",
+        "chinese": ""
+      },
+      {
+        "korean": "우리 가족은 행복해요.",
+        "english": "Our family is happy.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000007",
+    "korean": "날씨",
+    "english": "Weather",
+    "chinese": "",
+    "romanization": "nalSSi",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "오늘 날씨가 좋아요.",
+        "english": "The weather is good today.",
+        "chinese": ""
+      },
+      {
+        "korean": "내일 날씨는 어때요?",
+        "english": "How is the weather tomorrow?",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000008",
+    "korean": "책",
+    "english": "Book",
+    "chinese": "",
+    "romanization": "chaek",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "책을 읽어요.",
+        "english": "I read a book.",
+        "chinese": ""
+      },
+      {
+        "korean": "재미있는 책을 찾았어요.",
+        "english": "I found an interesting book.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000009",
+    "korean": "나",
+    "english": "I; Me",
+    "chinese": "",
+    "romanization": "na",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "나는 학생이에요.",
+        "english": "I am a student.",
+        "chinese": ""
+      },
+      {
+        "korean": "나를 도와주세요.",
+        "english": "Help me please.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000010",
+    "korean": "너",
+    "english": "You",
+    "chinese": "",
+    "romanization": "neo",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "너는 누구야?",
+        "english": "Who are you?",
+        "chinese": ""
+      },
+      {
+        "korean": "너를 좋아해.",
+        "english": "I like you.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000011",
+    "korean": "좋다",
+    "english": "Good; Like",
+    "chinese": "",
+    "romanization": "jota",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "날씨가 좋아요.",
+        "english": "The weather is good.",
+        "chinese": ""
+      },
+      {
+        "korean": "너를 좋아해.",
+        "english": "I like you.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000012",
+    "korean": "나쁘다",
+    "english": "Bad; Poor",
+    "chinese": "",
+    "romanization": "nappeuda",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "날씨가 나빠요.",
+        "english": "The weather is bad.",
+        "chinese": ""
+      },
+      {
+        "korean": "기분이 나빠요.",
+        "english": "I feel bad.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000013",
+    "korean": "크다",
+    "english": "Big; Large",
+    "chinese": "",
+    "romanization": "keuda",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "이 집은 커요.",
+        "english": "This house is big.",
+        "chinese": ""
+      },
+      {
+        "korean": "크기가 크다.",
+        "english": "The size is large.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000014",
+    "korean": "작다",
+    "english": "Small",
+    "chinese": "",
+    "romanization": "jakda",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "이 상자는 작아요.",
+        "english": "This box is small.",
+        "chinese": ""
+      },
+      {
+        "korean": "작은 새를 봤어요.",
+        "english": "I saw a small bird.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000015",
+    "korean": "먹다",
+    "english": "Eat",
+    "chinese": "",
+    "romanization": "meokda",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "밥을 먹어요.",
+        "english": "I eat rice.",
+        "chinese": ""
+      },
+      {
+        "korean": "친구와 함께 먹었어요.",
+        "english": "I ate with my friend.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000016",
+    "korean": "마시다",
+    "english": "Drink",
+    "chinese": "",
+    "romanization": "masida",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "물을 마셔요.",
+        "english": "I drink water.",
+        "chinese": ""
+      },
+      {
+        "korean": "커피를 마시고 싶어요.",
+        "english": "I want to drink coffee.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000017",
+    "korean": "가다",
+    "english": "Go",
+    "chinese": "",
+    "romanization": "gada",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "학교에 가요.",
+        "english": "I go to school.",
+        "chinese": ""
+      },
+      {
+        "korean": "어디에 가세요?",
+        "english": "Where are you going?",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000018",
+    "korean": "오다",
+    "english": "Come",
+    "chinese": "",
+    "romanization": "oda",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "친구가 왔어요.",
+        "english": "My friend came.",
+        "chinese": ""
+      },
+      {
+        "korean": "내일 올 거예요.",
+        "english": "I will come tomorrow.",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  },
+  {
+    "id": "tp_000019",
+    "korean": "있다",
+    "english": "There is; Have; Exist",
+    "chinese": "",
+    "romanization": "itda",
+    "partOfSpeech": "",
+    "level": "1",
+    "topic": "TOPIK1",
+    "book": "",
+    "phonetic": "",
+    "exampleSentences": [
+      {
+        "korean": "책이 있어요.",
+        "english": "There is a book.",
+        "chinese": ""
+      },
+      {
+        "korean": "시간이 있나요?",
+        "english": "Do you have time?",
+        "chinese": ""
+      }
+    ],
+    "grammar": "",
+    "source": "topik-vocab"
+  }
+]

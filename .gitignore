@@ -9,6 +9,7 @@ dist-ssr/
 dist_bak/
 dist_old_*/
 dist-verify/
+dist-deploy/
 *.local
 
 # Temp / generated scripts

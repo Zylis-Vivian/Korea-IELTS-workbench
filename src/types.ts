@@ -27,6 +27,15 @@ export interface VocabWord {
   grammar?: string // 例句涉及的语法点说明（如「-아/어요 礼貌陈述式」）
   level?: string // TOPIK 难度等级（1~6）
   topic: string
+  // —— 词库扩展指令 V2 扩展字段（向后兼容，全部可选）——
+  book?: string // 教材，如「延世韩国语1」
+  category?: string // 主分类，如「延世韩国语」
+  source?: string // 数据来源
+  unit?: number // 单元号
+  lesson?: number // 课次
+  topics?: string[] // 多标签
+  audioSrc?: string // 对应 manifest.json 音频路径
+  english?: string // 英文释义（延世等外源词库提供）
 }
 
 export interface GrammarPoint {

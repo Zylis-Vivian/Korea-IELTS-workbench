@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Sidebar from './components/Sidebar'
 import PetalBackground from './components/PetalBackground'
@@ -7,7 +7,6 @@ import PronunciationStatus from './components/PronunciationStatus'
 import { useStore } from './stores/useStore'
 import { runPronunciationTest } from './utils/pronunciationTest'
 import KoreanAlphabet from './modules/korean-alphabet'
-import KoreanVocab from './modules/korean-vocab'
 import KoreanGrammar from './modules/korean-grammar'
 import KoreanDialogue from './modules/korean-dialogue'
 import KoreanPronunciation from './modules/korean-pronunciation'
@@ -19,7 +18,8 @@ import IeltsListening from './modules/ielts-listening'
 import IeltsReading from './modules/ielts-reading'
 import IeltsSpeaking from './modules/ielts-speaking'
 import IeltsWriting from './modules/ielts-writing'
-import IeltsVocab from './modules/ielts-vocab'
+// 雅思词汇模块含 ~1.4MB 词汇真经 JSON，按需懒加载以移出首屏主包
+const IeltsVocab = lazy(() => import('./modules/ielts-vocab'))
 import IeltsGrammar from './modules/ielts-grammar'
 import IeltsScoring from './modules/ielts-scoring'
 import Dashboard from './modules/dashboard'
@@ -28,6 +28,9 @@ import Settings from './modules/settings'
 import BoardView from './modules/board/BoardView'
 import BookCenter from './modules/book-center'
 import PDFReader from './modules/book-center/PDFReader'
+
+// 韩语词汇模块含 ~1.5MB 延世词库 JSON，按需懒加载以移出首屏主包
+const KoreanVocab = lazy(() => import('./modules/korean-vocab'))
 
 export default function App() {
   const setPronStatus = useStore((s) => s.setPronStatus)
@@ -64,7 +67,14 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/korean/alphabet" element={<KoreanAlphabet />} />
-            <Route path="/korean/vocab" element={<KoreanVocab />} />
+            <Route
+              path="/korean/vocab"
+              element={
+                <Suspense fallback={<div className="p-8 text-center text-gray-400">加载中…</div>}>
+                  <KoreanVocab />
+                </Suspense>
+              }
+            />
             <Route path="/korean/grammar" element={<KoreanGrammar />} />
             <Route path="/korean/dialogue" element={<KoreanDialogue />} />
             <Route path="/korean/pronunciation" element={<KoreanPronunciation />} />
@@ -72,7 +82,14 @@ export default function App() {
             <Route path="/korean/practice" element={<KoreanPractice />} />
             <Route path="/korean/video" element={<KoreanVideo />} />
             <Route path="/korean/daily" element={<KoreanDaily />} />
-            <Route path="/ielts/vocab" element={<IeltsVocab />} />
+            <Route
+              path="/ielts/vocab"
+              element={
+                <Suspense fallback={<div className="p-8 text-center text-gray-400">加载中…</div>}>
+                  <IeltsVocab />
+                </Suspense>
+              }
+            />
             <Route path="/ielts/grammar" element={<IeltsGrammar />} />
             <Route path="/ielts/listening" element={<IeltsListening />} />
             <Route path="/ielts/reading" element={<IeltsReading />} />

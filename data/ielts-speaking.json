@@ -1,0 +1,498 @@
+[
+  {
+    "id": "sp_e7f6aaf495",
+    "question": "What's your full name?",
+    "topic": "Personal Information",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_e9953d8e37",
+    "question": "Can I see your ID?",
+    "topic": "Personal Information",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_fe99499473",
+    "question": "Where are you from?",
+    "topic": "Personal Information",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_89d50f7ba6",
+    "question": "Do you work or study?",
+    "topic": "Personal Information",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_826dd64c3d",
+    "question": "What do you do for work/study?",
+    "topic": "Personal Information",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_0bad1562bb",
+    "question": "Do you like your job/studies? Why?",
+    "topic": "Personal Information",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_98e9561b7f",
+    "question": "Do you have a large family?",
+    "topic": "Family & Friends",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_285fe99863",
+    "question": "How much time do you spend with your family?",
+    "topic": "Family & Friends",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_c4ccbda905",
+    "question": "What do you like to do together as a family?",
+    "topic": "Family & Friends",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_c7249db5fd",
+    "question": "Do you prefer spending time with family or friends?",
+    "topic": "Family & Friends",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_5e0082027b",
+    "question": "How often do you meet your friends?",
+    "topic": "Family & Friends",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_2418bf7b0c",
+    "question": "What do you usually do with your friends?",
+    "topic": "Family & Friends",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_76787dfc56",
+    "question": "What do you like to do in your free time?",
+    "topic": "Hobbies & Interests",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_a940a92ccc",
+    "question": "Do you have any hobbies?",
+    "topic": "Hobbies & Interests",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_6626048b34",
+    "question": "When did you start this hobby?",
+    "topic": "Hobbies & Interests",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_5bccc84829",
+    "question": "Is it an expensive hobby?",
+    "topic": "Hobbies & Interests",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_feacdac9a8",
+    "question": "What hobbies are popular in your country?",
+    "topic": "Hobbies & Interests",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_d27fc458b2",
+    "question": "Do you think hobbies should be shared with other people?",
+    "topic": "Hobbies & Interests",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_a8bb9d31fb",
+    "question": "Do you use the internet very much?",
+    "topic": "Technology",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_ea0ff5f639",
+    "question": "When did you first start using the internet?",
+    "topic": "Technology",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_32a7bda8ba",
+    "question": "What do you do on the internet?",
+    "topic": "Technology",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_f84bb4d73a",
+    "question": "Do you think the internet is useful?",
+    "topic": "Technology",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_18d4e47f46",
+    "question": "What are the pros and cons of children using the internet?",
+    "topic": "Technology",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_97b863df27",
+    "question": "Do you like music?",
+    "topic": "Music",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_37153f35d3",
+    "question": "What kind of music do you like?",
+    "topic": "Music",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_3a36025207",
+    "question": "Have you ever learned to play a musical instrument?",
+    "topic": "Music",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_fe544c1031",
+    "question": "Which instrument would you prefer to study - the piano or the violin?",
+    "topic": "Music",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_9eb9bea8fc",
+    "question": "Do you think it's important for children to learn a musical instrument?",
+    "topic": "Music",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_909b2b4346",
+    "question": "Do you like sport?",
+    "topic": "Sports & Exercise",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_059fccdbf7",
+    "question": "What sports do you play?",
+    "topic": "Sports & Exercise",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_e356136c38",
+    "question": "What's the most popular sport in your country?",
+    "topic": "Sports & Exercise",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_20b3a2f635",
+    "question": "What's your favorite sport to watch on TV?",
+    "topic": "Sports & Exercise",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_69e18a7258",
+    "question": "Do you think children should play sport?",
+    "topic": "Sports & Exercise",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_f2e68b2968",
+    "question": "What are the benefits of playing sport?",
+    "topic": "Sports & Exercise",
+    "answer": "",
+    "part": "Part 1",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_97e8c2cf3d",
+    "question": "Describe a person you admire\n                    \nYou should say:\n• Who this person is\n• How you know about this person  \n• What this person does\n• And explain why you admire this person\n\nYou have one minute to think about what you're going to say.\nYou can make some notes to help you if you wish.",
+    "topic": "Describe a person you admire",
+    "answer": "",
+    "part": "Part 2",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_66f6f44b84",
+    "question": "Describe a memorable journey you have taken\n                    \nYou should say:\n• Where you went\n• Who you went with\n• How you traveled there\n• And explain why this journey was memorable\n\nYou have one minute to think about what you're going to say.\nYou can make some notes to help you if you wish.",
+    "topic": "Describe a memorable journey",
+    "answer": "",
+    "part": "Part 2",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_604bfaf805",
+    "question": "Describe a skill you learned recently\n                    \nYou should say:\n• What the skill is\n• How you learned it\n• How long it took you to learn\n• And explain how this skill has helped you\n\nYou have one minute to think about what you're going to say.\nYou can make some notes to help you if you wish.",
+    "topic": "Describe a skill you learned",
+    "answer": "",
+    "part": "Part 2",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_541bcfcb04",
+    "question": "Describe a place you would like to visit\n                    \nYou should say:\n• Where this place is\n• How you know about this place\n• What you would do there\n• And explain why you want to visit this place\n\nYou have one minute to think about what you're going to say.\nYou can make some notes to help you if you wish.",
+    "topic": "Describe a place you want to visit",
+    "answer": "",
+    "part": "Part 2",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_919665ffe4",
+    "question": "What are the advantages of online learning?",
+    "topic": "Education",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_372e9dbd63",
+    "question": "How has education changed in recent years?",
+    "topic": "Education",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_ae4d287402",
+    "question": "Do you think traditional teaching methods are still effective?",
+    "topic": "Education",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_b4c0ef5827",
+    "question": "What role should technology play in education?",
+    "topic": "Education",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_7c047bb37f",
+    "question": "How important is it for students to learn practical skills?",
+    "topic": "Education",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_b2a1c1c756",
+    "question": "What are the benefits of studying abroad?",
+    "topic": "Education",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_af49692e2d",
+    "question": "What are the main environmental problems in your country?",
+    "topic": "Environment",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_ca39a7539e",
+    "question": "How can individuals help protect the environment?",
+    "topic": "Environment",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_0acaefb406",
+    "question": "Do you think governments are doing enough to tackle climate change?",
+    "topic": "Environment",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_aae4892651",
+    "question": "What role should businesses play in environmental protection?",
+    "topic": "Environment",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_a28a44fe02",
+    "question": "How might cities change in the future to be more environmentally friendly?",
+    "topic": "Environment",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_9fb001ffde",
+    "question": "Is it realistic to expect people to change their lifestyle to help the environment?",
+    "topic": "Environment",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_105fbf376b",
+    "question": "How has technology changed the way people communicate?",
+    "topic": "Technology",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_530db433f7",
+    "question": "What are the advantages and disadvantages of social media?",
+    "topic": "Technology",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_945fc8a4ea",
+    "question": "Do you think artificial intelligence will replace human workers?",
+    "topic": "Technology",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_ce5f0bb62e",
+    "question": "How might technology change education in the future?",
+    "topic": "Technology",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_5f29112855",
+    "question": "What are the potential risks of our increasing dependence on technology?",
+    "topic": "Technology",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_c094c5afd7",
+    "question": "How can we ensure technology is used responsibly?",
+    "topic": "Technology",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_82130a83d8",
+    "question": "How has family life changed in recent decades?",
+    "topic": "Society",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_3aa5fecd0d",
+    "question": "What are the advantages and disadvantages of living in a big city?",
+    "topic": "Society",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_9915a4e92f",
+    "question": "How important is it to preserve cultural traditions?",
+    "topic": "Society",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_25cdeceaac",
+    "question": "What role should governments play in people's lives?",
+    "topic": "Society",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_2a77ac58a6",
+    "question": "How can communities be made stronger?",
+    "topic": "Society",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  },
+  {
+    "id": "sp_67ed8ce741",
+    "question": "What are the main challenges facing young people today?",
+    "topic": "Society",
+    "answer": "",
+    "part": "Part 3",
+    "source": "ielts-speaking-ai"
+  }
+]
