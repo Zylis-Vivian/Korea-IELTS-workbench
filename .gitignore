@@ -8,6 +8,7 @@ dist/
 dist-ssr/
 dist_bak/
 dist_old_*/
+dist-verify/
 *.local
 
 # Temp / generated scripts

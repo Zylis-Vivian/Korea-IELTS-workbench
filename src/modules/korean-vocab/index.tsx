@@ -105,6 +105,7 @@ export default function KoreanVocab() {
               <div className="text-sm">{w.chinese}</div>
               {w.example && <div className="text-xs text-gray-400 mt-1">💡 {w.example}</div>}
               {w.exampleZh && <div className="text-xs text-gray-300">　{w.exampleZh}</div>}
+              {w.grammar && <div className="text-xs text-lavender-deep/80 mt-1">📝 语法：{w.grammar}</div>}
               <div className="flex items-center justify-between mt-1">
                 <span className="text-[10px] bg-lavender-light text-lavender-deep rounded px-2 py-0.5">
                   TOPIK {w.level || '-'}

@@ -24,7 +24,8 @@ export interface VocabWord {
   pos?: string // 词性
   example?: string
   exampleZh?: string
-  level?: string // TOPIK 等级
+  grammar?: string // 例句涉及的语法点说明（如「-아/어요 礼貌陈述式」）
+  level?: string // TOPIK 难度等级（1~6）
   topic: string
 }
 

@@ -238,6 +238,51 @@ export const sceneVocab: SceneGroup[] = [
       { word: 'craftsmanship', phonetic: '/ˈkrɑːftsmənʃɪp/', pos: 'n.', chinese: '工艺', example: 'Fine craftsmanship.', exampleCn: '精湛工艺。' },
     ],
   },
+  {
+    scene: '教育学术',
+    words: [
+      { word: 'curriculum', phonetic: '/kəˈrɪkjələm/', pos: 'n.', chinese: '课程', example: 'The curriculum covers many subjects.', exampleCn: '课程涵盖许多科目。' },
+      { word: 'assignment', phonetic: '/əˈsaɪnmənt/', pos: 'n.', chinese: '作业', example: 'Finish your assignment on time.', exampleCn: '按时完成作业。' },
+      { word: 'lecture', phonetic: '/ˈlektʃə/', pos: 'n.', chinese: '讲座', example: 'We attend a lecture weekly.', exampleCn: '我们每周听一次讲座。' },
+      { word: 'thesis', phonetic: '/ˈθiːsɪs/', pos: 'n.', chinese: '论文', example: 'She wrote a long thesis.', exampleCn: '她写了一篇长篇论文。' },
+      { word: 'scholarship', phonetic: '/ˈskɒləʃɪp/', pos: 'n.', chinese: '奖学金', example: 'He won a full scholarship.', exampleCn: '他获得了全额奖学金。' },
+      { word: 'literacy', phonetic: '/ˈlɪtərəsi/', pos: 'n.', chinese: '读写能力', example: 'Improve digital literacy.', exampleCn: '提升数字读写能力。' },
+      { word: 'tuition', phonetic: '/tjuˈɪʃn/', pos: 'n.', chinese: '学费', example: 'Tuition fees are rising.', exampleCn: '学费在上涨。' },
+      { word: 'campus', phonetic: '/ˈkæmpəs/', pos: 'n.', chinese: '校园', example: 'Walk around the campus.', exampleCn: '在校园里散步。' },
+      { word: 'seminar', phonetic: '/ˈsemɪnə/', pos: 'n.', chinese: '研讨会', example: 'Join a research seminar.', exampleCn: '参加一场研究研讨会。' },
+      { word: 'enroll', phonetic: '/ɪnˈrəʊl/', pos: 'v.', chinese: '注册入学', example: 'Enroll in a course.', exampleCn: '注册一门课程。' },
+    ],
+  },
+  {
+    scene: '科技与媒体',
+    words: [
+      { word: 'innovation', phonetic: '/ˌɪnəˈveɪʃn/', pos: 'n.', chinese: '创新', example: 'Technology drives innovation.', exampleCn: '科技推动创新。' },
+      { word: 'algorithm', phonetic: '/ˈælɡərɪðəm/', pos: 'n.', chinese: '算法', example: 'The algorithm is complex.', exampleCn: '这个算法很复杂。' },
+      { word: 'bandwidth', phonetic: '/ˈbændwɪdθ/', pos: 'n.', chinese: '带宽', example: 'We need more bandwidth.', exampleCn: '我们需要更多带宽。' },
+      { word: 'cybersecurity', phonetic: '/ˌsaɪbəsɪˈkjʊərəti/', pos: 'n.', chinese: '网络安全', example: 'Cybersecurity is vital.', exampleCn: '网络安全至关重要。' },
+      { word: 'artificial intelligence', phonetic: '/ˌɑːtɪˈfɪʃl ɪnˈtelɪdʒəns/', pos: 'n.', chinese: '人工智能', example: 'AI changes our lives.', exampleCn: '人工智能改变我们的生活。' },
+      { word: 'social media', phonetic: '/ˈsəʊʃl ˈmiːdiə/', pos: 'n.', chinese: '社交媒体', example: 'Social media influences us.', exampleCn: '社交媒体影响我们。' },
+      { word: 'digital', phonetic: '/ˈdɪdʒɪtl/', pos: 'adj.', chinese: '数字的', example: 'A digital world.', exampleCn: '一个数字化的世界。' },
+      { word: 'platform', phonetic: '/ˈplætfɔːm/', pos: 'n.', chinese: '平台', example: 'An online learning platform.', exampleCn: '一个在线学习平台。' },
+      { word: 'automate', phonetic: '/ˈɔːtəmeɪt/', pos: 'v.', chinese: '使自动化', example: 'Automate the repeated task.', exampleCn: '把重复的任务自动化。' },
+      { word: 'virtual', phonetic: '/ˈvɜːtʃuəl/', pos: 'adj.', chinese: '虚拟的', example: 'A virtual meeting.', exampleCn: '一场虚拟会议。' },
+    ],
+  },
+  {
+    scene: '商业经济',
+    words: [
+      { word: 'inflation', phonetic: '/ɪnˈfleɪʃn/', pos: 'n.', chinese: '通货膨胀', example: 'Inflation is rising.', exampleCn: '通货膨胀在上升。' },
+      { word: 'revenue', phonetic: '/ˈrevənjuː/', pos: 'n.', chinese: '收入', example: 'Company revenue grew.', exampleCn: '公司收入增长了。' },
+      { word: 'investment', phonetic: '/ɪnˈvestmənt/', pos: 'n.', chinese: '投资', example: 'Make a wise investment.', exampleCn: '做一项明智的投资。' },
+      { word: 'entrepreneur', phonetic: '/ˌɒntrəprəˈnɜː/', pos: 'n.', chinese: '企业家', example: 'A successful entrepreneur.', exampleCn: '一位成功的企业家。' },
+      { word: 'monopoly', phonetic: '/məˈnɒpəli/', pos: 'n.', chinese: '垄断', example: 'Break the monopoly.', exampleCn: '打破垄断。' },
+      { word: 'export', phonetic: '/ɪkˈspɔːt/', pos: 'n.', chinese: '出口', example: 'Export goods abroad.', exampleCn: '向国外出口商品。' },
+      { word: 'tariff', phonetic: '/ˈtærɪf/', pos: 'n.', chinese: '关税', example: 'A new tariff started.', exampleCn: '一项新关税开始实施。' },
+      { word: 'retail', phonetic: '/ˈriːteɪl/', pos: 'n.', chinese: '零售', example: 'Retail sales rose.', exampleCn: '零售额上升了。' },
+      { word: 'logistics', phonetic: '/ləˈdʒɪstɪks/', pos: 'n.', chinese: '物流', example: 'Logistics is efficient.', exampleCn: '物流很高效。' },
+      { word: 'merger', phonetic: '/ˈmɜːdʒə/', pos: 'n.', chinese: '合并', example: 'A company merger.', exampleCn: '公司合并。' },
+    ],
+  },
 ]
 
 // ───────── 话题词汇（写作/口语高频） ─────────

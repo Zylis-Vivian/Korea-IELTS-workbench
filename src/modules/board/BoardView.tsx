@@ -9,6 +9,8 @@ import {
   BookmarkX,
   Plus,
   Download,
+  Upload,
+  AlertTriangle,
   Trash2,
   Search,
   Filter,
@@ -19,6 +21,7 @@ import {
   CircleDot,
   Circle,
 } from 'lucide-react'
+import { parseImportText, type ImportItem } from '../../utils/importData'
 
 interface Props {
   category: BoardCategory
@@ -80,6 +83,12 @@ export default function BoardView({ category, kind }: Props) {
   const [showAdd, setShowAdd] = useState(false)
   const [showLib, setShowLib] = useState(false)
   const [libSearch, setLibSearch] = useState('')
+  // 导入
+  const [showImport, setShowImport] = useState(false)
+  const [parsed, setParsed] = useState<ImportItem[] | null>(null)
+  const [importErrors, setImportErrors] = useState<string[]>([])
+  const [importMode, setImportMode] = useState<'append' | 'replace'>('append')
+  const [importMsg, setImportMsg] = useState('')
   // 录入表单
   const [form, setForm] = useState({
     korean: '', romanization: '', english: '', phonetic: '', pos: '', chinese: '',
@@ -125,16 +134,94 @@ export default function BoardView({ category, kind }: Props) {
     if (isWord) {
       const rows: (string | number)[][] = [['来源', '分类', '韩文', '罗马音', '英文', '音标', '词性', '中文', '掌握度', '添加时间']]
       items.forEach((w: any) =>
-        rows.push([w.source, '雅思', w.korean || '', w.romanization || '', w.english || '', w.phonetic || '', w.pos || '', w.chinese, MASTERY_LABEL[w.mastery] || '未学', new Date(w.createdAt).toLocaleDateString()])
+        rows.push([w.source, CAT_LABEL[category], w.korean || '', w.romanization || '', w.english || '', w.phonetic || '', w.pos || '', w.chinese, MASTERY_LABEL[w.mastery] || '未学', new Date(w.createdAt).toLocaleDateString()])
       )
       downloadCSV(`${title}.csv`, rows)
     } else {
       const rows: (string | number)[][] = [['来源', '分类', '题目', '你的答案', '正确答案', '添加时间']]
       items.forEach((w: any) =>
-        rows.push([w.source, '雅思', w.question, w.yourAnswer, w.correct, new Date(w.createdAt).toLocaleDateString()])
+        rows.push([w.source, CAT_LABEL[category], w.question, w.yourAnswer, w.correct, new Date(w.createdAt).toLocaleDateString()])
       )
       downloadCSV(`${title}.csv`, rows)
     }
+  }
+
+  const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      try {
+        const text = String(reader.result || '')
+        const res = parseImportText(text, file.name, kind, category)
+        setParsed(res.items)
+        setImportErrors(res.errors)
+        setImportMsg('')
+      } catch (err) {
+        setParsed(null)
+        setImportErrors([])
+        setImportMsg('解析失败：' + (err as Error).message)
+      }
+    }
+    reader.readAsText(file, 'utf-8')
+    e.target.value = '' // 允许重复选择同一文件
+  }
+
+  const sameWord = (a: ImportItem, b: any) =>
+    a.type === 'word' && b.type === 'word' &&
+    a.category === b.category &&
+    (a.korean || '') === (b.korean || '') &&
+    (a.english || '') === (b.english || '') &&
+    a.chinese === b.chinese
+  const sameWrong = (a: ImportItem, b: any) =>
+    a.type === 'wrong' && b.type === 'wrong' &&
+    a.category === b.category &&
+    a.question === b.question &&
+    a.correct === b.correct
+
+  const handleConfirmImport = () => {
+    if (!parsed || parsed.length === 0) return
+    if (importMode === 'replace') {
+      isWord ? clearWordbook(category) : clearWrongbook(category)
+    }
+    const existing = isWord ? wordbook : wrongbook
+    let added = 0
+    let skipped = 0
+    parsed.forEach((it) => {
+      const dup = existing.some((x: any) =>
+        isWord ? sameWord(it, x) : sameWrong(it, x)
+      )
+      if (dup) {
+        skipped++
+        return
+      }
+      if (it.type === 'word') {
+        addWord({
+          source: it.source,
+          category: it.category,
+          korean: it.korean,
+          romanization: it.romanization,
+          english: it.english,
+          phonetic: it.phonetic,
+          pos: it.pos,
+          chinese: it.chinese,
+          mastery: it.mastery,
+        })
+      } else {
+        addWrong({
+          source: it.source,
+          category: it.category,
+          question: it.question,
+          yourAnswer: it.yourAnswer,
+          correct: it.correct,
+        })
+      }
+      added++
+    })
+    setImportMsg(`导入完成：新增 ${added} 条，跳过重复 ${skipped} 条。`)
+    setShowImport(false)
+    setParsed(null)
+    setImportErrors([])
   }
 
   const handleAddWord = () => {
@@ -226,6 +313,12 @@ export default function BoardView({ category, kind }: Props) {
         </div>
         <button onClick={handleExport} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-cream text-gray-600 text-sm hover:bg-lavender-light">
           <Download size={15} /> 导出
+        </button>
+        <button
+          onClick={() => { setShowImport(true); setParsed(null); setImportErrors([]); setImportMsg('') }}
+          className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-cream text-gray-600 text-sm hover:bg-lavender-light"
+        >
+          <Upload size={15} /> 导入
         </button>
         {items.length > 0 && (
           <button
@@ -383,6 +476,89 @@ export default function BoardView({ category, kind }: Props) {
               <div className="text-[10px] text-gray-400 mt-1">来源：{w.source} · {new Date(w.createdAt).toLocaleDateString()}</div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* 导入弹窗 */}
+      {showImport && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" onClick={() => setShowImport(false)}>
+          <div
+            className="bg-white rounded-card shadow-card w-full max-w-lg max-h-[85vh] overflow-y-auto p-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-base font-bold text-gray-700">导入{CAT_LABEL[category]}{isWord ? '单词' : '错题'}</h3>
+              <button onClick={() => setShowImport(false)} className="text-gray-300 hover:text-gray-500 text-xl leading-none">×</button>
+            </div>
+
+            {!parsed && (
+              <>
+                <p className="text-xs text-gray-500 mb-3 leading-relaxed">
+                  支持 CSV（与「导出」格式一致，含表头）或 JSON（对象数组，键名支持中文/英文）。
+                  表头自动识别：来源 / 分类 / 韩文 / 罗马音 / 英文 / 音标 / 词性 / 中文 / 掌握度（单词），
+                  或 来源 / 分类 / 题目 / 你的答案 / 正确答案（错题）。缺字段可留空，按当前板块自动归属。
+                </p>
+                <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-lavender-light rounded-xl py-8 cursor-pointer hover:bg-lavender-light/40 transition">
+                  <Upload size={28} className="text-lavender" />
+                  <span className="text-sm text-gray-500">点击选择 CSV / JSON 文件</span>
+                  <input type="file" accept=".csv,.json,text/csv,application/json" onChange={handleImportFile} className="hidden" />
+                </label>
+                {importMsg && <div className="mt-3 text-sm text-coral">{importMsg}</div>}
+              </>
+            )}
+
+            {parsed && (
+              <>
+                <div className="flex items-center gap-2 mb-3">
+                  <label className="flex items-center gap-1 text-sm text-gray-600">
+                    <input type="radio" checked={importMode === 'append'} onChange={() => setImportMode('append')} /> 追加（跳过重复）
+                  </label>
+                  <label className="flex items-center gap-1 text-sm text-gray-600">
+                    <input type="radio" checked={importMode === 'replace'} onChange={() => setImportMode('replace')} /> 覆盖当前板块
+                  </label>
+                </div>
+
+                <div className="text-sm text-gray-600 mb-2">
+                  共解析 <b className="text-lavender-deep">{parsed.length}</b> 条有效数据
+                  {importErrors.length > 0 && <span className="text-coral">，{importErrors.length} 行已跳过</span>}。
+                </div>
+
+                {importErrors.length > 0 && (
+                  <div className="text-xs text-coral bg-coral/5 rounded-lg p-2 mb-2 max-h-24 overflow-y-auto">
+                    {importErrors.slice(0, 8).map((e, i) => (<div key={i}>· {e}</div>))}
+                    {importErrors.length > 8 && <div>…等共 {importErrors.length} 条</div>}
+                  </div>
+                )}
+
+                <div className="border border-lavender-light rounded-xl divide-y max-h-56 overflow-y-auto mb-3">
+                  {parsed.slice(0, 50).map((it, i) => (
+                    <div key={i} className="px-3 py-1.5 text-xs flex items-center gap-2">
+                      <span className={`px-1.5 py-0.5 rounded text-[10px] ${it.category === 'korean' ? 'bg-lavender-light text-lavender-deep' : 'bg-mint/40 text-emerald-700'}`}>
+                        {it.category === 'korean' ? '韩语' : '雅思'}
+                      </span>
+                      <span className="truncate">
+                        {it.type === 'word'
+                          ? `${it.korean || it.english || ''} · ${it.chinese}`
+                          : `${it.question} → ${it.correct}`}
+                      </span>
+                    </div>
+                  ))}
+                  {parsed.length > 50 && <div className="px-3 py-1.5 text-xs text-gray-400">…仅预览前 50 条</div>}
+                </div>
+
+                <div className="flex justify-end gap-2">
+                  <button onClick={() => { setShowImport(false); setParsed(null) }} className="px-4 py-1.5 rounded-full bg-cream text-gray-500 text-sm">取消</button>
+                  <button onClick={handleConfirmImport} className="px-4 py-1.5 rounded-full bg-lavender text-white text-sm hover:bg-lavender-deep">确认导入</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {importMsg && !showImport && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-lavender-deep text-white text-sm px-4 py-2 rounded-full shadow-lg">
+          {importMsg}
         </div>
       )}
     </div>
