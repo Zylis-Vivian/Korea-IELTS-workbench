@@ -18,6 +18,7 @@ export interface Sound {
 }
 
 export interface VocabWord {
+  id?: string // 唯一 ID，格式 "{source}-{hash}"（合并脚本生成；既有词条为空，向后兼容）
   korean: string
   romanization: string
   chinese: string
@@ -42,6 +43,23 @@ export interface VocabWord {
   originType?: 'hanja' | 'native' | 'loanword' | 'hybrid' | 'expression' | 'grammar' | string
   originDetail?: string // 词源追溯/源词（如「安寧 + 하다」「computer」）
   pronunciation?: string // 发音提示（韩文音标）
+}
+
+// 例句（雅思等外源词库提供；韩语词条沿用 example/exampleZh 字符串）
+export interface ExampleSentence {
+  korean: string
+  chinese: string
+  english: string
+}
+
+// 词库清单元数据（供前端词库切换器使用）
+export interface DictionaryMeta {
+  id: string // "yonsei" / "topik" / "ielts-core" / "korean-all"
+  name: string // 显示名
+  category: string // "韩语教材" / "韩语考试" / "雅思"
+  url: string // "/data/xxx.json"
+  length: number // 词条数
+  language: 'ko' | 'en'
 }
 
 export interface GrammarPoint {
