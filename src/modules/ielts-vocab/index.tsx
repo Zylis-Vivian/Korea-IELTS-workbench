@@ -5,6 +5,7 @@ import SpeakerButton from '../../components/SpeakerButton'
 import { useStore } from '../../stores/useStore'
 import { sceneVocab, roots, topicVocab, type SceneWord } from '../../data/ieltsVocabData'
 import { ALL_TOPIC_GROUPS, ALL_SYNONYMS, SPEAKING_GROUPS, type SpeakItem } from '../../data/ieltsVocabNew'
+import { FULL_SCENE_GROUPS, FULL_TOPIC_GROUPS } from '../../data/ieltsVocabFull'
 
 type Tab = 'browse' | 'study' | 'synonym' | 'root' | 'speaking'
 const allWords: SceneWord[] = [
@@ -71,10 +72,16 @@ function Browse() {
   const [view, setView] = useState<'scene' | 'topic'>('scene')
   const [src, setSrc] = useState<'builtin' | 'zhenting'>('builtin')
   const [q, setQ] = useState('')
-  // 词库源：内置精选 / 词汇真经全量（my-ielts 词汇真经 + 听力179）
-  // 词库源：内置精选（仅 topicVocab）/ 词汇真经全量（topicVocab + my-ielts 词汇真经 + 听力179）
-  const topicGroups = src === 'zhenting' ? ALL_TOPIC_GROUPS : topicVocab
-  const list = view === 'scene' ? sceneVocab.find((g) => g.scene === scene)!.words : topicGroups.find((g) => g.topic === topic)!.words
+  // 词库源：内置精选（sceneVocab / topicVocab） vs 词汇真经全量（data/ielts-vocabulary.json 全量词库）
+  const sceneGroups = src === 'zhenting' ? FULL_SCENE_GROUPS : sceneVocab
+  const topicGroups = src === 'zhenting' ? FULL_TOPIC_GROUPS : topicVocab
+  // 切换词库源 / 视图后，当前选中项可能不在新数据集里，做安全兜底避免 find() 崩溃
+  const safeScene = sceneGroups.some((g) => g.scene === scene) ? scene : sceneGroups[0]?.scene ?? scene
+  const safeTopic = topicGroups.some((g) => g.topic === topic) ? topic : topicGroups[0]?.topic ?? topic
+  const list =
+    view === 'scene'
+      ? (sceneGroups.find((g) => g.scene === safeScene)?.words ?? [])
+      : (topicGroups.find((g) => g.topic === safeTopic)?.words ?? [])
   const filtered = useMemo(() => {
     if (!q.trim()) return list
     const kw = q.trim().toLowerCase()
@@ -116,12 +123,12 @@ function Browse() {
         </div>
         <select
           className="inp"
-          value={view === 'scene' ? scene : topic}
+          value={view === 'scene' ? safeScene : safeTopic}
           onChange={(e) => (view === 'scene' ? setScene(e.target.value) : setTopic(e.target.value))}
         >
-          {(view === 'scene' ? sceneVocab : topicGroups).map((g) => (
+          {(view === 'scene' ? sceneGroups : topicGroups).map((g) => (
             <option key={g.scene || g.topic} value={g.scene || g.topic}>
-              {g.scene || g.topic}
+              {g.scene || g.topic}（{(g.words || []).length}）
             </option>
           ))}
         </select>
