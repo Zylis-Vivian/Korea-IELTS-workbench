@@ -1787,5 +1787,401 @@ export const GRAMMAR: GrammarPoint[] = [
       { q: '“太紧张以致说不出话”用？', a: '긴장한 나머지 말을 못 했어요' },
     ],
   },
+  {
+    id: 'nikka',
+    level: '中级',
+    pattern: '-(으)니까',
+    name: '原因“因为”（说话人理由/对比）',
+    explanation:
+      '表原因，和 -아/어서 近义，区别在于：-(으)니까 多用于说话人主观判断、劝告、命令、提议的语境，或前后句带对比；而 -아/어서 偏客观先后/原因，且不能接命令或共动句。例如“비가 오니까 우산을 챙기세요”（下雨了，带上伞吧）用 니까 最自然，因为后接建议。回答“왜 안 가요?”（为什么不去？）时用“피곤하니까요”（因为累）来强调理由。',
+    conjugation: '有收音 + 으니까；无收音/ㄹ + 니까',
+    examples: [
+      { ko: '비가 오니까 우산을 챙기세요.', roman: 'biga onikka umaneul chaenggiseyo', zh: '下雨了，带上伞吧。' },
+      { ko: '피곤하니까 먼저 잘래요?', roman: 'pigonhanikka meonjeo jalleyo?', zh: '累了，先睡吗？' },
+      { ko: '길이 막히니까 지하철이 빨라요.', roman: 'giri makinikka jihacheori ppallayo', zh: '路堵，所以地铁更快。' },
+    ],
+    notes: '命令/共动/劝告的后句必须用 -(으)니까，不能用 -아/어서。',
+    mnemonic: '니까＝“既然如此”，带说话人态度。',
+    common_errors: [
+      { wrong: '비가 와서 가세요.', reason: '劝告/命令前用 니까：비가 오니까 가세요。' },
+    ],
+    quiz: [
+      { q: '“因为累，先回去吧”（劝告）用？', a: '피곤하니까 먼저 가세요' },
+    ],
+  },
+  {
+    id: 'ryeogo',
+    level: '中级',
+    pattern: '-(으)려고',
+    name: '目的“为了”',
+    explanation:
+      '接动词词干，表行动的目的、意图，“为了做…”。常与 가다/오다 呼应。注意 -(으)려고 和 -(으)러（来去的目的）不同：러 只接 가다/오다 等方向移动动词，려고 则通用。否定目的用 -지 않으려고。前后主语须一致。',
+    conjugation: '有收音 + 으려고；无收音/ㄹ + 려고',
+    examples: [
+      { ko: '한국어를 배우려고 왔어요.', roman: 'hangugeoreul baeuryeogo wasseoyo', zh: '为了学韩语来了。' },
+      { ko: '건강해지려고 운동해요.', roman: 'geongganghaejiryeogo undonghaeyo', zh: '为了变健康而运动。' },
+      { ko: '늦지 않으려고 일찍 나왔어요.', roman: 'neutji aneuryeogo iljjik nawasseoyo', zh: '为了不迟到提前出来了。' },
+    ],
+    notes: '表来去目的更常用 -(으)러；러 不能接普通动作。',
+    mnemonic: '려고＝“心里打算去做”。',
+    common_errors: [
+      { wrong: '공부하러 공부해요.', reason: '러 只能接移动动词(가다/오다)；普通动作目的用 려고：공부하려고。' },
+    ],
+    quiz: [
+      { q: '“为了健康而运动”用？', a: '건강해지려고 운동해요' },
+    ],
+  },
+  {
+    id: 'deoni',
+    level: '中级',
+    pattern: '-더니',
+    name: '过去经验 vs 现在对比',
+    explanation:
+      '表说话人亲眼所见的过去状况，与现在形成对比或意外结果，“以前…（可是现在…）”。也可表先后：过去见闻 + 后续发现。更自然的对比常用过去词干 맑더니，而 다더니 偏转述他人说法。',
+    conjugation: '动词/形容词过去词干 + 더니（았/었 + 더니）',
+    examples: [
+      { ko: '어제는 맑더니 오늘은 흐려요.', roman: 'eoje neun makdeoni oneureun heuryeoyo', zh: '昨天还晴，今天却阴了。' },
+      { ko: '조용하더니 갑자기 시끄러워졌어요.', roman: 'joyonghadeoni gapjagi sikkeureowojyeosseoyo', zh: '刚才还安静，突然变吵了。' },
+      { ko: '그 사람은 친절하더니 아니었어요.', roman: 'geu saram eun chinjeolhadeoni anieosseoyo', zh: '那人看似亲切，其实不是。' },
+    ],
+    notes: '多用于说话人直接观察的对比转折。',
+    mnemonic: '더니＝“记得当时…现在却”。',
+    common_errors: [
+      { wrong: '맑은 더니', reason: '需过去词干 맑더니。' },
+    ],
+    quiz: [
+      { q: '“昨天晴今天阴”对比用？', a: '맑더니 흐려요' },
+    ],
+  },
+  {
+    id: 'daga',
+    level: '中级',
+    pattern: '-다가',
+    name: '动作中断转另一动作',
+    explanation:
+      '表一个动作进行中被另一动作打断、转去，如“책을 읽다가 잤어요”（看着书睡着了）。前后主语须一致，也可表状态持续中发生某事。',
+    conjugation: '动词现在词干 + 다가',
+    examples: [
+      { ko: '공부하다가 전화를 받았어요.', roman: 'gongbuhadaga jeonhwareul badasseoyo', zh: '学着学着接了电话。' },
+      { ko: '길을 걷다가 친구를 만났어요.', roman: 'gireul geotdaga chingureul mannasseoyo', zh: '走路时遇到了朋友。' },
+      { ko: '먹다가 멈췄어요.', roman: 'meokdaga meomchwosseoyo', zh: '吃着吃着停下了。' },
+    ],
+    notes: '前后主语必须相同。',
+    mnemonic: '다가＝“做着做着，忽然”。',
+    common_errors: [
+      { wrong: '읽는다가 잤어요.', reason: '中断用现在词干 다가：읽다가。' },
+    ],
+    quiz: [
+      { q: '“看书时睡着了”用？', a: '책을 읽다가 잤어요' },
+    ],
+  },
+  {
+    id: 'beorida',
+    level: '中级',
+    pattern: '-아/어 버리다',
+    name: '完成 / 遗憾 / 释然',
+    explanation:
+      '表动作彻底完成，常带“遗憾、后悔、如释重负”等情感色彩，如“다 먹어 버렸어요”（全吃光了，带遗憾）。也可单纯强调做完，正式写作中宜慎用。',
+    conjugation: 'ㅏ/ㅗ + 아 버리다；其他 + 어 버리다；하다→해 버리다',
+    examples: [
+      { ko: '숙제를 다 해 버렸어요.', roman: 'sukjereul da hae beoryeosseoyo', zh: '作业一口气做完了。' },
+      { ko: '실수로 까먹어 버렸어요.', roman: 'silsuro kkameogeo beoryeosseoyo', zh: '不小心全忘了（遗憾）。' },
+      { ko: '그 책을 다 읽어 버렸어요.', roman: 'geu chaegeul da ilgeobeoryeosseoyo', zh: '那本书全看完了。' },
+    ],
+    notes: '情感色彩强，正式文风克制使用。',
+    mnemonic: '버리다＝“丢/弄完”，带情绪。',
+    common_errors: [
+      { wrong: '먹어 버려요', reason: '过去式 해 버렸어요；原形 해 버리다。' },
+    ],
+    quiz: [
+      { q: '“不小心全忘了”（遗憾）用？', a: '까먹어 버렸어요' },
+    ],
+  },
+  {
+    id: 'girohada',
+    level: '中级',
+    pattern: '-기로 하다',
+    name: '决定做',
+    explanation:
+      '表经思考后决定做某事，主语通常是第一人称，如“내일부터 운동하기로 했어요”（决定从明天起运动）。表两人约定可用“-기로 약속하다”。与 -게 되다（被动变化）不同，这里是主动决定。',
+    conjugation: '动词词干 + 기로 하다',
+    examples: [
+      { ko: '매일 일찍 자기로 했어요.', roman: 'maeil iljjik jagiro haesseoyo', zh: '决定每天早睡。' },
+      { ko: '주말에 만나기로 했어요.', roman: 'jumare mannagiro haesseoyo', zh: '约好周末见。' },
+      { ko: '담배를 끊기로 했어요.', roman: 'dambaereul kkeunggiro haesseoyo', zh: '决定戒烟。' },
+    ],
+    notes: '与 -게 되다（非主观变化）区分：这里是主动决定。',
+    mnemonic: '기로＝“定下要做的事”。',
+    common_errors: [
+      { wrong: '자기로 해요', reason: '决定是既成事实，用 자기로 했어요。' },
+    ],
+    quiz: [
+      { q: '“决定戒烟”用？', a: '담배를 끊기로 했어요' },
+    ],
+  },
+  {
+    id: 'jeokida',
+    level: '中级',
+    pattern: '-은/ㄴ 적이 있다',
+    name: '有过…经历',
+    explanation:
+      '表过去有过某种经历，“曾经…过”。疑问/否定用 적이 있어요? / 적이 없어요。与 -아/어 본 적이 있다 近义。',
+    conjugation: '有收音 + 은 적이 있다；无收音/ㄹ + ㄴ 적이 있다',
+    examples: [
+      { ko: '한국에 가 본 적이 있어요?', roman: 'hanguge ga bon jeogi isseoyo?', zh: '去过韩国吗？' },
+      { ko: '배를 타 본 적이 없어요.', roman: 'baereul ta bon jeogi eopseoyo', zh: '没坐过船。' },
+      { ko: '그 영화를 본 적이 있어요.', roman: 'geu yeonghwareul bon jeogi isseoyo', zh: '看过那部电影。' },
+    ],
+    notes: '经历用 적이 있다；单纯尝试用 -아/어 보다。',
+    mnemonic: '적＝“那回事”，있다＝发生过。',
+    common_errors: [
+      { wrong: '가는 적이 있어요', reason: '经历用过去连体 간 적이 있어요。' },
+    ],
+    quiz: [
+      { q: '“看过那部电影”用？', a: '그 영화를 본 적이 있어요' },
+    ],
+  },
+  {
+    id: 'geodeunyo',
+    level: '高级',
+    pattern: '-거든요',
+    name: '原因说明（口语·补充）',
+    explanation:
+      '口语中解释原因、补充背景，常置于句末作答，语气柔和带“告诉你哦”的味道，如“피곤해요, 어제 늦게 잤거든요”（累，因为我昨晚睡晚了）。与 -(으)니까 不同：거든요 多用于答句补充理由，不用于问句引导。',
+    conjugation: '动词/形容词词干 + 거든요（过去 + 거든요）',
+    examples: [
+      { ko: '못 가요, 약속이 거든요.', roman: 'mot gayo, yaksogi geodeunyo', zh: '去不了，我有约了嘛。' },
+      { ko: '이게 맞거든요.', roman: 'ige matgeodeunyo', zh: '这个才对嘛。' },
+      { ko: '바빠요, 시험 기간이거든요.', roman: 'bappayo, siheom gigani geodeunyo', zh: '忙，因为是考试周嘛。' },
+    ],
+    notes: '多用于答句补充，带亲昵语气。',
+    mnemonic: '거든요＝“其实是因为…”的软理由。',
+    common_errors: [
+      { wrong: '왜요? 피곤하거든요', reason: '거든요 不用于问句引导，用于答句补充。' },
+    ],
+    quiz: [
+      { q: '“去不了，我有约了嘛”用？', a: '못 가요, 약속이 거든요' },
+    ],
+  },
+  {
+    id: 'ppunda',
+    level: '高级',
+    pattern: '-(으)ㄹ뿐더러',
+    name: '不仅…而且',
+    explanation:
+      '表递进，“不但…而且…”，语气比 -ㄹ 뿐만 아니라 更书面，如“노래를 잘할 뿐더러 춤도 춰요”（不但歌唱得好，舞也跳）。',
+    conjugation: '有收音 + 을 뿐더러；无收音/ㄹ + ㄹ 뿐더러',
+    examples: [
+      { ko: '말도 잘할 뿐더러 글씨도 예뻐요.', roman: 'maldo jalhal ppundeureo geulssido yeppeoyo', zh: '不但健谈，字也漂亮。' },
+      { ko: '공부를 잘할 뿐더러 성격도 좋아요.', roman: 'gongbureul jalhal ppundeureo seonggyeokdo joayo', zh: '不但学习好，性格也不错。' },
+      { ko: '값도 싼 뿐더러 맛도 좋아요.', roman: 'gapdo ssin ppundeureo matdo joayo', zh: '不但便宜，味道也好。' },
+    ],
+    notes: '与 -ㄹ 뿐만 아니라 近义，更正式。',
+    mnemonic: '뿐더러＝“不止于此，还…”。',
+    common_errors: [
+      { wrong: '잘하는 뿐더러', reason: '需将来连体 할 뿐더러。' },
+    ],
+    quiz: [
+      { q: '“不但便宜味道也好”用？', a: '값도 싼 뿐더러 맛도 좋아요' },
+    ],
+  },
+  {
+    id: 'jiraedo',
+    level: '高级',
+    pattern: '-(으)ㄹ지라도',
+    name: '即使…也（让步）',
+    explanation:
+      '承认前项事实（多为负面或极端），仍坚持后项，“纵使…也…”，如“힘들지라도 포기 안 해요”（即使累也不放弃）。语气强于 -아/어도。',
+    conjugation: '有收音 + 을지라도；无收音/ㄹ + ㄹ지라도',
+    examples: [
+      { ko: '비가 올지라도 갈 거예요.', roman: 'biga oljiraedo gal geoyeo', zh: '即使下雨也去。' },
+      { ko: '늦을지라도 끝까지 해요.', roman: 'neujeuljiraedo kkeutkkaji haeyo', zh: '即使迟到也要做到底。' },
+      { ko: '어렵지라도 도전해요.', roman: 'eoryeopjiraedo dojeonhaeyo', zh: '纵使困难也要挑战。' },
+    ],
+    notes: '书面/演讲常用，让步最强。',
+    mnemonic: '지라도＝“就算…也”。',
+    common_errors: [
+      { wrong: '가지라도', reason: '需将来连体 갈지라도。' },
+    ],
+    quiz: [
+      { q: '“即使下雨也去”用？', a: '비가 올지라도 갈 거예요' },
+    ],
+  },
+  {
+    id: 'roinhae',
+    level: '高级',
+    pattern: '-(으)로 인해',
+    name: '因为 / 由于（名词）',
+    explanation:
+      '接名词，表原因、缘由，书面正式，多用于说明事件起因（常中性或负面），如“감염으로 인해 결석했어요”（因感染缺席）。',
+    conjugation: '名词 + (으)로 인해（有收音+으로，无收音+로）',
+    examples: [
+      { ko: '교통사고로 인해 지연됐어요.', roman: 'gyotongsaguro inae jyeondwaesseoyo', zh: '因交通事故延误了。' },
+      { ko: '질병으로 인해 휴학했어요.', roman: 'jilbyeongeuro inae hyuhakhaesseoyo', zh: '因病休学了。' },
+      { ko: '바이러스로 인해 취소됐어요.', roman: 'baireoseuro inae chwisodwaesseoyo', zh: '因病毒取消了。' },
+    ],
+    notes: '仅接名词，比 -기 때문에 正式。',
+    mnemonic: '인해＝“因…之故”。',
+    common_errors: [
+      { wrong: '아파서 인해', reason: '인해 前接名词：아픔으로 인해。' },
+    ],
+    quiz: [
+      { q: '“因病休学”用？', a: '질병으로 인해 휴학했어요' },
+    ],
+  },
+  {
+    id: 'edaehan',
+    level: '高级',
+    pattern: '-에 대한',
+    name: '关于 / 对于',
+    explanation:
+      '接名词，表“关于…”“对于…”，书面高频，常修饰后面的名词（에 대한 관심＝对…的关心），如“환경에 대한 글”（关于环境的文章）。',
+    conjugation: '名词 + 에 대한 + (명사)',
+    examples: [
+      { ko: '기후변화에 대한 연구', roman: 'gihubyeonhwae daehan yeon-gu', zh: '关于气候变化的研究' },
+      { ko: '그 문제에 대한 의견이 있어요.', roman: 'geu munjee daehan uigyeoni isseoyo', zh: '对那个问题有意见。' },
+      { ko: '한국에 대한 관심이 많아요.', roman: 'hanguge daehan gwangimi manayo', zh: '对韩国很关心。' },
+    ],
+    notes: '修饰名词用 에 대한 + N；作状语用 에 대해(서)。',
+    mnemonic: '대한＝“针对”。',
+    common_errors: [
+      { wrong: '한국을 대한', reason: '助词是 에：한국에 대한。' },
+    ],
+    quiz: [
+      { q: '“关于环境的文章”用？', a: '환경에 대한 글' },
+    ],
+  },
+  {
+    id: 'reultonghae',
+    level: '高级',
+    pattern: '-을/를 통해',
+    name: '通过…',
+    explanation:
+      '接名词，表经由某媒介、手段、过程达成目的，如“인터넷을 통해 알았어요”（通过网络得知）。可用于具体通道或抽象过程。',
+    conjugation: '有收音 + 을 통해；无收音 + 를 통해',
+    examples: [
+      { ko: '뉴스를 통해 소식을 들었어요.', roman: 'nyuseureul tonghae sosig eul deureosseoyo', zh: '通过新闻听到消息。' },
+      { ko: '토론을 통해 해결했어요.', roman: 'toroneul tonghae haegyeolhaesseoyo', zh: '通过讨论解决了。' },
+      { ko: '교육을 통해 성장해요.', roman: 'gyoyugeul tonghae seongjanghaeyo', zh: '通过教育成长。' },
+    ],
+    notes: '媒介/手段，书面常用。',
+    mnemonic: '통해＝“穿过→经由”。',
+    common_errors: [
+      { wrong: '뉴스로 통해', reason: '통해 前用 을/를：뉴스를 통해。' },
+    ],
+    quiz: [
+      { q: '“通过网络得知”用？', a: '인터넷을 통해 알았어요' },
+    ],
+  },
+  {
+    id: 'saengpassive',
+    level: '高级',
+    pattern: '使动/被动',
+    name: '使动与被动（词缀派生）',
+    explanation:
+      '韩语用特定词缀派生使动/被动：使动后缀 -이/히/리/기/우-，被动后缀 -이/히/리/기-（同形，依动词而定）。如 먹다→먹이다(使吃)、먹히다(被吃)；보다→보이다(使看/被看)、잡다→잡히다(被抓)。需逐个动词记忆搭配。',
+    conjugation: '使动: -이/히/리/기/우-；被动: -이/히/리/기-',
+    examples: [
+      { ko: '아이에게 책을 읽혀요.', roman: 'aiege chaegeul ilkyeoyo', zh: '让孩子读书（使动）。' },
+      { ko: '문이 열려 있어요.', roman: 'muni yeollyeo isseoyo', zh: '门开着（被动）。' },
+      { ko: '케이크가 먹혀요?', roman: 'keikiga meokhyeoyo?', zh: '蛋糕被吃掉了吗（被动）？' },
+    ],
+    notes: '同一后缀可能兼使动/被动，依动词义定（먹이다使动，먹히다被动）。',
+    mnemonic: '히/리/기＝“被/使”的小尾巴。',
+    common_errors: [
+      { wrong: '책을 읽어졌어요', reason: '읽다 被动是 읽히다；잡다 被动 잡히다。' },
+    ],
+    quiz: [
+      { q: '“门开着”（被动）用？', a: '문이 열려 있어요' },
+    ],
+  },
+  {
+    id: 'naboda',
+    level: '高级',
+    pattern: '-나 보다',
+    name: '看来 / 似乎（推测）',
+    explanation:
+      '基于外部迹象做推测，“看来…”“好像…”，如“비가 오나 봐요”（看来下雨了）。比 것 같다 更口语、更凭直观。常与“하나 봐요”（似乎要做）连用。',
+    conjugation: '动词现在 + 나 보다；形容词 + 나 보다；过去 + (으)ㄴ가 보다',
+    examples: [
+      { ko: '피곤한가 봐요.', roman: 'pigonhanga bwayo', zh: '看来累了。' },
+      { ko: '누군가 왔나 봐요.', roman: 'nugunga wannna bwayo', zh: '好像有人来过。' },
+      { ko: '배가 고프나 봐요.', roman: 'baega goneubana bwayo', zh: '看来饿了。' },
+    ],
+    notes: '推测用 나 보다；共动/劝告不可用。',
+    mnemonic: '나 보다＝“我看是…吧”。',
+    common_errors: [
+      { wrong: '오나 봐요（表过去见闻）', reason: '现在推测用 오나 봐요；过去用 왔나 봐요。' },
+    ],
+    quiz: [
+      { q: '“看来饿了”用？', a: '배가 고프나 봐요' },
+    ],
+  },
+  {
+    id: 'deon',
+    level: '高级',
+    pattern: '-던',
+    name: '过去的习惯 / 回忆（修饰名词）',
+    explanation:
+      '冠形词形 -던 修饰名词，表“过去常常…的”“曾经…的（现在已不同）”，带回忆、怀念色彩，如“자던 방”（曾经睡的房间）、“먹던 음식”（以前常吃的菜）。与 -은/ㄴ（单纯过去）不同：던 强调“过往的习惯/持续状态”。',
+    conjugation: '动词词干 + 던（过去习惯/回忆）',
+    examples: [
+      { ko: '제가 살던 집이에요.', roman: 'jega saldeon jibieyo', zh: '是我曾经住过的房子。' },
+      { ko: '자주 가던 카페예요.', roman: 'jaju gadeon kapeyeyo', zh: '是常去的咖啡馆。' },
+      { ko: '들던 노래예요.', roman: 'deudeon noraeyeyo', zh: '是以前常听的歌。' },
+    ],
+    notes: '回忆过往状态时用 던；单纯过去事实用 -은/ㄴ。',
+    mnemonic: '던＝“记得那时候常…的”。',
+    common_errors: [
+      { wrong: '산 집이에요', reason: '回忆“曾住过的”用 살던 집。' },
+    ],
+    quiz: [
+      { q: '“曾经住过的房子”用？', a: '살던 집' },
+    ],
+  },
+  {
+    id: 'gimanada',
+    level: '高级',
+    pattern: '-기만 하다',
+    name: '只做…（限定）',
+    explanation:
+      '表“只…”“光…”，强调除此外无其他动作，常带不满或单一性，如“놀기만 해요”（光玩不学）。与 -ㄹ 뿐이다（只不过）近义，但 기만 하다 更口语、带动态。',
+    conjugation: '动词词干 + 기만 하다',
+    examples: [
+      { ko: '공부는 안 하고 놀기만 해요.', roman: 'gongbuneun an hamgo nolgiman haeyo', zh: '不学习光玩。' },
+      { ko: '말하기만 하지 마세요.', roman: 'malhagiman haji maseyo', zh: '别光说。' },
+      { ko: '기다리기만 했어요.', roman: 'gidarigiman haesseoyo', zh: '只是干等着。' },
+    ],
+    notes: '带“仅此一项”的限定或埋怨。',
+    mnemonic: '기만＝“就只…”。',
+    common_errors: [
+      { wrong: '노는 기만 해요', reason: '需 기만 하다：놀기만 해요。' },
+    ],
+    quiz: [
+      { q: '“不学光玩”用？', a: '공부 안 하고 놀기만 해요' },
+    ],
+  },
+  {
+    id: 'daesine',
+    level: '高级',
+    pattern: '-는 대신에',
+    name: '代替 / 反而',
+    explanation:
+      '表“代替…”“作为补偿/相反”，前后为对应关系，如“버스를 타는 대신에 지하철을 타요”（不坐公交改坐地铁）。也可表“反而”（对比转折）。',
+    conjugation: '动词现在 + 는 대신에；名词 + 대신에',
+    examples: [
+      { ko: '택시를 타는 대신에 걸어갔어요.', roman: 'taeksireul taneun daesine georeogasseoyo', zh: '不打车走着去了。' },
+      { ko: '도움을 주는 대신에 받고 싶지 않아요.', roman: 'domimeul juneun daesine batgo sipeun jio', zh: '想给帮助，不想索取。' },
+      { ko: '그는 사과하는 대신에 화를 냈어요.', roman: 'geuneun sagwahaneun daesine hwareul naesseoyo', zh: '他不道歉反而发火了。' },
+    ],
+    notes: '可表替代，也可表“反而”（对比转折）。',
+    mnemonic: '대신＝“代替”。',
+    common_errors: [
+      { wrong: '타는 대신 타요', reason: '대신에 完整：타는 대신에 타요。' },
+    ],
+    quiz: [
+      { q: '“不打车走着去了”用？', a: '택시를 타는 대신에 걸어갔어요' },
+    ],
+  },
 ]
 
