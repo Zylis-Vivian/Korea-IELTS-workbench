@@ -64,6 +64,18 @@ export default function KoreanAlphabet() {
     states[mastery[s.char] || 'unlearned']++
   })
 
+  /** 当前 tab 第一个未学字符；全部学完则为 null */
+  const firstUnlearned = tabData.find((s) => !mastery[s.char]) ?? null
+  /** 从 from 起顺时针找到下一个未学字符；若本 tab 已全部掌握，则返回下一个字符（循环） */
+  const nextUnlearned = (from: Sound): Sound => {
+    const idx = tabData.findIndex((s) => s.char === from.char)
+    for (let k = 1; k <= tabData.length; k++) {
+      const cand = tabData[(idx + k) % tabData.length]
+      if (!mastery[cand.char]) return cand
+    }
+    return tabData[(idx + 1) % tabData.length]
+  }
+
   const open = (s: Sound) => {
     setSel(s)
     if (!mastery[s.char]) setMastery(s.char, 'learning')
@@ -100,9 +112,19 @@ export default function KoreanAlphabet() {
         <div className="bg-white rounded-card shadow-card p-4">
           <div className="flex items-center justify-between mb-3 text-xs text-gray-400">
             <span>进度</span>
-            <span>
-              未学 {states.unlearned} · 学习中 {states.learning} · 已掌握 {states.mastered}
-            </span>
+            <div className="flex items-center gap-2">
+              {firstUnlearned && (
+                <button
+                  onClick={() => open(firstUnlearned)}
+                  className="px-3 py-1 rounded-full bg-lavender text-white text-xs font-medium hover:bg-lavender-deep shadow-soft transition"
+                >
+                  开始学习 →
+                </button>
+              )}
+              <span>
+                未学 {states.unlearned} · 学习中 {states.learning} · 已掌握 {states.mastered}
+              </span>
+            </div>
           </div>
           <div className="grid grid-cols-5 sm:grid-cols-7 gap-2">
             {tabData.map((s) => {
@@ -187,6 +209,12 @@ export default function KoreanAlphabet() {
           </div>
 
           <div className="mt-4 flex gap-2">
+            <button
+              onClick={() => open(nextUnlearned(sel))}
+              className="flex-1 py-2 rounded-full bg-lavender-light text-lavender-deep text-sm font-medium hover:bg-lavender/30 transition"
+            >
+              下一个未学 →
+            </button>
             <button
               onClick={() => setMastery(sel.char, 'mastered')}
               className="flex-1 py-2 rounded-full bg-mint/60 text-emerald-700 text-sm font-medium hover:bg-mint"

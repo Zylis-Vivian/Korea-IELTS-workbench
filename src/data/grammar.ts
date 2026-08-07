@@ -1535,5 +1535,257 @@ export const GRAMMAR: GrammarPoint[] = [
       { q: '“即使失败也挑战”用？', a: '실패할망정 도전해요' },
     ],
   },
+  {
+    id: 'jiyo',
+    level: '初级',
+    pattern: '-지요/죠',
+    name: '…吧 / …对吧（确认、共识）',
+    explanation: '表示说话人认为对方也知道或会同意，用于确认、征求认同或柔和陈述，口语常缩为 죠。',
+    conjugation: '动词/形容词词干 + 지요(죠)；名词 + (이)지요',
+    examples: [
+      { ko: '날씨가 좋죠?', roman: 'nalssiga jochyo?', zh: '天气不错吧？' },
+      { ko: '여기가 학교죠?', roman: 'yeogiga hakgyojyo?', zh: '这里是学校吧？' },
+      { ko: '제가 할게요, 됐죠?', roman: 'jega halgeyo, dwaetjyo?', zh: '我来做，可以吧？' },
+    ],
+    notes: '升调=询问确认，降调=柔和陈述。',
+    mnemonic: '지요→죠，“对吧”的口气。',
+    common_errors: [
+      { wrong: '학생죠', reason: '有收音名词需加 이：학생이죠。' },
+    ],
+    quiz: [
+      { q: '“天气不错吧？”用？', a: '날씨가 좋죠?' },
+    ],
+  },
+  {
+    id: 'euro',
+    level: '初级',
+    pattern: '-으로/로',
+    name: '用…/往…/成为…（手段·方向·结果）',
+    explanation: '多功能助词：表工具手段、移动方向、变化结果或身份资格。',
+    conjugation: '有收音 + 으로；无收音或 ㄹ 收音 + 로',
+    examples: [
+      { ko: '젓가락으로 먹어요.', roman: 'jeotgarageuro meogeoyo', zh: '用筷子吃。' },
+      { ko: '학교로 가요.', roman: 'hakgyoro gayo', zh: '往学校去。' },
+      { ko: '물이 얼음으로 변해요.', roman: 'muri eoreumeuro byeonhaeyo', zh: '水变成冰。' },
+    ],
+    notes: 'ㄹ 收音视作无收音，用 로：연필로。',
+    mnemonic: '으로/로＝箭头，指向工具或方向。',
+    common_errors: [
+      { wrong: '연필으로', reason: 'ㄹ 收音用 로：연필로。' },
+    ],
+    quiz: [
+      { q: '“用筷子”怎么说？', a: '젓가락으로' },
+    ],
+  },
+  {
+    id: 'get',
+    level: '初级',
+    pattern: '-겠-',
+    name: '将要 / 我要 / 大概（意志·推测）',
+    explanation: '第一人称表意志决心，第二三人称或对情况表推测，也用于礼貌套语。',
+    conjugation: '词干 + 겠 + 语尾（겠어요/겠습니다）',
+    examples: [
+      { ko: '제가 하겠습니다.', roman: 'jega hagetseumnida', zh: '我来做。' },
+      { ko: '내일은 춥겠어요.', roman: 'naeireun chupgesseoyo', zh: '明天大概会冷。' },
+      { ko: '잘 먹겠습니다.', roman: 'jal meokgetseumnida', zh: '我开动了（餐前语）。' },
+    ],
+    notes: '固定礼貌语：알겠습니다 / 모르겠어요。',
+    mnemonic: '겠＝把“将来+决心/猜测”打包。',
+    common_errors: [
+      { wrong: '하겠요', reason: '겠 后接 어요/습니다：하겠어요。' },
+    ],
+    quiz: [
+      { q: '“我来做”（表意志）用？', a: '제가 하겠습니다' },
+    ],
+  },
+  {
+    id: 'gedoeda',
+    level: '中级',
+    pattern: '-게 되다',
+    name: '（自然而然）变得 / 结果…了',
+    explanation: '表非主观意愿导致的状态变化或结果，强调“不是我要，而是形势使然”。',
+    conjugation: '动词词干 + 게 되다（过去 게 됐어요）',
+    examples: [
+      { ko: '한국에 살게 됐어요.', roman: 'hanguge salge dwaesseoyo', zh: '（因故）在韩国住下了。' },
+      { ko: '그 사실을 알게 됐어요.', roman: 'geu sasireul alge dwaesseoyo', zh: '得知了那件事。' },
+      { ko: '자연스럽게 친해지게 됐어요.', roman: 'jayeonseureopge chinhaejige dwaesseoyo', zh: '自然而然熟络起来了。' },
+    ],
+    notes: '与主动决定 -기로 하다 相对。',
+    mnemonic: '게 되다＝“被安排”的结果。',
+    common_errors: [
+      { wrong: '살게 했어요', reason: '“变得”用 되다；하다 是使役。' },
+    ],
+    quiz: [
+      { q: '“得知了那件事”用？', a: '알게 됐어요' },
+    ],
+  },
+  {
+    id: 'ayahada',
+    level: '中级',
+    pattern: '-아/어야 하다/되다',
+    name: '必须 / 应该',
+    explanation: '表义务、必要条件；하다 与 되다 基本通用，되다 更口语。',
+    conjugation: 'ㅏ/ㅗ + 아야；其他 + 어야；하다→해야',
+    examples: [
+      { ko: '지금 가야 해요.', roman: 'jigeum gaya haeyo', zh: '现在必须走。' },
+      { ko: '숙제를 해야 돼요.', roman: 'sukjereul haeya dwaeyo', zh: '得做作业。' },
+      { ko: '건강하려면 운동해야 해요.', roman: 'geonggangharyeomyeon undonghaeya haeyo', zh: '想健康就得运动。' },
+    ],
+    notes: '否定“不必”用 -지 않아도 되다。',
+    mnemonic: '야＝“非…不可”的门槛。',
+    common_errors: [
+      { wrong: '가야 있어요', reason: '搭配 하다/되다，不用 있다。' },
+    ],
+    quiz: [
+      { q: '“现在必须走”用？', a: '지금 가야 해요' },
+    ],
+  },
+  {
+    id: 'pyeonida',
+    level: '中级',
+    pattern: '-ㄴ/은/는 편이다',
+    name: '算是比较…的（倾向）',
+    explanation: '不绝对断言，表“大体上属于…那一类 / 偏…”，语气委婉。',
+    conjugation: '形容词现在 + ㄴ/은 편이다；动词现在 + 는 편이다',
+    examples: [
+      { ko: '매운 걸 잘 먹는 편이에요.', roman: 'maeun geol jal meongneun pyeonieyo', zh: '算是挺能吃辣的。' },
+      { ko: '이 식당은 싼 편이에요.', roman: 'i sikdangeun ssan pyeonieyo', zh: '这家餐厅算便宜的。' },
+      { ko: '키가 큰 편이에요.', roman: 'kiga keun pyeonieyo', zh: '个子算高的。' },
+    ],
+    notes: '弱化断言，常与 잘/좀 连用。',
+    mnemonic: '편＝“归到…那一边”。',
+    common_errors: [
+      { wrong: '먹은 편이에요', reason: '表一贯倾向用现在 먹는 편이에요。' },
+    ],
+    quiz: [
+      { q: '“个子算高的”用？', a: '키가 큰 편이에요' },
+    ],
+  },
+  {
+    id: 'asseumyeon',
+    level: '中级',
+    pattern: '-았/었으면 좋겠다',
+    name: '要是…就好了 / 但愿',
+    explanation: '表愿望、期盼，虽用过去形 았/었 但指向现在或将来的希望。',
+    conjugation: '词干 + 았/었으면 좋겠다（也可 -(으)면 좋겠다）',
+    examples: [
+      { ko: '비가 그쳤으면 좋겠어요.', roman: 'biga geuchyeosseumyeon jokesseoyo', zh: '雨要是停了就好了。' },
+      { ko: '시험에 합격했으면 좋겠어요.', roman: 'siheome hapgyeokhaesseumyeon jokesseoyo', zh: '但愿能考过。' },
+      { ko: '돈이 많으면 좋겠어요.', roman: 'doni maneumyeon jokesseoyo', zh: '要是钱多就好了。' },
+    ],
+    notes: '았/었 在此非过去，是虚拟愿望标记。',
+    mnemonic: '“…으면 좋겠다”＝许愿公式。',
+    common_errors: [
+      { wrong: '좋겠다요', reason: '좋겠다 的敬语是 좋겠어요。' },
+    ],
+    quiz: [
+      { q: '“但愿能考过”用？', a: '합격했으면 좋겠어요' },
+    ],
+  },
+  {
+    id: 'ppunida',
+    level: '高级',
+    pattern: '-ㄹ/을 뿐이다',
+    name: '只不过 / 仅仅',
+    explanation: '限定唯一情形，强调“除此之外别无其他”。',
+    conjugation: '动/形将来连体 + 뿐이다；名词 + 일 뿐이다',
+    examples: [
+      { ko: '최선을 다할 뿐이에요.', roman: 'choeseoneul dahal ppunieyo', zh: '只是尽力而已。' },
+      { ko: '농담일 뿐이에요.', roman: 'nongdamil ppunieyo', zh: '只是玩笑罢了。' },
+      { ko: '조금 피곤할 뿐이에요.', roman: 'jogeum pigonhal ppunieyo', zh: '只是有点累。' },
+    ],
+    notes: '与 -ㄹ 뿐만 아니라（不仅）区分：此处表“仅”。',
+    mnemonic: '뿐＝“到此为止，就这些”。',
+    common_errors: [
+      { wrong: '하는 뿐이다', reason: '뿐 前用将来连体 할 뿐이다。' },
+    ],
+    quiz: [
+      { q: '“只是尽力而已”用？', a: '최선을 다할 뿐이에요' },
+    ],
+  },
+  {
+    id: 'beobida',
+    level: '高级',
+    pattern: '-는 법이다',
+    name: '（本就）理应… / 自然会…',
+    explanation: '陈述普遍规律、常理或必然趋势，带说理、格言口吻。',
+    conjugation: '动词现在 + 는 법이다；形容词 + ㄴ/은 법이다',
+    examples: [
+      { ko: '노력하면 성공하는 법이에요.', roman: 'noryeokhamyeon seonggonghaneun beobieyo', zh: '努力就自然会成功。' },
+      { ko: '시간이 지나면 잊히는 법이에요.', roman: 'sigani jinamyeon ijhineun beobieyo', zh: '时间一过自然会淡忘。' },
+      { ko: '급하면 실수하는 법이에요.', roman: 'geuphamyeon silsuhaneun beobieyo', zh: '一急就难免出错。' },
+    ],
+    notes: '强调“道理本该如此”，语气笃定。',
+    mnemonic: '법＝天经地义的“法则”。',
+    common_errors: [
+      { wrong: '성공한 법이다', reason: '表规律用现在 는 법이다。' },
+    ],
+    quiz: [
+      { q: '“努力就会成功”（规律）用？', a: '성공하는 법이에요' },
+    ],
+  },
+  {
+    id: 'giryeon',
+    level: '高级',
+    pattern: '-기 마련이다',
+    name: '必然会 / 难免',
+    explanation: '表某结果理所当然、不可避免，常用于人生哲理。',
+    conjugation: '动/形词干 + 기 마련이다（= -게 마련이다）',
+    examples: [
+      { ko: '사람은 실수하기 마련이에요.', roman: 'sarameun silsuhagi maryeonieyo', zh: '人总难免犯错。' },
+      { ko: '시간이 지나면 낫기 마련이에요.', roman: 'sigani jinamyeon natgi maryeonieyo', zh: '时间一久自然会好。' },
+      { ko: '노력은 배신하지 않기 마련이에요.', roman: 'noryeogeun baesinhaji anki maryeonieyo', zh: '努力一般不会辜负人。' },
+    ],
+    notes: '与 -는 법이다 近义，마련 更口语。',
+    mnemonic: '마련＝“命中注定”会这样。',
+    common_errors: [
+      { wrong: '실수하는 마련이다', reason: '固定为 -기 마련이다。' },
+    ],
+    quiz: [
+      { q: '“人总难免犯错”用？', a: '실수하기 마련이에요' },
+    ],
+  },
+  {
+    id: 'semida',
+    level: '高级',
+    pattern: '-ㄴ/은/는 셈이다',
+    name: '算是 / 等于是',
+    explanation: '把某情况归结、折算为某结论，“大致相当于”。',
+    conjugation: '动词过去 + ㄴ/은 셈이다；现在 + 는 셈이다；形容词 + ㄴ/은 셈이다',
+    examples: [
+      { ko: '이 정도면 다 한 셈이에요.', roman: 'i jeongdomyeon da han semieyo', zh: '到这程度就算全做完了。' },
+      { ko: '하루에 한 번 보니 자주 보는 셈이에요.', roman: 'harue han beon boni jaju boneun semieyo', zh: '一天见一次算是常见了。' },
+      { ko: '거의 공짜인 셈이에요.', roman: 'geoui gongjjain semieyo', zh: '几乎等于免费。' },
+    ],
+    notes: '主观折算判断，非精确统计。',
+    mnemonic: '셈＝“算账”折合。',
+    common_errors: [
+      { wrong: '한 세미다', reason: '为 셈이다（셈＝计算）。' },
+    ],
+    quiz: [
+      { q: '“算是全做完了”用？', a: '다 한 셈이에요' },
+    ],
+  },
+  {
+    id: 'nameoji',
+    level: '高级',
+    pattern: '-ㄴ/은 나머지',
+    name: '由于过度…以致 / 结果',
+    explanation: '前项程度过甚，导致后项（多为负面）结果，书面语色彩强。',
+    conjugation: '动/形过去连体 + 나머지',
+    examples: [
+      { ko: '너무 긴장한 나머지 말을 못 했어요.', roman: 'neomu ginjanghan nameoji mareul mot haesseoyo', zh: '太紧张以致说不出话。' },
+      { ko: '기쁜 나머지 눈물이 났어요.', roman: 'gippeun nameoji nunmuri nasseoyo', zh: '高兴过头竟落泪了。' },
+      { ko: '서두른 나머지 실수를 했어요.', roman: 'seodureun nameoji silsureul haesseoyo', zh: '太匆忙结果出了错。' },
+    ],
+    notes: '前项须为程度可“过度”的状态或动作。',
+    mnemonic: '나머지＝“剩下的后果”。',
+    common_errors: [
+      { wrong: '긴장하는 나머지', reason: '用过去连体 긴장한 나머지。' },
+    ],
+    quiz: [
+      { q: '“太紧张以致说不出话”用？', a: '긴장한 나머지 말을 못 했어요' },
+    ],
+  },
 ]
 
