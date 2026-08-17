@@ -35,9 +35,20 @@ node scripts/gen-audio.mjs   # Edge TTS 生成韩语 MP3 → public/audio/ko/ + 
 ```bash
 npm install
 npm run dev      # 本地开发（Vite + 后端 API）
-npm run build    # 生产构建（vite build）
+npm run typecheck # TypeScript 类型检查
+npm test         # 数据、UI 与 TTS API 安全自测
+npm run build    # 类型检查通过后执行生产构建
+npm run check    # 完整质量检查：测试 + 类型检查 + 构建
 npm start        # 启动后端 API 服务（含 Azure/Google TTS 时需 .env 配置密钥）
 ```
+
+### TTS 服务安全配置
+
+复制 `.env.example` 为 `.env` 后再填写服务端密钥。生产环境务必设置 `ALLOWED_ORIGINS`，并根据部署流量调整 `TTS_RATE_LIMIT`。`/api/tts` 仅接受 POST，请求文本最多 500 个字符，语速范围为 0.5–2；服务端会执行限流、上游超时和短时内存缓存。
+
+开发服务器默认只监听本机 `127.0.0.1`。需要同一可信 Wi-Fi 下的手机访问时，临时设置 `LAN_DEV=1`，并把对应的局域网来源加入 `ALLOWED_ORIGINS`；测试结束后应恢复为 `0`。
+
+第三方平台的 `client_secret` 不应保存在 LocalStorage 或任何前端代码中。需要接入带签名的第三方音频 API 时，应由服务端读取环境变量并代理请求。
 
 ## 数据来源及许可证
 

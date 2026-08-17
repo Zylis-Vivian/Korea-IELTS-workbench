@@ -7,7 +7,6 @@ import { tracksByBook, audioTracks } from '../../data/audio-tracks'
 import { ximalayaAlbums } from '../../data/ximalaya-albums'
 import AudioPlayer from '../../components/AudioPlayer'
 import BookVocab from './BookVocab'
-import { useStore } from '../../stores/useStore'
 
 type Tab = 'shelf' | 'audio' | 'vocab' | 'platform'
 
@@ -24,7 +23,6 @@ export default function BookCenter() {
   const [q, setQ] = useState('')
   const [sort, setSort] = useState<'added' | 'name' | 'level'>('added')
   const navigate = useNavigate()
-  const audioConfig = useStore((s) => s.settings.audioConfig)
 
   const filtered = useMemo(() => {
     let r = books.filter(
@@ -101,10 +99,8 @@ export default function BookCenter() {
 
       {tab === 'platform' && (
         <div className="space-y-3">
-          <div className={`rounded-card p-3 text-sm ${audioConfig.ximalayaKey ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
-            {audioConfig.ximalayaKey
-              ? '✅ 已配置喜马拉雅 app_key，可解锁在线音频播放。'
-              : '⚠️ 未配置喜马拉雅 app_key，在线音频暂以占位展示。在「设置 → 音频来源」填入密钥后即可解锁（前往喜马拉雅开放平台 open.ximalaya.com 注册获取）。'}
+          <div className="rounded-card bg-blue-50 p-3 text-sm text-blue-700">
+            在线平台凭据不再保存在浏览器中；当前仅提供专辑入口，避免把 client secret 暴露给前端脚本。
           </div>
           {(['korean', 'english'] as const).map((lg) => (
             <div key={lg}>

@@ -16,6 +16,7 @@ interface Props {
   source: string
   category?: BoardCategory
   size?: number
+  className?: string
 }
 
 // 一键加入单词本（自动按 category 归入对应语言单词本）
@@ -29,6 +30,7 @@ export default function AddWordButton({
   source,
   category = 'korean',
   size = 16,
+  className = '',
 }: Props) {
   const addWord = useStore((s) => s.addWord)
   const wordbook = useStore((s) => s.wordbook)
@@ -51,7 +53,7 @@ export default function AddWordButton({
         added
           ? 'bg-mint/40 text-emerald-700'
           : 'bg-lavender-light text-lavender-deep hover:bg-lavender hover:text-white'
-      }`}
+      } ${className}`}
     >
       {added ? <Check size={size} /> : <BookmarkPlus size={size} />}
       {added ? '已收藏' : '收藏'}

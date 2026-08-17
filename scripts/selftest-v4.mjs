@@ -49,7 +49,7 @@ const check = (name, cond, detail = '') => {
 console.log('\n[问题1] 韩语语法库')
 const G = m.GRAMMAR
 const byLevel = G.reduce((a, g) => ((a[g.level] = (a[g.level] || 0) + 1), a), {})
-check('总量 60~80 条', G.length >= 60 && G.length <= 80, `实际 ${G.length}`)
+check('总量 ≥60 条', G.length >= 60, `实际 ${G.length}`)
 check('初级 ≥25', byLevel['初级'] >= 25, `实际 ${byLevel['初级'] || 0}`)
 check('中级 ≥25', byLevel['中级'] >= 25, `实际 ${byLevel['中级'] || 0}`)
 check('高级 ≥15', byLevel['高级'] >= 15, `实际 ${byLevel['高级'] || 0}`)

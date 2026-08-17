@@ -1,8 +1,6 @@
 // src/utils/pronunciationTest.ts
-// 发音方案自动测试：Azure / Google / Edge(在线) / Web Speech API，异步执行，不阻塞 UI。
-// 在控制台打印报告，并返回结构化结果供状态指示器/设置面板使用。
-
-import { synthEdge, edgeTtsSupported } from './edgeTts'
+// 发音方案轻量健康检查：只读取后端配置和本地浏览器能力，不合成音频、不产生付费调用。
+// 真正的音频合成只在用户点击发音时发生。
 
 export interface EngineResult {
   engine: 'azure' | 'google' | 'edge'
@@ -39,47 +37,46 @@ function getWebVoices(): Promise<SpeechSynthesisVoice[]> {
   })
 }
 
-async function testBackend(engine: 'azure' | 'google'): Promise<EngineResult> {
+async function checkBackendHealth(): Promise<{ azure: EngineResult; google: EngineResult }> {
   const start = performance.now()
   try {
-    const url = `/api/tts?engine=${engine}&text=${encodeURIComponent('안녕하세요')}&speed=0.8`
-    const res = await fetch(url)
-    const ct = res.headers.get('Content-Type') || ''
+    const res = await fetch('/api/tts/health')
     const timeMs = Math.round(performance.now() - start)
-    if (res.ok && ct.includes('audio')) {
-      // 消费响应体，避免连接挂起
-      await res.arrayBuffer().catch(() => {})
-      return { engine, ok: true, timeMs }
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const health = (await res.json()) as { azure?: boolean; google?: boolean }
+    return {
+      azure: { engine: 'azure', ok: !!health.azure, timeMs, error: health.azure ? undefined : '后端未配置' },
+      google: { engine: 'google', ok: !!health.google, timeMs, error: health.google ? undefined : '后端未配置' },
     }
-    const body = await res.json().catch(() => ({}))
-    return { engine, ok: false, timeMs, error: body?.error || `HTTP ${res.status}` }
   } catch (e) {
-    return { engine, ok: false, timeMs: Math.round(performance.now() - start), error: (e as Error).message }
+    const timeMs = Math.round(performance.now() - start)
+    const error = (e as Error).message
+    return {
+      azure: { engine: 'azure', ok: false, timeMs, error },
+      google: { engine: 'google', ok: false, timeMs, error },
+    }
   }
 }
 
-async function testEdge(): Promise<EngineResult> {
+async function checkEdgeCapability(): Promise<EngineResult> {
   const start = performance.now()
-  if (!edgeTtsSupported()) {
-    return { engine: 'edge', ok: false, timeMs: 0, error: '非安全上下文(需 https/localhost)' }
-  }
   try {
-    const blob = await synthEdge('안녕하세요', 'female', 1)
+    const { edgeTtsSupported } = await import('./edgeTts')
     const timeMs = Math.round(performance.now() - start)
-    if (blob && blob.size > 0) return { engine: 'edge', ok: true, timeMs }
-    return { engine: 'edge', ok: false, timeMs, error: '返回空音频' }
+    const ok = edgeTtsSupported()
+    return { engine: 'edge', ok, timeMs, error: ok ? undefined : '非安全上下文(需 https/localhost)' }
   } catch (e) {
     return { engine: 'edge', ok: false, timeMs: Math.round(performance.now() - start), error: (e as Error).message }
   }
 }
 
 export async function runPronunciationTest(): Promise<TestReport> {
-  const [azure, google, edge, webVoices] = await Promise.all([
-    testBackend('azure'),
-    testBackend('google'),
-    testEdge(),
+  const [backend, edge, webVoices] = await Promise.all([
+    checkBackendHealth(),
+    checkEdgeCapability(),
     getWebVoices(),
   ])
+  const { azure, google } = backend
 
   const web: WebResult = {
     available: typeof window !== 'undefined' && 'speechSynthesis' in window,

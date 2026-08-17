@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { PageHeader } from '../../components/Layout'
 import { useStore, currentStreak } from '../../stores/useStore'
 import { CalendarCheck, Flame } from 'lucide-react'
+import { localDateKey } from '../../utils/localDate'
 
 export default function Checkin() {
   const checkin = useStore((s) => s.checkin)
   const addCheckin = useStore((s) => s.addCheckin)
   const [justDone, setJustDone] = useState(false)
 
-  const today = new Date().toISOString().slice(0, 10)
+  const today = localDateKey()
   const doneToday = !!checkin[today]
   const streak = currentStreak(checkin)
 

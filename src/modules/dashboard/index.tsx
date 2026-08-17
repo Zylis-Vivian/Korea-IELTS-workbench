@@ -14,6 +14,7 @@ import {
   Tooltip,
 } from 'recharts'
 import { Flame, Clock, BookmarkPlus, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { localDateKey } from '../../utils/localDate'
 
 const COLORS = ['#A8E6CF', '#E6DFF5', '#FF8B94']
 
@@ -24,7 +25,7 @@ export default function Dashboard() {
   const wordbook = useStore((s) => s.wordbook)
   const wrongbook = useStore((s) => s.wrongbook)
 
-  const today = new Date().toISOString().slice(0, 10)
+  const today = localDateKey()
   const todayMin = studyMinutes[today] || 0
 
   const koWord = wordbook.filter((w) => w.category === 'korean').length
@@ -45,7 +46,7 @@ export default function Dashboard() {
     for (let i = 6; i >= 0; i--) {
       const dt = new Date()
       dt.setDate(dt.getDate() - i)
-      const key = dt.toISOString().slice(0, 10)
+      const key = localDateKey(dt)
       arr.push({ d: `${dt.getMonth() + 1}/${dt.getDate()}`, m: studyMinutes[key] || 0 })
     }
     return arr

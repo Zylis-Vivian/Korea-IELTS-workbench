@@ -54,7 +54,7 @@ function AddBtn({ w }: { w: SceneWord }) {
     <button
       disabled={inBook}
       onClick={() =>
-        addWord({ source: '雅思词汇', category: 'ielts', korean: '', romanization: '', chinese: w.chinese, english: w.word, phonetic: w.phonetic, pos: w.pos, example: w.example, exampleZh: w.exampleZh })
+        addWord({ source: '雅思词汇', category: 'ielts', korean: '', romanization: '', chinese: w.chinese, english: w.word, phonetic: w.phonetic, pos: w.pos, example: w.example, exampleZh: w.exampleCn })
       }
       className={`shrink-0 px-2 py-1 rounded-lg text-xs flex items-center gap-1 ${
         inBook ? 'bg-emerald-50 text-emerald-500' : 'bg-lavender text-white'

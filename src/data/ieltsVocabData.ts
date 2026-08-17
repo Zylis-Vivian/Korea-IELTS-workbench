@@ -8,6 +8,7 @@ export interface SceneWord {
   chinese: string
   example: string
   exampleCn: string
+  topic?: string
 }
 export interface SceneGroup {
   scene: string

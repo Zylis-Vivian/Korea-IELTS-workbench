@@ -36,11 +36,14 @@ function ScaleTab() {
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {[['听力（A 类）', listeningScale], ['阅读（A 类）', readingScale]].map(([title, scale]) => (
-          <div key={title as string} className="bg-white rounded-card shadow-card p-4">
+        {[
+          { title: '听力（A 类）', scale: listeningScale },
+          { title: '阅读（A 类）', scale: readingScale },
+        ].map(({ title, scale }) => (
+          <div key={title} className="bg-white rounded-card shadow-card p-4">
             <div className="font-medium text-gray-700 mb-2">{title}</div>
             <div className="space-y-0.5 text-xs">
-              {(scale as any).map((r: any, i: number) => (
+              {scale.map((r, i) => (
                 <div key={i} className="flex justify-between">
                   <span className="text-gray-500">对 {r.min}-{r.max} 题</span>
                   <span className="text-lavender-deep font-medium">{r.band}</span>
