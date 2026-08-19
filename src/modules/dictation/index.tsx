@@ -28,6 +28,7 @@ export default function Dictation() {
   const [answer, setAnswer] = useState('')
   const [result, setResult] = useState<'correct' | 'wrong' | null>(null)
   const [doneIds, setDoneIds] = useState<Set<string>>(new Set())
+  const [activeId, setActiveId] = useState<string | null>(null)
 
   useEffect(() => {
     const known = new Set(reviewItems.map((item) => item.id))
@@ -42,7 +43,15 @@ export default function Dictation() {
     () => reviewItems.filter((item) => DICTATION_KINDS.has(item.kind) && !doneIds.has(item.id)),
     [reviewItems, doneIds]
   )
-  const current = candidates.find((item) => isDue(item)) || candidates[0]
+  const current = candidates.find((item) => item.id === activeId) || candidates.find((item) => isDue(item)) || candidates[0]
+
+  useEffect(() => {
+    if (!current) {
+      setActiveId(null)
+    } else if (!activeId || !candidates.some((item) => item.id === activeId)) {
+      setActiveId(current.id)
+    }
+  }, [activeId, candidates, current?.id])
 
   useEffect(() => {
     setAnswer('')
@@ -60,10 +69,12 @@ export default function Dictation() {
   const next = () => {
     if (!current) return
     setDoneIds((ids) => new Set(ids).add(current.id))
+    setActiveId(null)
   }
 
   const resetRound = () => {
     setDoneIds(new Set())
+    setActiveId(null)
     setAnswer('')
     setResult(null)
   }
