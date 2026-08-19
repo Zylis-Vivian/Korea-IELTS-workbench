@@ -63,8 +63,8 @@ const ielts: NavItem[] = [
 const center: NavItem[] = [
   { to: '/review', label: '今日任务', icon: CalendarDays },
   { to: '/shadowing', label: '影子跟读', icon: Mic2 },
+  { to: '/dictation', label: '听写练习', icon: Headphones },
   { to: '/dashboard', label: '学习仪表盘', icon: LayoutDashboard },
-  { to: '/books', label: '教材中心', icon: BookOpen },
   { to: '/checkin', label: '每日打卡', icon: CalendarCheck },
 ]
 
@@ -166,4 +166,3 @@ function Section({ title, items }: { title: string; items: NavItem[] }) {
     </div>
   )
 }
-
