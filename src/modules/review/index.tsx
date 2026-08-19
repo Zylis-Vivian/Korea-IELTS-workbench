@@ -139,7 +139,7 @@ export default function Review() {
         ) : (
           <div className="bg-white rounded-card shadow-card p-8 text-center text-gray-500">
             <Check className="mx-auto mb-3 text-emerald-500" size={30} />
-            今天的队列已经完成。可以去影子跟读复习薄弱句，或返回课程库学习新内容。
+            今天的队列已经完成。可以去影子跟读复习薄弱句，或返回韩语 / 雅思模块学习新内容。
           </div>
         )}
       </div>
