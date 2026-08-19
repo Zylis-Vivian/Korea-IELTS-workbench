@@ -9,6 +9,7 @@ const manifest = JSON.parse(read('public/manifest.webmanifest'))
 const index = read('index.html')
 const sw = read('public/sw.js')
 const sidebar = read('src/components/Sidebar.tsx')
+const vercel = read('vercel.json')
 
 const checks = [
   ['manifest display=standalone', manifest.display === 'standalone'],
@@ -20,6 +21,8 @@ const checks = [
   ['index links apple touch icon', index.includes('apple-touch-icon')],
   ['service worker caches shell', sw.includes('lavender-study-shell-v1') && sw.includes("request.mode === 'navigate'")],
   ['service worker supports updates', sw.includes('SKIP_WAITING')],
+  ['Vercel API entry exists', exists('api/index.js') && read('api/index.js').includes("../server/index.js")],
+  ['Vercel SPA rewrite keeps API paths', vercel.includes('"rewrites"') && vercel.includes('"destination": "/index.html"') && vercel.includes('(?!api')],
   ['mobile primary nav includes review loop', ['/review', '/dictation', '/shadowing'].every((route) => sidebar.includes(`to: '${route}'`))],
 ]
 
