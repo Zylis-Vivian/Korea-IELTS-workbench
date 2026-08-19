@@ -9,6 +9,7 @@ import { useStore } from './stores/useStore'
 const Dashboard = lazy(() => import('./modules/dashboard'))
 const Review = lazy(() => import('./modules/review'))
 const Shadowing = lazy(() => import('./modules/shadowing'))
+const Dictation = lazy(() => import('./modules/dictation'))
 const KoreanAlphabet = lazy(() => import('./modules/korean-alphabet'))
 const KoreanGrammar = lazy(() => import('./modules/korean-grammar'))
 const KoreanDialogue = lazy(() => import('./modules/korean-dialogue'))
@@ -29,8 +30,6 @@ const IeltsScoring = lazy(() => import('./modules/ielts-scoring'))
 const Checkin = lazy(() => import('./modules/checkin'))
 const Settings = lazy(() => import('./modules/settings'))
 const BoardView = lazy(() => import('./modules/board/BoardView'))
-const BookCenter = lazy(() => import('./modules/book-center'))
-const PDFReader = lazy(() => import('./modules/book-center/PDFReader'))
 
 const pageFallback = <div className="p-8 text-center text-gray-400">加载中…</div>
 
@@ -98,14 +97,13 @@ export default function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/review" element={<Review />} />
               <Route path="/shadowing" element={<Shadowing />} />
+              <Route path="/dictation" element={<Dictation />} />
               <Route path="/korean/wordbook" element={<BoardView category="korean" kind="word" />} />
               <Route path="/korean/wrong" element={<BoardView category="korean" kind="wrong" />} />
               <Route path="/ielts/wordbook" element={<BoardView category="ielts" kind="word" />} />
               <Route path="/ielts/wrong" element={<BoardView category="ielts" kind="wrong" />} />
               <Route path="/wordbook" element={<BoardView category="korean" kind="word" />} />
               <Route path="/checkin" element={<Checkin />} />
-              <Route path="/books" element={<BookCenter />} />
-              <Route path="/books/reader/:id" element={<PDFReader />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -3,7 +3,7 @@ import type { Mastery, WordbookItem, WrongItem, BoardCategory, WordMastery, NewW
 import type { TtsEngine, TtsGender } from '../hooks/usePronunciation'
 import type { TestReport } from '../utils/pronunciationTest'
 import { localDateKey } from '../utils/localDate'
-import { reviewItem } from '../utils/review'
+import { createReviewItem, reviewItem } from '../utils/review'
 
 export type PronLevel = 'unknown' | 'green' | 'yellow' | 'red'
 
@@ -194,7 +194,19 @@ export const useStore = create<State>((set, get) => ({
         category: w.category || 'korean',
         mastery: w.mastery || 'unlearned',
       }
-      const ns = { ...s, wordbook: [item, ...s.wordbook] }
+      const prompt = item.korean || item.english || item.chinese
+      const review = createReviewItem({
+        id: `wordbook-${item.id}`,
+        language: item.category === 'ielts' ? 'en' : 'ko',
+        kind: 'word',
+        title: `${item.source} · ${prompt}`,
+        prompt,
+        answer: prompt,
+        translation: item.chinese,
+        source: `${item.source} · 单词本`,
+        href: `/${item.category}/wordbook`,
+      })
+      const ns = { ...s, wordbook: [item, ...s.wordbook], reviewItems: [...s.reviewItems, review] }
       save(ns)
       return ns
     }),
@@ -224,7 +236,18 @@ export const useStore = create<State>((set, get) => ({
         createdAt: Date.now(),
         category: w.category || 'korean',
       }
-      const ns = { ...s, wrongbook: [item, ...s.wrongbook] }
+      const review = createReviewItem({
+        id: `wrong-${item.id}`,
+        language: item.category === 'ielts' ? 'en' : 'ko',
+        kind: 'grammar',
+        title: `${item.source} · 错题回流`,
+        prompt: item.question,
+        answer: item.correct,
+        translation: `你的答案：${item.yourAnswer}`,
+        source: `${item.source} · 错题本`,
+        href: `/${item.category}/wrong`,
+      })
+      const ns = { ...s, wrongbook: [item, ...s.wrongbook], reviewItems: [...s.reviewItems, review] }
       save(ns)
       return ns
     }),
