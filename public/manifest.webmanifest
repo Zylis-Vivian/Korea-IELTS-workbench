@@ -1,0 +1,35 @@
+{
+  "id": "/",
+  "name": "Lavender Study · 韩语+雅思学习工作台",
+  "short_name": "Lavender Study",
+  "description": "韩语与雅思的单词、听写、复习和影子跟读工作台",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#fff8f0",
+  "theme_color": "#7b5ea7",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/lavender-study.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/lavender-study.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/lavender-study.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "maskable"
+    }
+  ]
+}
