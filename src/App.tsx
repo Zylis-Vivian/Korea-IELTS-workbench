@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar'
 import PetalBackground from './components/PetalBackground'
 import Layout from './components/Layout'
 import PronunciationStatus from './components/PronunciationStatus'
+import PwaUpdatePrompt from './components/PwaUpdatePrompt'
 import { useStore } from './stores/useStore'
 
 const Dashboard = lazy(() => import('./modules/dashboard'))
@@ -69,7 +70,7 @@ export default function App() {
   }, [setPronStatus])
 
   return (
-    <div className="flex h-full">
+    <div className="app-shell flex min-h-[100dvh]">
       <PetalBackground />
       <Sidebar />
       <div className="relative z-10 flex-1 h-full overflow-y-auto">
@@ -111,6 +112,7 @@ export default function App() {
         </Layout>
       </div>
       <PronunciationStatus />
+      <PwaUpdatePrompt />
     </div>
   )
 }

@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   }, [location.pathname])
 
   return (
-    <div className="min-h-full px-4 sm:px-6 py-5 pb-24 md:pb-6 max-w-5xl mx-auto">
+    <div className="min-h-[100dvh] px-4 sm:px-6 py-5 pb-24 lg:pb-6 max-w-5xl mx-auto">
       {children}
     </div>
   )
