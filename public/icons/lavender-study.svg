@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Lavender Study</title>
+  <desc id="desc">A lavender flower mark on a warm cream background</desc>
+  <rect width="512" height="512" rx="112" fill="#7b5ea7"/>
+  <circle cx="256" cy="256" r="150" fill="#b19cd9" opacity=".35"/>
+  <g fill="#fff8f0">
+    <ellipse cx="256" cy="166" rx="42" ry="86"/>
+    <ellipse cx="256" cy="346" rx="42" ry="86"/>
+    <ellipse cx="166" cy="256" rx="86" ry="42"/>
+    <ellipse cx="346" cy="256" rx="86" ry="42"/>
+    <ellipse cx="192" cy="192" rx="42" ry="76" transform="rotate(-45 192 192)"/>
+    <ellipse cx="320" cy="192" rx="42" ry="76" transform="rotate(45 320 192)"/>
+    <ellipse cx="192" cy="320" rx="42" ry="76" transform="rotate(45 192 320)"/>
+    <ellipse cx="320" cy="320" rx="42" ry="76" transform="rotate(-45 320 320)"/>
+  </g>
+  <circle cx="256" cy="256" r="48" fill="#ffcf70"/>
+  <circle cx="256" cy="256" r="20" fill="#7b5ea7"/>
+</svg>
