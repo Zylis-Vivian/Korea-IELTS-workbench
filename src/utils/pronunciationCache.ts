@@ -51,7 +51,7 @@ function reqToPromise<T>(req: IDBRequest<T>): Promise<T> {
 }
 
 // 读取缓存；过期则删除并返回 null
-export async function getCachedAudio(key: string): Promise<Blob | null> {
+export async function getCachedAudio(key: string): Promise<CacheHit | null> {
   if (!hasIDB()) return null
   try {
     const db = await openDB()

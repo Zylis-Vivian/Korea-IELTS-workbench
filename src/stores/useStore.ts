@@ -1,7 +1,8 @@
 import { create } from 'zustand'
-import type { Mastery, WordbookItem, WrongItem, BoardCategory, WordMastery } from '../types'
+import type { Mastery, WordbookItem, WrongItem, BoardCategory, WordMastery, NewWordbookItem } from '../types'
 import type { TtsEngine, TtsGender } from '../hooks/usePronunciation'
 import type { TestReport } from '../utils/pronunciationTest'
+import { localDateKey } from '../utils/localDate'
 
 export type PronLevel = 'unknown' | 'green' | 'yellow' | 'red'
 
@@ -30,11 +31,6 @@ interface State {
     ttsSpeed: number
     ttsEngine: TtsEngine // 发音引擎：auto / azure / google / web
     ttsGender: TtsGender // 声线：female / male（主要影响 Azure）
-    audioConfig: {
-      ximalayaKey: string
-      qingtingId: string
-      qingtingSecret: string
-    }
   }
   // 发音引擎状态（供右下角指示器与设置面板展示）
   pronStatus: {
@@ -53,7 +49,7 @@ interface State {
   recordHandwriting: (char: string, score: number) => void
   addStudyMinutes: (min: number) => void
   addCheckin: () => void
-  addWord: (w: Omit<WordbookItem, 'id' | 'createdAt'>) => void
+  addWord: (w: NewWordbookItem) => void
   removeWord: (id: string) => void
   setWordMastery: (id: string, m: WordMastery) => void
   clearWordbook: (category: BoardCategory) => void
@@ -62,6 +58,8 @@ interface State {
   clearWrongbook: (category: BoardCategory) => void
   updateSettings: (s: Partial<State['settings']>) => void
   setPronStatus: (s: Partial<State['pronStatus']>) => void
+  markFlash: (korean: string, status: 'known' | 'unknown') => void
+  markDaily: (date: string, korean: string, status: 'known' | 'unknown') => void
 }
 
 const KEY = 'lavender-study-v1'
@@ -85,9 +83,13 @@ function load(): Partial<State> {
         category: w.category || 'korean',
       }))
     }
-    // 旧数据兼容：设置补 audioConfig
-    if (data.settings && !data.settings.audioConfig) {
-      data.settings.audioConfig = { ximalayaKey: '', qingtingId: '', qingtingSecret: '' }
+    // V2 安全迁移：旧版本曾把第三方 client_secret 放进 settings.audioConfig。
+    // 立即从持久化数据中移除，同时保留其他学习进度。
+    const legacySettings = data.settings as (State['settings'] & { audioConfig?: unknown }) | undefined
+    if (legacySettings?.audioConfig) {
+      const { audioConfig: _removed, ...safeSettings } = legacySettings
+      data.settings = safeSettings
+      localStorage.setItem(KEY, JSON.stringify(data))
     }
     return data
   } catch {
@@ -96,13 +98,25 @@ function load(): Partial<State> {
 }
 function save(s: State) {
   const { mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState } = s
-  localStorage.setItem(
-    KEY,
-    JSON.stringify({ mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState })
-  )
+  try {
+    localStorage.setItem(
+      KEY,
+      JSON.stringify({ mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState })
+    )
+  } catch {
+    // Private browsing, disabled storage, or quota exhaustion must not break study actions.
+  }
 }
 
-const today = () => new Date().toISOString().slice(0, 10)
+const today = () => localDateKey()
+
+const DEFAULT_SETTINGS: State['settings'] = {
+  fontSize: 16,
+  showVideo: true,
+  ttsSpeed: 1,
+  ttsEngine: 'auto',
+  ttsGender: 'female',
+}
 
 const init = load()
 
@@ -113,7 +127,13 @@ export const useStore = create<State>((set, get) => ({
   checkin: init.checkin || {},
   wordbook: init.wordbook || [],
   wrongbook: init.wrongbook || [],
-  settings: init.settings || { fontSize: 16, showVideo: true, ttsSpeed: 1, ttsEngine: 'auto', ttsGender: 'female', audioConfig: { ximalayaKey: '', qingtingId: '', qingtingSecret: '' } },
+  settings: {
+    fontSize: init.settings?.fontSize ?? DEFAULT_SETTINGS.fontSize,
+    showVideo: init.settings?.showVideo ?? DEFAULT_SETTINGS.showVideo,
+    ttsSpeed: init.settings?.ttsSpeed ?? DEFAULT_SETTINGS.ttsSpeed,
+    ttsEngine: init.settings?.ttsEngine ?? DEFAULT_SETTINGS.ttsEngine,
+    ttsGender: init.settings?.ttsGender ?? DEFAULT_SETTINGS.ttsGender,
+  },
   pronStatus: init.pronStatus || { level: 'unknown', webVoices: [] },
   flashState: init.flashState || {},
   dailyState: init.dailyState || {},
@@ -241,7 +261,7 @@ export function currentStreak(checkin: Record<string, CheckinDay>): number {
   let streak = 0
   const d = new Date()
   for (;;) {
-    const key = d.toISOString().slice(0, 10)
+    const key = localDateKey(d)
     if (checkin[key]) {
       streak++
       d.setDate(d.getDate() - 1)

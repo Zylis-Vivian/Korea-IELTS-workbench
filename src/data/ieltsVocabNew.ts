@@ -41,7 +41,7 @@ function toSceneWord(r: RawIelts): SceneWord {
     pos: r.partOfSpeech || '',
     chinese: r.chinese || '',
     example: ex?.english || '',
-    exampleZh: ex?.chinese || '',
+    exampleCn: ex?.chinese || '',
     topic: r.topic,
   }
 }
@@ -50,11 +50,15 @@ export const NEW_IELTS_WORDS: SceneWord[] = RAW_I.map(toSceneWord)
 
 const gMap = new Map<string, SceneWord[]>()
 for (const w of NEW_IELTS_WORDS) {
-  if (!gMap.has(w.topic)) gMap.set(w.topic, [])
-  gMap.get(w.topic)!.push(w)
+  const topic = w.topic || '其他'
+  if (!gMap.has(topic)) gMap.set(topic, [])
+  gMap.get(topic)!.push(w)
 }
 const ordered: string[] = []
-for (const w of NEW_IELTS_WORDS) if (!ordered.includes(w.topic)) ordered.push(w.topic)
+for (const w of NEW_IELTS_WORDS) {
+  const topic = w.topic || '其他'
+  if (!ordered.includes(topic)) ordered.push(topic)
+}
 
 export const NEW_TOPIC_GROUPS: TopicGroup[] = ordered.map((t) => ({ topic: t, words: gMap.get(t)! }))
 

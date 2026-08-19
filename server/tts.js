@@ -9,6 +9,22 @@ export const AZURE_VOICES = {
   male: 'ko-KR-InJoonNeural',
 }
 export const GOOGLE_VOICE = 'ko-KR-Neural2-A'
+const UPSTREAM_TIMEOUT_MS = Number(process.env.TTS_TIMEOUT_MS || 10_000)
+
+async function fetchWithTimeout(url, options) {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS)
+  try {
+    return await fetch(url, { ...options, signal: controller.signal })
+  } catch (error) {
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw new Error(`上游 TTS 请求超过 ${UPSTREAM_TIMEOUT_MS}ms`)
+    }
+    throw error
+  } finally {
+    clearTimeout(timer)
+  }
+}
 
 // 将 speed（0.5~2）映射为 Azure SSML 可识别的 rate 表达式
 function azureRate(speed) {
@@ -43,7 +59,7 @@ export async function synthAzure(text, voice = 'female', speed = 1) {
   if (!key || !region) return null
   const url = `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`
   const voiceName = AZURE_VOICES[voice] || AZURE_VOICES.female
-  const res = await fetch(url, {
+  const res = await fetchWithTimeout(url, {
     method: 'POST',
     headers: {
       'Ocp-Apim-Subscription-Key': key,
@@ -70,7 +86,7 @@ export async function synthGoogle(text, voice = 'ko-KR-Neural2-A', speed = 1) {
     voice: { languageCode: 'ko-KR', name: voice },
     audioConfig: { audioEncoding: 'MP3', speakingRate: speed },
   }
-  const res = await fetch(url, {
+  const res = await fetchWithTimeout(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -88,8 +104,6 @@ export async function synthGoogle(text, voice = 'ko-KR-Neural2-A', speed = 1) {
 // engine: 'auto' | 'azure' | 'google'
 // 返回 { audio: Buffer, engine: 'azure'|'google', format: 'mp3' }
 export async function synthesize(text, speed = 1, voice = 'female', engine = 'auto') {
-  const azureVoice = voice === 'male' ? 'ko-KR-InJoonNeural' : 'ko-KR-SunHiNeural'
-
   if (engine === 'azure') {
     const buf = await synthAzure(text, voice, speed)
     if (!buf) throw new Error('Azure 方案不可用：缺少 AZURE_SPEECH_KEY / AZURE_SPEECH_REGION 环境变量')

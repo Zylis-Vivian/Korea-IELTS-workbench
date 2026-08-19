@@ -23,6 +23,7 @@ import {
     GraduationCap,
 } from 'lucide-react'
 import { useStore } from '../stores/useStore'
+import { localDateKey } from '../utils/localDate'
 
 interface NavItem {
   to: string
@@ -100,7 +101,7 @@ function Item({ item, mobile }: { item: NavItem; mobile?: boolean }) {
 
 export default function Sidebar() {
   const studyMinutes = useStore((s) => s.studyMinutes)
-  const today = new Date().toISOString().slice(0, 10)
+  const today = localDateKey()
   const mins = studyMinutes[today] || 0
   const hh = Math.floor(mins / 60)
   const mm = mins % 60

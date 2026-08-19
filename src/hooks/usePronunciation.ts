@@ -122,10 +122,11 @@ async function fetchTts(
   voice: TtsGender,
   speed: number
 ): Promise<{ blob: Blob; used: string }> {
-  const url = `/api/tts?engine=${encodeURIComponent(engine)}&voice=${encodeURIComponent(
-    voice
-  )}&speed=${encodeURIComponent(String(speed))}&text=${encodeURIComponent(text)}`
-  const res = await fetch(url)
+  const res = await fetch('/api/tts', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ engine, voice, speed, text }),
+  })
   const ct = res.headers.get('Content-Type') || ''
   if (!res.ok || !ct.includes('audio')) {
     throw new Error(`后端不可用 (${res.status}, ${ct})`)

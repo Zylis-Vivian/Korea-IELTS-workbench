@@ -155,8 +155,13 @@ export interface WordbookItem {
   phonetic?: string // 音标
   pos?: string // 词性
   chinese: string
+  example?: string // 英文例句
+  exampleZh?: string // 例句中文释义
   createdAt: number
   mastery: WordMastery // 掌握度：未学/学习中/已掌握
+}
+export type NewWordbookItem = Omit<WordbookItem, 'id' | 'createdAt' | 'mastery'> & {
+  mastery?: WordMastery
 }
 export interface WrongItem {
   id: string

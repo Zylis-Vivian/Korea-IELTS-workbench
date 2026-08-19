@@ -31,12 +31,35 @@ function shuffle<T>(arr: T[]): T[] {
 // 核心词库（VOCAB）的结构与 KoreanTopic 同形，统一按 KoreanTopic 处理
 const CORE_TOPICS = VOCAB as unknown as KoreanTopic[]
 
+function mergeDuplicateTopics(topics: KoreanTopic[]): KoreanTopic[] {
+  const merged = new Map<string, KoreanTopic>()
+  for (const topic of topics) {
+    const existing = merged.get(topic.topic)
+    if (existing) existing.words.push(...topic.words)
+    else merged.set(topic.topic, { ...topic, words: [...topic.words] })
+  }
+  return [...merged.values()]
+}
+
 // 三套韩语词库数据源（核心 / flashcards / TOPIK），不修改 VOCAB 现有词条，仅切换。
 // 延世韩国语已独立为 /korean/yonsei 教材页，避免四库混用导致面板混乱。
 const LIB_MAP: Record<Lib, KoreanTopic[]> = {
-  core: CORE_TOPICS,
-  flashcards: FLASH_TOPICS,
-  topik: TOPIC_TOPICS,
+  core: mergeDuplicateTopics(CORE_TOPICS),
+  flashcards: mergeDuplicateTopics(FLASH_TOPICS),
+  topik: mergeDuplicateTopics(TOPIC_TOPICS),
+}
+
+function ModeTab({ id, label, active, onSelect }: { id: Mode; label: string; active: boolean; onSelect: (id: Mode) => void }) {
+  return (
+    <button
+      onClick={() => onSelect(id)}
+      className={`px-3 py-1.5 rounded-full text-sm transition ${
+        active ? 'bg-lavender text-white shadow-card' : 'bg-white text-gray-500 hover:bg-lavender-light/60'
+      }`}
+    >
+      {label}
+    </button>
+  )
 }
 
 export default function KoreanVocab() {
@@ -50,7 +73,7 @@ export default function KoreanVocab() {
   useEffect(() => {
     setTopic(activeVocab[0]?.topic || '')
     setQ('')
-  }, [lib]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [activeVocab])
 
   // —— 词汇预览（主题学习） ——
   const [topic, setTopic] = useState(VOCAB[0].topic)
@@ -107,17 +130,6 @@ export default function KoreanVocab() {
     []
   )
 
-  const Tab = ({ id, label }: { id: Mode; label: string }) => (
-    <button
-      onClick={() => setMode(id)}
-      className={`px-3 py-1.5 rounded-full text-sm transition ${
-        mode === id ? 'bg-lavender text-white shadow-card' : 'bg-white text-gray-500 hover:bg-lavender-light/60'
-      }`}
-    >
-      {label}
-    </button>
-  )
-
   const libName = lib === 'flashcards' ? 'Korean Flashcards' : lib === 'topik' ? 'TOPIK 词库' : '核心词库'
 
   return (
@@ -134,10 +146,10 @@ export default function KoreanVocab() {
 
       {/* 四栏切换（预览 + 学习模式 + 每日 + 总汇） */}
       <div className="flex flex-wrap gap-2 mb-4">
-        <Tab id="preview" label="词汇预览" />
-        <Tab id="study" label="学习模式" />
-        <Tab id="daily" label="每日刷新" />
-        <Tab id="all" label="单词总汇" />
+        <ModeTab id="preview" label="词汇预览" active={mode === 'preview'} onSelect={setMode} />
+        <ModeTab id="study" label="学习模式" active={mode === 'study'} onSelect={setMode} />
+        <ModeTab id="daily" label="每日刷新" active={mode === 'daily'} onSelect={setMode} />
+        <ModeTab id="all" label="单词总汇" active={mode === 'all'} onSelect={setMode} />
       </div>
 
       {/* 延世韩国语已独立为 /korean/yonsei，此处不再混入，避免面板混乱 */}

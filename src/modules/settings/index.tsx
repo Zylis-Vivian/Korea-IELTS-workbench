@@ -1,7 +1,7 @@
 import { PageHeader } from '../../components/Layout'
 import { useStore } from '../../stores/useStore'
 import PronunciationSettings from '../../components/PronunciationSettings'
-import { Moon, Sun, Volume2, Video } from 'lucide-react'
+import { Moon, Volume2, Video } from 'lucide-react'
 
 export default function Settings() {
   const settings = useStore((s) => s.settings)
@@ -13,43 +13,6 @@ export default function Settings() {
 
       <div className="space-y-4">
         <PronunciationSettings />
-
-        <div className="bg-white rounded-card shadow-card p-5">
-          <div className="text-sm font-medium text-lavender-deep mb-1">📻 音频来源（可选）</div>
-          <div className="text-xs text-gray-400 mb-3">
-            填入后可解锁喜马拉雅/蜻蜓 FM 在线音频。留空则仅使用本地 MP3 与 TTS 合成，界面不会报错。
-          </div>
-          <div className="space-y-3">
-            <label className="block">
-              <span className="text-xs text-gray-500">喜马拉雅 app_key</span>
-              <input
-                className="inp w-full mt-1"
-                placeholder="在 open.ximalaya.com 注册获取"
-                value={settings.audioConfig.ximalayaKey}
-                onChange={(e) => update({ audioConfig: { ...settings.audioConfig, ximalayaKey: e.target.value } })}
-              />
-            </label>
-            <label className="block">
-              <span className="text-xs text-gray-500">蜻蜓 FM client_id</span>
-              <input
-                className="inp w-full mt-1"
-                placeholder="在 open.qingting.fm 注册获取"
-                value={settings.audioConfig.qingtingId}
-                onChange={(e) => update({ audioConfig: { ...settings.audioConfig, qingtingId: e.target.value } })}
-              />
-            </label>
-            <label className="block">
-              <span className="text-xs text-gray-500">蜻蜓 FM client_secret</span>
-              <input
-                className="inp w-full mt-1"
-                type="password"
-                placeholder="与 client_id 配套"
-                value={settings.audioConfig.qingtingSecret}
-                onChange={(e) => update({ audioConfig: { ...settings.audioConfig, qingtingSecret: e.target.value } })}
-              />
-            </label>
-          </div>
-        </div>
 
         <div className="bg-white rounded-card shadow-card p-5">
           <div className="text-sm font-medium text-lavender-deep mb-2">🔊 发音语速</div>
