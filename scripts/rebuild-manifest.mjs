@@ -17,7 +17,6 @@ import { PRONUNCIATION } from './src/data/pronunciation'
 import { VOCAB } from './src/data/vocab'
 import { DIALOGUES } from './src/data/dialogue'
 import { GRAMMAR } from './src/data/grammar'
-import { bookVocab } from './src/data/book-vocabulary'
 import { applyPhoneticsIfNeeded } from './src/utils/koreanPhonetics'
 
 const out = new Set()
@@ -34,7 +33,6 @@ PRONUNCIATION.forEach((r) => r.examples.forEach((e) => add(e.ko)))
 VOCAB.forEach((topic) => topic.words.forEach((w) => add(w.korean)))
 DIALOGUES.forEach((d) => { d.lines.forEach((l) => add(l.ko)); ; d.vocabulary.forEach((v) => add(v.word)) })
 GRAMMAR.forEach((g) => g.examples.forEach((e) => add(e.ko)))
-bookVocab.forEach((b) => b.words.forEach((w) => { if (w.korean) add(w.korean); if (w.example) add(w.example) }))
 export const STRINGS = [...out]
 `
 
