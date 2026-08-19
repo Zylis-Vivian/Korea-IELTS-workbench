@@ -21,6 +21,7 @@ import {
     Flower2,
     Award,
     GraduationCap,
+    Mic2,
 } from 'lucide-react'
 import { useStore } from '../stores/useStore'
 import { localDateKey } from '../utils/localDate'
@@ -33,7 +34,7 @@ interface NavItem {
 }
 
 const korean: NavItem[] = [
-  { to: '/korean/alphabet', label: '四十音图', icon: Grid3x3 },
+  { to: '/korean/alphabet', label: '韩文字母', icon: Grid3x3 },
   { to: '/korean/daily', label: '每日学习', icon: CalendarDays },
   { to: '/korean/vocab', label: '词汇学习', icon: BookOpen },
   { to: '/korean/yonsei', label: '延世韩国语', icon: GraduationCap },
@@ -60,6 +61,8 @@ const ielts: NavItem[] = [
 ]
 
 const center: NavItem[] = [
+  { to: '/review', label: '今日任务', icon: CalendarDays },
+  { to: '/shadowing', label: '影子跟读', icon: Mic2 },
   { to: '/dashboard', label: '学习仪表盘', icon: LayoutDashboard },
   { to: '/books', label: '教材中心', icon: BookOpen },
   { to: '/checkin', label: '每日打卡', icon: CalendarCheck },

@@ -18,7 +18,7 @@ import { applyPhoneticsIfNeeded } from '../utils/koreanPhonetics'
 import { getCachedAudio, cacheAudio } from '../utils/pronunciationCache'
 // synthEdge 改为动态导入（避免 edge-tts-universal 在模块加载时触发 TDZ 崩溃）
 // 仅在用户点击发音、走到 Edge TTS 兜底路径时才加载
-import { hasKoreanVoice } from '../components/SpeakerButton'
+import { hasKoreanVoice } from '../utils/speech'
 
 export type TtsEngine = 'auto' | 'azure' | 'google' | 'edge' | 'web'
 export type TtsGender = 'female' | 'male'

@@ -13,7 +13,9 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from 'recharts'
-import { Flame, Clock, BookmarkPlus, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { Flame, Clock, BookmarkPlus, AlertCircle, CheckCircle2, Headphones, ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { isDue } from '../../utils/review'
 import { localDateKey } from '../../utils/localDate'
 
 const COLORS = ['#A8E6CF', '#E6DFF5', '#FF8B94']
@@ -24,6 +26,7 @@ export default function Dashboard() {
   const checkin = useStore((s) => s.checkin)
   const wordbook = useStore((s) => s.wordbook)
   const wrongbook = useStore((s) => s.wrongbook)
+  const reviewItems = useStore((s) => s.reviewItems)
 
   const today = localDateKey()
   const todayMin = studyMinutes[today] || 0
@@ -53,6 +56,7 @@ export default function Dashboard() {
   }, [studyMinutes])
 
   const streak = currentStreak(checkin)
+  const dueCount = reviewItems.filter((item) => isDue(item)).length
 
   return (
     <div className="fade-in">
@@ -98,9 +102,19 @@ export default function Dashboard() {
         </div>
       </div>
 
+      <div className="mt-5 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-4 items-center bg-gradient-to-r from-lavender-deep to-lavender rounded-card shadow-card p-5 text-white">
+        <div>
+          <div className="flex items-center gap-2 font-semibold"><Headphones size={18} /> 今日学习队列</div>
+          <p className="mt-1 text-sm text-white/80">{dueCount ? `有 ${dueCount} 条内容到期，先复习再学新内容。` : '进入今日任务，系统会按记忆强度安排单词、句子和听力。'}</p>
+        </div>
+        <Link to="/review" className="inline-flex items-center justify-center gap-1 rounded-full bg-white px-4 py-2 text-sm text-lavender-deep hover:bg-cream">
+          开始复习 <ArrowRight size={15} />
+        </Link>
+      </div>
+
       <div className="mt-5 bg-white rounded-card shadow-card p-5 flex items-center gap-3 text-sm text-gray-600">
         <CheckCircle2 size={18} className="text-emerald-500" />
-        继续完成「四十音图」中的书写练习与「综合练习」，数据会实时同步到这里。
+        建议先完成「今日学习任务」，再回到「影子跟读」强化听读记忆；学习记录会自动保存在当前设备。
       </div>
     </div>
   )
