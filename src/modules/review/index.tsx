@@ -3,42 +3,10 @@ import { Check, Clock3, Headphones, RotateCcw, Sparkles, Volume2 } from 'lucide-
 import { Link } from 'react-router-dom'
 import { PageHeader } from '../../components/Layout'
 import SpeakerButton from '../../components/SpeakerButton'
-import { DIALOGUES } from '../../data/dialogue'
-import { LISTENING } from '../../data/ielts'
+import { createPersonalReviewItems, DEFAULT_REVIEW_ITEMS } from '../../data/reviewSeeds'
 import { useStore } from '../../stores/useStore'
-import type { ReviewItem, ReviewRating } from '../../types'
+import type { ReviewRating } from '../../types'
 import { createReviewItem, dueDateLabel, isDue } from '../../utils/review'
-
-const SEED_ITEMS: Array<Omit<ReviewItem, 'card' | 'createdAt' | 'updatedAt'>> = [
-  ...DIALOGUES.flatMap((scene) =>
-    scene.lines.map((line, index) => ({
-      id: `dialogue-${scene.scene}-${index}`,
-      language: 'ko' as const,
-      kind: 'sentence' as const,
-      title: `${scene.scene} · ${line.speaker === 'B' ? '我的台词' : '对方'}`,
-      prompt: line.ko,
-      answer: line.ko,
-      translation: line.zh,
-      source: '韩语情景对话',
-      href: '/korean/dialogue',
-    }))
-  ),
-  ...LISTENING.flatMap((item) =>
-    item.script
-      .split(/(?<=[.!?])\s+/)
-      .filter(Boolean)
-      .map((sentence, index) => ({
-        id: `ielts-listening-${item.id}-${index}`,
-        language: 'en' as const,
-        kind: 'listening' as const,
-        title: `${item.title} · 第 ${index + 1} 句`,
-        prompt: sentence,
-        answer: sentence,
-        source: '雅思听力示例',
-        href: '/ielts/listening',
-      }))
-  ),
-]
 
 const RATINGS: Array<{ value: ReviewRating; label: string; hint: string; color: string }> = [
   { value: 'again', label: '重来', hint: '现在再来一次', color: 'bg-coral text-white' },
@@ -49,6 +17,8 @@ const RATINGS: Array<{ value: ReviewRating; label: string; hint: string; color: 
 
 export default function Review() {
   const reviewItems = useStore((s) => s.reviewItems)
+  const wordbook = useStore((s) => s.wordbook)
+  const wrongbook = useStore((s) => s.wrongbook)
   const upsertReviewItems = useStore((s) => s.upsertReviewItems)
   const review = useStore((s) => s.review)
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -56,9 +26,12 @@ export default function Review() {
 
   useEffect(() => {
     const known = new Set(reviewItems.map((item) => item.id))
-    const missing = SEED_ITEMS.filter((item) => !known.has(item.id)).map((item) => createReviewItem(item))
+    const personal = createPersonalReviewItems(wordbook, wrongbook)
+    const missing = [...DEFAULT_REVIEW_ITEMS, ...personal]
+      .filter((item) => !known.has(item.id))
+      .map((item) => createReviewItem(item))
     if (missing.length) upsertReviewItems(missing)
-  }, [reviewItems, upsertReviewItems])
+  }, [reviewItems, wordbook, wrongbook, upsertReviewItems])
 
   const now = new Date()
   const dueItems = useMemo(() => reviewItems.filter((item) => isDue(item, now)), [reviewItems, now])
@@ -183,4 +156,3 @@ function SummaryCard({ icon, label, value }: { icon: React.ReactNode; label: str
     </div>
   )
 }
-
