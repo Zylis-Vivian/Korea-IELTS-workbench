@@ -1,8 +1,9 @@
 import { create } from 'zustand'
-import type { Mastery, WordbookItem, WrongItem, BoardCategory, WordMastery, NewWordbookItem } from '../types'
+import type { Mastery, WordbookItem, WrongItem, BoardCategory, WordMastery, NewWordbookItem, ReviewItem, ReviewRating } from '../types'
 import type { TtsEngine, TtsGender } from '../hooks/usePronunciation'
 import type { TestReport } from '../utils/pronunciationTest'
 import { localDateKey } from '../utils/localDate'
+import { reviewItem } from '../utils/review'
 
 export type PronLevel = 'unknown' | 'green' | 'yellow' | 'red'
 
@@ -44,6 +45,8 @@ interface State {
   flashState: Record<string, 'known' | 'unknown'>
   // 每日刷词进度：日期(YYYY-MM-DD) -> 词key -> 状态（每日自动更新词表）
   dailyState: Record<string, Record<string, 'known' | 'unknown'>>
+  // 统一复习队列：词汇、句子、听力和语法共用 FSRS 调度
+  reviewItems: ReviewItem[]
 
   setMastery: (char: string, m: Mastery) => void
   recordHandwriting: (char: string, score: number) => void
@@ -60,6 +63,9 @@ interface State {
   setPronStatus: (s: Partial<State['pronStatus']>) => void
   markFlash: (korean: string, status: 'known' | 'unknown') => void
   markDaily: (date: string, korean: string, status: 'known' | 'unknown') => void
+  upsertReviewItem: (item: ReviewItem) => void
+  upsertReviewItems: (items: ReviewItem[]) => void
+  review: (id: string, rating: ReviewRating) => void
 }
 
 const KEY = 'lavender-study-v1'
@@ -97,11 +103,11 @@ function load(): Partial<State> {
   }
 }
 function save(s: State) {
-  const { mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState } = s
+  const { mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState, reviewItems } = s
   try {
     localStorage.setItem(
       KEY,
-      JSON.stringify({ mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState })
+      JSON.stringify({ mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState, reviewItems })
     )
   } catch {
     // Private browsing, disabled storage, or quota exhaustion must not break study actions.
@@ -137,6 +143,7 @@ export const useStore = create<State>((set, get) => ({
   pronStatus: init.pronStatus || { level: 'unknown', webVoices: [] },
   flashState: init.flashState || {},
   dailyState: init.dailyState || {},
+  reviewItems: init.reviewItems || [],
 
   setMastery: (char, m) =>
     set((s) => {
@@ -254,6 +261,30 @@ export const useStore = create<State>((set, get) => ({
       save(ns)
       return ns
     }),
+  upsertReviewItem: (item) =>
+    set((s) => {
+      const exists = s.reviewItems.some((x) => x.id === item.id)
+      const reviewItems = exists ? s.reviewItems.map((x) => (x.id === item.id ? item : x)) : [...s.reviewItems, item]
+      const ns = { ...s, reviewItems }
+      save(ns)
+      return ns
+    }),
+  upsertReviewItems: (items) =>
+    set((s) => {
+      if (!items.length) return s
+      const next = new Map(s.reviewItems.map((item) => [item.id, item]))
+      items.forEach((item) => next.set(item.id, item))
+      const ns = { ...s, reviewItems: Array.from(next.values()) }
+      save(ns)
+      return ns
+    }),
+  review: (id, rating) =>
+    set((s) => {
+      const reviewItems = s.reviewItems.map((item) => (item.id === id ? reviewItem(item, rating) : item))
+      const ns = { ...s, reviewItems }
+      save(ns)
+      return ns
+    }),
 }))
 
 // 辅助：连续打卡天数
@@ -269,3 +300,4 @@ export function currentStreak(checkin: Record<string, CheckinDay>): number {
   }
   return streak
 }
+
