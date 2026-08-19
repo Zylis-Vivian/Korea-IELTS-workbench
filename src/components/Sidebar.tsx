@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
     Grid3x3,
@@ -22,6 +23,7 @@ import {
     Award,
     GraduationCap,
     Mic2,
+    MoreHorizontal,
 } from 'lucide-react'
 import { useStore } from '../stores/useStore'
 import { localDateKey } from '../utils/localDate'
@@ -68,7 +70,25 @@ const center: NavItem[] = [
   { to: '/checkin', label: '每日打卡', icon: CalendarCheck },
 ]
 
-function Item({ item, mobile }: { item: NavItem; mobile?: boolean }) {
+const mobilePrimary: NavItem[] = [
+  { to: '/review', label: '今日', icon: CalendarDays },
+  { to: '/dictation', label: '听写', icon: Headphones },
+  { to: '/shadowing', label: '跟读', icon: Mic2 },
+  { to: '/korean/daily', label: '韩语', icon: BookOpen },
+  { to: '/ielts/vocab', label: '雅思', icon: GraduationCap },
+]
+
+const mobileMore: NavItem[] = [
+  { to: '/dashboard', label: '学习仪表盘', icon: LayoutDashboard },
+  { to: '/korean/wordbook', label: '韩语单词本', icon: BookMarked },
+  { to: '/korean/wrong', label: '韩语错题本', icon: AlertOctagon },
+  { to: '/ielts/wordbook', label: '雅思单词本', icon: BookMarked },
+  { to: '/ielts/wrong', label: '雅思错题本', icon: AlertOctagon },
+  { to: '/checkin', label: '每日打卡', icon: CalendarCheck },
+  { to: '/settings', label: '设置', icon: SettingsIcon },
+]
+
+function Item({ item, mobile, onNavigate }: { item: NavItem; mobile?: boolean; onNavigate?: () => void }) {
   const wordbook = useStore((s) => s.wordbook)
   const wrongbook = useStore((s) => s.wrongbook)
   const koWord = wordbook.some((w) => w.category === 'korean')
@@ -85,6 +105,7 @@ function Item({ item, mobile }: { item: NavItem; mobile?: boolean }) {
   return (
     <NavLink
       to={item.to}
+      onClick={onNavigate}
       className={({ isActive }) =>
         `group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition ${
           isActive
@@ -103,6 +124,7 @@ function Item({ item, mobile }: { item: NavItem; mobile?: boolean }) {
 }
 
 export default function Sidebar() {
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false)
   const studyMinutes = useStore((s) => s.studyMinutes)
   const today = localDateKey()
   const mins = studyMinutes[today] || 0
@@ -112,7 +134,7 @@ export default function Sidebar() {
   return (
     <>
       {/* PC / 平板侧栏 */}
-      <aside className="hidden md:flex flex-col w-[260px] shrink-0 h-full bg-white/80 backdrop-blur border-r border-lavender-light">
+      <aside className="hidden lg:flex flex-col w-[260px] shrink-0 h-full bg-white/80 backdrop-blur border-r border-lavender-light">
         <div className="px-5 py-5 flex items-center gap-2 border-b border-lavender-light">
           <span className="text-2xl">🌸</span>
           <div>
@@ -135,19 +157,37 @@ export default function Sidebar() {
       </aside>
 
       {/* 手机底部 Tab */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 flex justify-around bg-white/95 backdrop-blur border-t border-lavender-light px-1 py-1">
-        {[
-          { to: '/korean/daily', label: '每日', icon: CalendarDays },
-          { to: '/korean/alphabet', label: '发音', icon: Grid3x3 },
-          { to: '/korean/vocab', label: '单词', icon: BookOpen },
-          { to: '/ielts/vocab', label: '雅思', icon: BookOpen },
-          { to: '/settings', label: '设置', icon: SettingsIcon },
-        ].map(
-          (it) => (
-            <Item key={it.to} item={it} mobile />
-          )
-        )}
+      <nav className="mobile-tabbar lg:hidden fixed bottom-0 left-0 right-0 z-30 flex justify-around bg-white/95 backdrop-blur border-t border-lavender-light px-1 py-1" aria-label="移动端主导航">
+        {mobilePrimary.map((item) => (
+          <Item key={item.to} item={item} mobile />
+        ))}
+        <button
+          type="button"
+          onClick={() => setMobileMoreOpen((open) => !open)}
+          aria-expanded={mobileMoreOpen}
+          aria-controls="mobile-more-menu"
+          className={`group relative flex flex-col items-center justify-center gap-0.5 rounded-xl px-2 py-1 text-[10px] transition ${mobileMoreOpen ? 'bg-lavender text-white' : 'text-gray-600 hover:bg-lavender-light/60'}`}
+        >
+          <MoreHorizontal size={20} />
+          <span>更多</span>
+        </button>
       </nav>
+
+      {mobileMoreOpen ? (
+        <div className="fixed inset-0 z-20 bg-black/20 lg:hidden" onClick={() => setMobileMoreOpen(false)}>
+          <div id="mobile-more-menu" className="mobile-more-panel absolute bottom-0 left-0 right-0 rounded-t-3xl bg-white p-4 shadow-2xl" onClick={(event) => event.stopPropagation()}>
+            <div className="mb-3 flex items-center justify-between px-1">
+              <span className="font-semibold text-lavender-deep">更多功能</span>
+              <button type="button" onClick={() => setMobileMoreOpen(false)} className="rounded-full px-3 py-1 text-xs text-gray-500 hover:bg-cream">关闭</button>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {mobileMore.map((item) => (
+                <Item key={item.to} item={item} mobile onNavigate={() => setMobileMoreOpen(false)} />
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   )
 }
