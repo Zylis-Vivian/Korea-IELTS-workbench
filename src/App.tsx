@@ -7,6 +7,8 @@ import PronunciationStatus from './components/PronunciationStatus'
 import { useStore } from './stores/useStore'
 
 const Dashboard = lazy(() => import('./modules/dashboard'))
+const Review = lazy(() => import('./modules/review'))
+const Shadowing = lazy(() => import('./modules/shadowing'))
 const KoreanAlphabet = lazy(() => import('./modules/korean-alphabet'))
 const KoreanGrammar = lazy(() => import('./modules/korean-grammar'))
 const KoreanDialogue = lazy(() => import('./modules/korean-dialogue'))
@@ -94,6 +96,8 @@ export default function App() {
               <Route path="/ielts/writing" element={<IeltsWriting />} />
               <Route path="/ielts/scoring" element={<IeltsScoring />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/review" element={<Review />} />
+              <Route path="/shadowing" element={<Shadowing />} />
               <Route path="/korean/wordbook" element={<BoardView category="korean" kind="word" />} />
               <Route path="/korean/wrong" element={<BoardView category="korean" kind="wrong" />} />
               <Route path="/ielts/wordbook" element={<BoardView category="ielts" kind="word" />} />
@@ -112,3 +116,4 @@ export default function App() {
     </div>
   )
 }
+
