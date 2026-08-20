@@ -89,10 +89,10 @@ const countTxt = (html) => {
 const optionCount = (html) => (html.match(/<option/g) || []).length
 const cardCount = (html) => (html.match(/添加|存入/g) || []).length
 
-// IeltsVocab 内 useState 顺序：[tab] → Browse:[scene, topic, view, src, q, page, pageSize, fullData, fullError]
+// IeltsVocab 内 useState 顺序：[tab] → Browse:[scene, topic, view, src, q, debouncedQ, page, pageSize, fullData, fullError]
 console.log('\n[UI-问题3] 雅思词汇「词库浏览」交互链路')
 
-const A = renderWith(mod.IeltsVocab, ['browse', '租房住宿', undefined, 'scene', 'builtin', ''])
+const A = renderWith(mod.IeltsVocab, ['browse', '租房住宿', undefined, 'scene', 'builtin', '', '', 1, 20, null, false])
 const aCount = countTxt(A)
 check('默认态：场景词 + 内置精选 有内容', aCount > 0, `渲染 ${aCount} 词，${optionCount(A)} 个场景选项`)
 check('默认态：单词卡片已渲染', cardCount(A) > 0, `${cardCount(A)} 张卡片`)
@@ -100,7 +100,7 @@ check('筛选区分层清晰', A.includes('浏览维度') && A.includes('词库�
 check('分页控件已接入', A.includes('aria-label="分页"') && A.includes('上一页') && A.includes('每页数量'))
 
 // 词汇真经现在是路由级动态模块，SSR 自测只断言可见的加载态；数据完整性由 selftest-v4 直接校验。
-const B = renderWith(mod.IeltsVocab, ['browse', '租房住宿', undefined, 'scene', 'zhenting', ''])
+const B = renderWith(mod.IeltsVocab, ['browse', '租房住宿', undefined, 'scene', 'zhenting', '', '', 1, 20, null, false])
 check('切换全量词库进入加载态', B.includes('正在加载全量词库') && B.includes('词库来源'))
 check('下拉选项带词数标注', /（\d+）/.test(A), '形如「租房住宿（8）」')
 
@@ -125,11 +125,14 @@ check('含长难句新真题', ig.length > 0)
 check('长难句分层面板已接入', ['1. 主干', '2. 从句', '3. 非谓语', '4. 修饰成分', '5. 中文翻译'].every((label) => ig.includes(label)))
 
 console.log('\n[UI-问题4] 雅思同义替换分页')
-const synFirst = renderWith(mod.Synonym, [1, 20])
-const synSecond = renderWith(mod.Synonym, [2, 20])
-check('同义替换默认页渲染内容', synFirst.includes('高频替换') && synFirst.includes('increase'))
+// Synonym 内 useState 顺序：[page, pageSize, q, debouncedQ, category, practiceIndex, practiceRevealed]
+const synFirst = renderWith(mod.Synonym, [1, 20, '', '', 'all', 0, false])
+const synSecond = renderWith(mod.Synonym, [2, 20, '', '', 'all', 0, false])
+const synSearch = renderWith(mod.Synonym, [1, 20, 'cause', 'cause', 'all', 0, false])
+check('同义替换默认页渲染内容', synFirst.includes('替换自测') && synFirst.includes('increase'))
 check('同义替换接入分页控件', synFirst.includes('aria-label="分页"') && synFirst.includes('每页数量'))
-check('同义替换第二页内容变化', synSecond !== synFirst && !synSecond.includes('increase'))
+check('同义替换第二页内容变化', synSecond !== synFirst && synFirst.includes('显示 1–20 /') && synSecond.includes('显示 21–40 /'))
+check('同义替换搜索可命中基础词/替换词', synSearch.includes('cause') && synSearch.includes('lead to') && !synSearch.includes('increase'))
 
 React.useState = realUseState
 rmSync(out, { force: true })
