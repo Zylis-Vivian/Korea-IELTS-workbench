@@ -4,8 +4,7 @@
 // 切换场景下拉可过滤、总量数字随筛选实时更新。
 //
 // 红线：仅 import + 字段映射 + 派生，绝不修改任何现有词条。
-import { sceneVocab, type SceneWord, type SceneGroup, type TopicGroup } from './ieltsVocabData'
-import { ALL_TOPIC_GROUPS } from './ieltsVocabNew'
+import { sceneVocab, topicVocab, type SceneWord, type SceneGroup, type TopicGroup } from './ieltsVocabData'
 import rawIelts from '../../data/ielts-vocabulary.json'
 
 interface RawIelts {
@@ -129,6 +128,15 @@ function toSceneWord(w: RawIelts): SceneWord {
   }
 }
 
+// 词汇真经原始 topic 仍在这个路由级模块内转换，避免首屏加载 1.5MB JSON。
+const rawTopicMap = new Map<string, SceneWord[]>()
+for (const r of RAW) {
+  const topic = r.topic || '其他'
+  if (!rawTopicMap.has(topic)) rawTopicMap.set(topic, [])
+  rawTopicMap.get(topic)!.push({ ...toSceneWord(r), topic })
+}
+const rawTopicGroups: TopicGroup[] = Array.from(rawTopicMap.entries()).map(([topic, words]) => ({ topic, words }))
+
 const groups = new Map<string, SceneWord[]>()
 for (const r of RAW) {
   const s = sceneFor(r)
@@ -141,11 +149,11 @@ export const FULL_SCENE_GROUPS: SceneGroup[] = Array.from(groups.entries())
   .map(([scene, words]) => ({ scene, words }))
   .sort((a, b) => b.words.length - a.words.length)
 
-// 全量话题分组：把 ALL_TOPIC_GROUPS 的原始名（形如「01_自然地理」）统一去掉序号前缀，
+// 全量话题分组：把内置词库与真经原始名（形如「01_自然地理」）统一去掉序号前缀，
 // 并合并规范化后同名的分组（如内置「太空探索」8 词 + 真经「04_太空探索」75 词），
 // 合并时按单词去重，保证下拉里不出现重复/带序号的话题名。
 const topicMerge = new Map<string, { words: TopicGroup['words']; seen: Set<string> }>()
-for (const g of ALL_TOPIC_GROUPS) {
+for (const g of [...topicVocab, ...rawTopicGroups]) {
   const key = normalizeTopic(g.topic) || g.topic
   if (!topicMerge.has(key)) topicMerge.set(key, { words: [], seen: new Set() })
   const bucket = topicMerge.get(key)!
