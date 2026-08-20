@@ -26,9 +26,10 @@ const entryFile = join(process.cwd(), '__ui_entry.tsx')
 writeFileSync(
   entryFile,
   `import IeltsVocab from './src/modules/ielts-vocab'
+import Synonym from './src/modules/ielts-vocab/Synonym'
 import KoreanGrammar from './src/modules/korean-grammar'
 import IeltsGrammar from './src/modules/ielts-grammar'
-export { IeltsVocab, KoreanGrammar, IeltsGrammar }
+export { IeltsVocab, Synonym, KoreanGrammar, IeltsGrammar }
 `
 )
 
@@ -122,6 +123,13 @@ check('雅思语法页渲染成功', ig.length > 2000, `${ig.length} 字节`)
 check('含写作专项新条目', ig.includes('数据描述句型') || ig.includes('因果链表达'))
 check('含长难句新真题', ig.length > 0)
 check('长难句分层面板已接入', ['1. 主干', '2. 从句', '3. 非谓语', '4. 修饰成分', '5. 中文翻译'].every((label) => ig.includes(label)))
+
+console.log('\n[UI-问题4] 雅思同义替换分页')
+const synFirst = renderWith(mod.Synonym, [1, 20])
+const synSecond = renderWith(mod.Synonym, [2, 20])
+check('同义替换默认页渲染内容', synFirst.includes('高频替换') && synFirst.includes('increase'))
+check('同义替换接入分页控件', synFirst.includes('aria-label="分页"') && synFirst.includes('每页数量'))
+check('同义替换第二页内容变化', synSecond !== synFirst && !synSecond.includes('increase'))
 
 React.useState = realUseState
 rmSync(out, { force: true })
