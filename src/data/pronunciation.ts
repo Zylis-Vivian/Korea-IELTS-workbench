@@ -16,8 +16,22 @@ export const PRONUNCIATION: PronunciationRule[] = [
     common_errors: ['双收音连音“左留右移”：ㄺ→ㄱ移、ㄻ→ㅁ移、ㄼ→ㅂ移', 'ㅇ/ㅎ 作收音时不连音：종이[종이] 而非 [조기]'],
   },
   {
+    id: 'final',
+    category: 'B. 终声规则',
+    rule: '韩语收音在音节末会归并为 7 个代表音，先判断终声类别，再进入连音或同化规则。',
+    formula: 'ㄱ/ㅋ/ㄲ→[ㄱ]；ㄷ/ㅅ/ㅆ/ㅈ/ㅊ/ㅎ→[ㄷ]；ㅂ/ㅍ→[ㅂ]；ㄴ/ㄹ/ㅁ/ㅇ/ㅆ 保持',
+    examples: [
+      { ko: '밖', roman: 'bak', zh: '外面', ipa: '[박]' },
+      { ko: '옷', roman: 'ot', zh: '衣服', ipa: '[옫]' },
+      { ko: '꽃', roman: 'kkot', zh: '花', ipa: '[꼳]' },
+      { ko: '앞', roman: 'ap', zh: '前面', ipa: '[압]' },
+      { ko: '부엌', roman: 'bueok', zh: '厨房', ipa: '[부억]' },
+    ],
+    common_errors: ['词尾 ㅅ/ㅈ/ㅊ 不读成 [s]/[j]/[ch]，统一收为 [ㄷ]', '终声规则先于后续音变判断；后面接元音时可能再发生连音'],
+  },
+  {
     id: 'aspiration',
-    category: 'B. 送气化现象',
+    category: 'C. 送气化现象',
     rule: '松音（ㄱㄷㅂㅈ）与ㅎ相邻，或ㅎ与松音相邻时，松音变为送气音（ㅋㅌㅍㅊ）。',
     formula: 'ㄱ/ㄷ/ㅂ/ㅈ + ㅎ → ㅋ/ㅌ/ㅍ/ㅊ；ㅎ + ㄱ/ㄷ/ㅂ/ㅈ → ㅋ/ㅌ/ㅍ/ㅊ',
     examples: [
@@ -31,7 +45,7 @@ export const PRONUNCIATION: PronunciationRule[] = [
   },
   {
     id: 'tense',
-    category: 'C. 紧音化现象',
+    category: 'D. 紧音化现象',
     rule: '收音ㄱ/ㄷ/ㅂ与后续ㄱ/ㄷ/ㅂ/ㅅ/ㅈ相遇时，后一个变为紧音。',
     formula: '收音 ㄱ/ㄷ/ㅂ + ㄱ/ㄷ/ㅂ/ㅅ/ㅈ → 后字紧音',
     examples: [
@@ -45,7 +59,7 @@ export const PRONUNCIATION: PronunciationRule[] = [
   },
   {
     id: 'palatal',
-    category: 'D. 腭化现象',
+    category: 'G. 腭化现象',
     rule: 'ㄷ/ㅌ 与 이/히 相邻时，腭化为 ㅈ/ㅊ。',
     formula: 'ㄷ + 이 → 지；ㄷ + 히 → 치；ㅌ + 이 → 치',
     examples: [
@@ -58,7 +72,7 @@ export const PRONUNCIATION: PronunciationRule[] = [
   },
   {
     id: 'nasal',
-    category: 'E. 辅音同化（鼻音化）',
+    category: 'E. 鼻音化',
     rule: '收音ㄱ/ㄷ/ㅂ 与后续ㄴ/ㄹ/ㅁ 相邻时，分别同化为ㅇ/ㄴ/ㅁ；ㅁ/ㅇ + ㄹ → ㄴ。',
     formula: 'ㄱ+ㄴ/ㄹ/ㅁ→ㅇ；ㄷ+ㄴ/ㄹ/ㅁ→ㄴ；ㅂ+ㄴ/ㄹ/ㅁ→ㅁ；ㅁ/ㅇ+ㄹ→ㄴ',
     examples: [
@@ -71,8 +85,21 @@ export const PRONUNCIATION: PronunciationRule[] = [
     common_errors: ['收音ㅂ与ㄹ相遇→ㅁ：밥맛[밤맏]', 'ㅁ/ㅇ 后的ㄹ变ㄴ：음력[음녁]'],
   },
   {
+    id: 'liquid',
+    category: 'F. 流音化',
+    rule: 'ㄴ与ㄹ相邻时通常同化为连续的 [ㄹㄹ]，舌尖音在词中保持流畅连接。',
+    formula: 'ㄴ+ㄹ → ㄹ+ㄹ；ㄹ+ㄴ → ㄹ+ㄹ（部分合成词需结合词典）',
+    examples: [
+      { ko: '신라', roman: 'sil-la', zh: '新罗', ipa: '[실라]' },
+      { ko: '설날', roman: 'seol-lal', zh: '春节', ipa: '[설랄]' },
+      { ko: '난로', roman: 'nal-lo', zh: '暖炉', ipa: '[날로]' },
+      { ko: '칼날', roman: 'kal-lal', zh: '刀刃', ipa: '[칼랄]' },
+    ],
+    common_errors: ['不要把 신라 读成 [신나]；先识别 ㄴ+ㄹ 的流音化', '部分外来语或词素边界存在例外，优先以词典音标为准'],
+  },
+  {
     id: 'elision',
-    category: 'F. 脱落现象',
+    category: 'H. 脱落现象',
     rule: '部分音节中的 ㅎ、ㄹ、ㅅ 在语流中脱落不发音。',
     formula: 'ㅎ 脱落（常用）；ㄹ/ㅅ 在特定词汇中脱落',
     examples: [
@@ -85,7 +112,7 @@ export const PRONUNCIATION: PronunciationRule[] = [
   },
   {
     id: 'addition',
-    category: 'G. 添加现象',
+    category: 'I. 添加现象',
     rule: '合成词中在两个语素之间添加 ㄴ，或添加 ㄷ/ㅅ 等。',
     formula: '合成词中间加 ㄴ（꽃+잎→꼰닢）',
     examples: [
@@ -97,7 +124,7 @@ export const PRONUNCIATION: PronunciationRule[] = [
   },
   {
     id: 'irregular',
-    category: 'H. 不规则音变（7 大类）',
+    category: 'J. 不规则音变（7 大类）',
     rule: '七类词干末音节在特定语尾前发生特殊变化，需逐个记忆。',
     formula: 'ㄷ/ㅂ/ㅅ/ㅎ/르/러/으 不规则',
     examples: [
@@ -113,7 +140,7 @@ export const PRONUNCIATION: PronunciationRule[] = [
   },
   {
     id: 'ui',
-    category: 'I. ㅢ 的发音规则',
+    category: 'K. ㅢ 的发音规则',
     rule: '“ㅢ”在词首发“ㅢ”；在词中/非重读时常弱读为“ㅣ”。',
     formula: '词首 → [ㅢ]；词中/助词 의 → [ㅔ]/[ㅣ]',
     examples: [
@@ -125,7 +152,7 @@ export const PRONUNCIATION: PronunciationRule[] = [
   },
   {
     id: 'aspiration2',
-    category: 'J. 略送气规则',
+    category: 'L. 略送气规则',
     rule: '送气音在词首送气强，在非词首位置送气减弱。',
     formula: '词首 ㅋ/ㅌ/ㅍ/ㅊ 送气强；词中非词首减弱',
     examples: [
@@ -136,7 +163,7 @@ export const PRONUNCIATION: PronunciationRule[] = [
   },
   {
     id: 'loan',
-    category: 'K. 外来语音变',
+    category: 'M. 外来语音变',
     rule: '外来语（英/日等）按韩国语语音体系转写，产生特定音变。',
     formula: 'f→ㅍ；z→ㅈ；l 词首→ㄹ 等',
     examples: [
