@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { Mastery, WordbookItem, WrongItem, BoardCategory, WordMastery, NewWordbookItem, ReviewItem, ReviewRating } from '../types'
+import type { Mastery, WordbookItem, WrongItem, BoardCategory, WordMastery, NewWordbookItem, ReviewItem, ReviewRating, DictationErrorType } from '../types'
 import type { TtsEngine, TtsGender } from '../hooks/usePronunciation'
 import type { TestReport } from '../utils/pronunciationTest'
 import { localDateKey } from '../utils/localDate'
@@ -66,6 +66,7 @@ interface State {
   upsertReviewItem: (item: ReviewItem) => void
   upsertReviewItems: (items: ReviewItem[]) => void
   review: (id: string, rating: ReviewRating) => void
+  recordDictation: (id: string, result: { correct: boolean; errorType?: DictationErrorType }) => void
 }
 
 const KEY = 'lavender-study-v1'
@@ -304,6 +305,31 @@ export const useStore = create<State>((set, get) => ({
   review: (id, rating) =>
     set((s) => {
       const reviewItems = s.reviewItems.map((item) => (item.id === id ? reviewItem(item, rating) : item))
+      const ns = { ...s, reviewItems }
+      save(ns)
+      return ns
+    }),
+  recordDictation: (id, result) =>
+    set((s) => {
+      const reviewItems = s.reviewItems.map((item) => {
+        if (item.id !== id) return item
+        const previous = item.dictation || { attempts: 0, correct: 0, wrong: 0, errorTypes: {} }
+        const errorType = result.errorType || 'unknown'
+        const errorTypes = { ...previous.errorTypes }
+        if (!result.correct) errorTypes[errorType] = (errorTypes[errorType] || 0) + 1
+        const withStats: ReviewItem = {
+          ...item,
+          dictation: {
+            attempts: previous.attempts + 1,
+            correct: previous.correct + (result.correct ? 1 : 0),
+            wrong: previous.wrong + (result.correct ? 0 : 1),
+            errorTypes,
+            ...(result.correct ? {} : { lastErrorType: errorType }),
+          },
+        }
+        // “again” 会把卡片重新排到近期到期队列，确保错题在下一轮回流。
+        return reviewItem(withStats, result.correct ? 'good' : 'again')
+      })
       const ns = { ...s, reviewItems }
       save(ns)
       return ns
