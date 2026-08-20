@@ -11,6 +11,7 @@ import { TOPIC_TOPICS, TOPIC_WORDS } from '../../data/topikVocab'
 import type { VocabWord } from '../../types'
 import { useStore } from '../../stores/useStore'
 import { todayStr, getDailyWords, getDailyProgress } from '../../utils/dailyWords'
+import useDebouncedValue from '../../hooks/useDebouncedValue'
 
 const LEVELS = ['1', '2', '3', '4', '5', '6']
 const DAILY_COUNT = 12
@@ -68,6 +69,7 @@ export default function KoreanVocab() {
   const [topic, setTopic] = useState(VOCAB[0].topic)
   const [level, setLevel] = useState<string>('all')
   const [q, setQ] = useState('')
+  const debouncedQ = useDebouncedValue(q)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
   const [flashTopics, setFlashTopics] = useState<KoreanTopic[] | null>(null)
@@ -142,8 +144,8 @@ export default function KoreanVocab() {
   const topicWords = useMemo(() => {
     let list = data?.words || []
     if (level !== 'all') list = list.filter((w) => w.level === level)
-    if (q.trim()) {
-      const kw = q.trim().toLowerCase()
+    if (debouncedQ.trim()) {
+      const kw = debouncedQ.trim().toLowerCase()
       list = list.filter(
         (w) =>
           w.korean.toLowerCase().includes(kw) ||
@@ -152,7 +154,8 @@ export default function KoreanVocab() {
       )
     }
     return list
-  }, [data, level, q])
+  }, [data, debouncedQ, level])
+  const isFiltering = q !== debouncedQ
 
   const pageCount = Math.max(1, Math.ceil(topicWords.length / pageSize))
   const pageItems = useMemo(
@@ -214,6 +217,10 @@ export default function KoreanVocab() {
                 <span className="sr-only">搜索韩文、罗马音或中文</span>
                 <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
+                  type="search"
+                  aria-label="搜索韩文、罗马音或中文"
+                  inputMode="search"
+                  enterKeyHint="search"
                   value={q}
                   onChange={(e) => {
                     setQ(e.target.value)
@@ -251,11 +258,17 @@ export default function KoreanVocab() {
           {isLoading && <div className="rounded-card bg-white p-8 text-center text-sm text-gray-400 shadow-card">正在加载 Korean Flashcards…</div>}
           {flashError && <div className="rounded-card bg-red-50 p-4 text-center text-sm text-red-600">词库加载失败，请稍后重试或切换其他词库。</div>}
 
-          {!isLoading && !flashError && <div className="text-xs text-gray-400 mb-2">
-            {topic} · {topicWords.length} 词
-            {level !== 'all' && ` · TOPIK ${level}`}
-            {q.trim() && ` · 搜索「${q.trim()}」`}
-          </div>}
+          {!isLoading && !flashError && (
+            <div className="text-xs text-gray-400 mb-2" aria-live="polite">
+              {isFiltering ? '正在筛选…' : (
+                <>
+                  {topic} · {topicWords.length} 词
+                  {level !== 'all' && ` · TOPIK ${level}`}
+                  {debouncedQ.trim() && ` · 搜索「${debouncedQ.trim()}」`}
+                </>
+              )}
+            </div>
+          )}
 
           {!isLoading && !flashError && topicWords.length === 0 ? (
             <div className="text-center text-gray-400 py-12">没有匹配的单词，换个条件试试～</div>

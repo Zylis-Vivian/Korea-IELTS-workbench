@@ -28,13 +28,28 @@ export default function Pagination({
     const first = Math.min(Math.max(safePage - 2, 1), totalPages - 4)
     return first + index
   })
+  const scrollToContentTop = () => {
+    const main = document.getElementById('main-content')
+    const scrollContainer = main?.parentElement
+    const behavior: ScrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+    if (scrollContainer && scrollContainer.scrollHeight > scrollContainer.clientHeight) {
+      scrollContainer.scrollTo({ top: 0, behavior })
+    } else {
+      window.scrollTo({ top: 0, behavior })
+    }
+  }
+  const goToPage = (nextPage: number) => {
+    if (nextPage === safePage) return
+    onPageChange(nextPage)
+    window.requestAnimationFrame(scrollToContentTop)
+  }
 
   return (
     <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-gray-500" aria-label="分页">
-      <span className="mr-1">显示 {start}–{end} / {total}</span>
+      <span className="mr-1" aria-live="polite">显示 {start}–{end} / {total}</span>
       <button
         type="button"
-        onClick={() => onPageChange(Math.max(1, safePage - 1))}
+        onClick={() => goToPage(Math.max(1, safePage - 1))}
         disabled={safePage === 1}
         className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg bg-white px-2 shadow-card transition hover:bg-lavender-light/60 disabled:opacity-40"
         aria-label="上一页"
@@ -45,7 +60,8 @@ export default function Pagination({
         <button
           type="button"
           key={pageNumber}
-          onClick={() => onPageChange(pageNumber)}
+          onClick={() => goToPage(pageNumber)}
+          aria-label={`第 ${pageNumber} 页`}
           aria-current={pageNumber === safePage ? 'page' : undefined}
           className={`min-h-9 min-w-9 rounded-lg px-2 transition ${pageNumber === safePage ? 'bg-lavender text-white shadow-soft' : 'bg-white hover:bg-lavender-light/60'}`}
         >
@@ -54,7 +70,7 @@ export default function Pagination({
       ))}
       <button
         type="button"
-        onClick={() => onPageChange(Math.min(totalPages, safePage + 1))}
+        onClick={() => goToPage(Math.min(totalPages, safePage + 1))}
         disabled={safePage === totalPages}
         className="inline-flex min-h-9 min-w-9 items-center justify-center rounded-lg bg-white px-2 shadow-card transition hover:bg-lavender-light/60 disabled:opacity-40"
         aria-label="下一页"
