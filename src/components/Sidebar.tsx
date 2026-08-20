@@ -134,24 +134,24 @@ export default function Sidebar() {
   return (
     <>
       {/* PC / 平板侧栏 */}
-      <aside className="hidden lg:flex flex-col w-[260px] shrink-0 h-full bg-white/80 backdrop-blur border-r border-lavender-light">
-        <div className="px-5 py-5 flex items-center gap-2 border-b border-lavender-light">
+      <aside className="hidden lg:flex lg:h-[100dvh] lg:sticky lg:top-0 flex-col w-[260px] shrink-0 overflow-hidden bg-white/80 backdrop-blur border-r border-lavender-light">
+        <div className="shrink-0 px-5 py-5 flex items-center gap-2 border-b border-lavender-light">
           <span className="text-2xl">🌸</span>
           <div>
             <div className="font-bold text-lavender-deep leading-tight">Lavender Study</div>
             <div className="text-[11px] text-gray-400">韩语 + 雅思双轨学习</div>
           </div>
         </div>
-        <div className="px-5 py-2 text-xs text-gray-400">
+        <div className="shrink-0 px-5 py-2 text-xs text-gray-400">
           今日学习 {hh > 0 ? `${hh}h ` : ''}
           {mm}m
         </div>
-        <nav className="flex-1 overflow-y-auto px-3 pb-4 space-y-5">
+        <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-4 space-y-5 [scrollbar-gutter:stable]" aria-label="桌面主导航">
           <Section title="韩语学习" items={korean} />
           <Section title="雅思备考" items={ielts} />
           <Section title="个人中心" items={center} />
         </nav>
-        <div className="p-3 border-t border-lavender-light">
+        <div className="shrink-0 p-3 border-t border-lavender-light">
           <Item item={{ to: '/settings', label: '设置', icon: SettingsIcon }} />
         </div>
       </aside>
