@@ -270,7 +270,7 @@ export default function KoreanYonsei() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="搜索韩文 / 罗马音 / 中文 / 英文"
-            className="inp w-full pl-9"
+            className="inp inp-leading-icon w-full"
           />
         </div>
       </div>
