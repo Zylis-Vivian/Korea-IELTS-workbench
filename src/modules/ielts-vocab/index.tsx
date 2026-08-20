@@ -1,15 +1,21 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Volume2, BookMarked, Check, Shuffle, RotateCcw, Search, MessageCircle } from 'lucide-react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
+import { BookMarked, Check, RotateCcw, Search } from 'lucide-react'
 import { PageHeader } from '../../components/Layout'
 import SpeakerButton from '../../components/SpeakerButton'
 import Pagination from '../../components/Pagination'
 import { useStore } from '../../stores/useStore'
 import { sceneVocab, roots, topicVocab, type SceneWord, type SceneGroup, type TopicGroup } from '../../data/ieltsVocabData'
-import { ALL_SYNONYMS, SPEAKING_GROUPS, type SpeakItem } from '../../data/ieltsVocabNew'
 
 type Tab = 'browse' | 'study' | 'synonym' | 'root' | 'speaking'
 const EMPTY_SCENE_GROUPS: SceneGroup[] = []
 const EMPTY_TOPIC_GROUPS: TopicGroup[] = []
+const Synonym = lazy(() => import('./Synonym'))
+const Speaking = lazy(() => import('./Speaking'))
+const topicFallback = (
+  <div className="rounded-card bg-white p-8 text-center text-sm text-gray-400" role="status" aria-live="polite">
+    正在准备专题词库…
+  </div>
+)
 const allWords: SceneWord[] = [
   ...sceneVocab.flatMap((g) => g.words.map((w) => ({ ...w, group: g.scene }))),
   ...topicVocab.flatMap((g) => g.words.map((w) => ({ ...w, group: g.topic }))),
@@ -30,6 +36,8 @@ export default function IeltsVocab() {
         ] as [Tab, string][]).map(([k, l]) => (
           <button
             key={k}
+            type="button"
+            aria-pressed={tab === k}
             onClick={() => setTab(k)}
             className={`flex-1 px-3 py-2 rounded-full text-sm whitespace-nowrap ${
               tab === k ? 'bg-lavender text-white shadow-soft' : 'text-gray-500'
@@ -41,9 +49,9 @@ export default function IeltsVocab() {
       </div>
       {tab === 'browse' && <Browse />}
       {tab === 'study' && <Study />}
-      {tab === 'synonym' && <Synonym />}
+      {tab === 'synonym' && <Suspense fallback={topicFallback}><Synonym /></Suspense>}
       {tab === 'root' && <Root />}
-      {tab === 'speaking' && <Speaking />}
+      {tab === 'speaking' && <Suspense fallback={topicFallback}><Speaking /></Suspense>}
     </div>
   )
 }
@@ -299,28 +307,6 @@ function Study() {
   )
 }
 
-function Synonym() {
-  return (
-    <div className="space-y-2">
-      <div className="text-xs text-gray-400 mb-1">共 {ALL_SYNONYMS.length} 组高频替换（写作/阅读核心，含内置 + 词汇真经 538）</div>
-      {ALL_SYNONYMS.map((s, i) => (
-        <div key={i} className="bg-white rounded-card shadow-card p-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-medium text-lavender-deep">{s.base}</span>
-            <span className="text-gray-300">→</span>
-            {s.replaces.map((r) => (
-              <span key={r} className="text-sm text-gray-700 bg-cream rounded-full px-2 py-0.5">
-                {r}
-              </span>
-            ))}
-          </div>
-          <div className="text-xs text-gray-400 mt-1">{s.note}</div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 function Root() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -334,31 +320,6 @@ function Root() {
               <span key={w.word} className="text-xs bg-cream rounded-lg px-2 py-1 text-gray-700">
                 {w.word} <span className="text-gray-400">{w.chinese}</span>
               </span>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function Speaking() {
-  return (
-    <div className="space-y-4">
-      <div className="text-xs text-gray-400">共 {SPEAKING_GROUPS.reduce((s, g) => s + g.items.length, 0)} 题（Part 1–3，源自 IELTS-Speaking-AI）</div>
-      {SPEAKING_GROUPS.map((g) => (
-        <div key={g.part}>
-          <div className="flex items-center gap-2 mb-2">
-            <MessageCircle size={15} className="text-lavender-deep" />
-            <h3 className="font-semibold text-gray-700">{g.part}</h3>
-            <span className="text-xs text-gray-400">{g.items.length} 题</span>
-          </div>
-          <div className="space-y-2">
-            {g.items.map((it: SpeakItem, i) => (
-              <div key={i} className="bg-white rounded-card shadow-card p-3">
-                <div className="text-sm text-gray-800 whitespace-pre-line">{it.question}</div>
-                <div className="text-xs text-gray-400 mt-1">{it.topic}</div>
-              </div>
             ))}
           </div>
         </div>
