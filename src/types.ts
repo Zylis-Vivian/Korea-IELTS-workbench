@@ -172,3 +172,5 @@ export interface WrongItem {
   correct: string
   createdAt: number
 }
+
+export type { ReviewItem, ReviewKind, ReviewLanguage, ReviewRating, SerializedCard, DictationErrorType, DictationStats } from './types/review'

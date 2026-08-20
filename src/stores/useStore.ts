@@ -1,8 +1,9 @@
 import { create } from 'zustand'
-import type { Mastery, WordbookItem, WrongItem, BoardCategory, WordMastery, NewWordbookItem } from '../types'
+import type { Mastery, WordbookItem, WrongItem, BoardCategory, WordMastery, NewWordbookItem, ReviewItem, ReviewRating, DictationErrorType } from '../types'
 import type { TtsEngine, TtsGender } from '../hooks/usePronunciation'
 import type { TestReport } from '../utils/pronunciationTest'
 import { localDateKey } from '../utils/localDate'
+import { createReviewItem, reviewItem } from '../utils/review'
 
 export type PronLevel = 'unknown' | 'green' | 'yellow' | 'red'
 
@@ -44,6 +45,8 @@ interface State {
   flashState: Record<string, 'known' | 'unknown'>
   // 每日刷词进度：日期(YYYY-MM-DD) -> 词key -> 状态（每日自动更新词表）
   dailyState: Record<string, Record<string, 'known' | 'unknown'>>
+  // 统一复习队列：词汇、句子、听力和语法共用 FSRS 调度
+  reviewItems: ReviewItem[]
 
   setMastery: (char: string, m: Mastery) => void
   recordHandwriting: (char: string, score: number) => void
@@ -60,6 +63,10 @@ interface State {
   setPronStatus: (s: Partial<State['pronStatus']>) => void
   markFlash: (korean: string, status: 'known' | 'unknown') => void
   markDaily: (date: string, korean: string, status: 'known' | 'unknown') => void
+  upsertReviewItem: (item: ReviewItem) => void
+  upsertReviewItems: (items: ReviewItem[]) => void
+  review: (id: string, rating: ReviewRating) => void
+  recordDictation: (id: string, result: { correct: boolean; errorType?: DictationErrorType }) => void
 }
 
 const KEY = 'lavender-study-v1'
@@ -97,11 +104,11 @@ function load(): Partial<State> {
   }
 }
 function save(s: State) {
-  const { mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState } = s
+  const { mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState, reviewItems } = s
   try {
     localStorage.setItem(
       KEY,
-      JSON.stringify({ mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState })
+      JSON.stringify({ mastery, handwriting, studyMinutes, checkin, wordbook, wrongbook, settings, flashState, dailyState, reviewItems })
     )
   } catch {
     // Private browsing, disabled storage, or quota exhaustion must not break study actions.
@@ -137,6 +144,7 @@ export const useStore = create<State>((set, get) => ({
   pronStatus: init.pronStatus || { level: 'unknown', webVoices: [] },
   flashState: init.flashState || {},
   dailyState: init.dailyState || {},
+  reviewItems: init.reviewItems || [],
 
   setMastery: (char, m) =>
     set((s) => {
@@ -187,7 +195,19 @@ export const useStore = create<State>((set, get) => ({
         category: w.category || 'korean',
         mastery: w.mastery || 'unlearned',
       }
-      const ns = { ...s, wordbook: [item, ...s.wordbook] }
+      const prompt = item.korean || item.english || item.chinese
+      const review = createReviewItem({
+        id: `wordbook-${item.id}`,
+        language: item.category === 'ielts' ? 'en' : 'ko',
+        kind: 'word',
+        title: `${item.source} · ${prompt}`,
+        prompt,
+        answer: prompt,
+        translation: item.chinese,
+        source: `${item.source} · 单词本`,
+        href: `/${item.category}/wordbook`,
+      })
+      const ns = { ...s, wordbook: [item, ...s.wordbook], reviewItems: [...s.reviewItems, review] }
       save(ns)
       return ns
     }),
@@ -217,7 +237,18 @@ export const useStore = create<State>((set, get) => ({
         createdAt: Date.now(),
         category: w.category || 'korean',
       }
-      const ns = { ...s, wrongbook: [item, ...s.wrongbook] }
+      const review = createReviewItem({
+        id: `wrong-${item.id}`,
+        language: item.category === 'ielts' ? 'en' : 'ko',
+        kind: 'grammar',
+        title: `${item.source} · 错题回流`,
+        prompt: item.question,
+        answer: item.correct,
+        translation: `你的答案：${item.yourAnswer}`,
+        source: `${item.source} · 错题本`,
+        href: `/${item.category}/wrong`,
+      })
+      const ns = { ...s, wrongbook: [item, ...s.wrongbook], reviewItems: [...s.reviewItems, review] }
       save(ns)
       return ns
     }),
@@ -251,6 +282,55 @@ export const useStore = create<State>((set, get) => ({
     set((s) => {
       const dayMap = { ...(s.dailyState[date] || {}), [korean]: status }
       const ns = { ...s, dailyState: { ...s.dailyState, [date]: dayMap } }
+      save(ns)
+      return ns
+    }),
+  upsertReviewItem: (item) =>
+    set((s) => {
+      const exists = s.reviewItems.some((x) => x.id === item.id)
+      const reviewItems = exists ? s.reviewItems.map((x) => (x.id === item.id ? item : x)) : [...s.reviewItems, item]
+      const ns = { ...s, reviewItems }
+      save(ns)
+      return ns
+    }),
+  upsertReviewItems: (items) =>
+    set((s) => {
+      if (!items.length) return s
+      const next = new Map(s.reviewItems.map((item) => [item.id, item]))
+      items.forEach((item) => next.set(item.id, item))
+      const ns = { ...s, reviewItems: Array.from(next.values()) }
+      save(ns)
+      return ns
+    }),
+  review: (id, rating) =>
+    set((s) => {
+      const reviewItems = s.reviewItems.map((item) => (item.id === id ? reviewItem(item, rating) : item))
+      const ns = { ...s, reviewItems }
+      save(ns)
+      return ns
+    }),
+  recordDictation: (id, result) =>
+    set((s) => {
+      const reviewItems = s.reviewItems.map((item) => {
+        if (item.id !== id) return item
+        const previous = item.dictation || { attempts: 0, correct: 0, wrong: 0, errorTypes: {} }
+        const errorType = result.errorType || 'unknown'
+        const errorTypes = { ...previous.errorTypes }
+        if (!result.correct) errorTypes[errorType] = (errorTypes[errorType] || 0) + 1
+        const withStats: ReviewItem = {
+          ...item,
+          dictation: {
+            attempts: previous.attempts + 1,
+            correct: previous.correct + (result.correct ? 1 : 0),
+            wrong: previous.wrong + (result.correct ? 0 : 1),
+            errorTypes,
+            ...(result.correct ? {} : { lastErrorType: errorType }),
+          },
+        }
+        // “again” 会把卡片重新排到近期到期队列，确保错题在下一轮回流。
+        return reviewItem(withStats, result.correct ? 'good' : 'again')
+      })
+      const ns = { ...s, reviewItems }
       save(ns)
       return ns
     }),

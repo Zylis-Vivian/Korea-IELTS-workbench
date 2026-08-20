@@ -86,7 +86,7 @@ function parseParams(req) {
   return { text, speed, voice, engine }
 }
 
-app.post('/api/tts', ttsLimiter, async (req, res) => {
+app.post(['/api/tts', '/tts'], ttsLimiter, async (req, res) => {
   try {
     const { text, speed, voice, engine } = parseParams(req)
     if (!text) return res.status(400).json({ error: 'text 参数必填', code: 'INVALID_TEXT' })
@@ -121,7 +121,7 @@ app.post('/api/tts', ttsLimiter, async (req, res) => {
   }
 })
 
-app.get('/api/tts/health', (_req, res) => {
+app.get(['/api/tts/health', '/tts/health'], (_req, res) => {
   res.json({
     ok: true,
     azure: !!(process.env.AZURE_SPEECH_KEY && process.env.AZURE_SPEECH_REGION),

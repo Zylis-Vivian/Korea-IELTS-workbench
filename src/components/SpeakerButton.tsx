@@ -1,5 +1,6 @@
 import { Volume2 } from 'lucide-react'
 import { usePronunciation } from '../hooks/usePronunciation'
+import { hasKoreanVoice } from '../utils/speech'
 
 interface Props {
   text: string
@@ -31,7 +32,5 @@ export default function SpeakerButton({ text, lang = 'ko-KR', category, size = 1
   )
 }
 
-export function hasKoreanVoice(): boolean {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return false
-  return window.speechSynthesis.getVoices().some((v) => v.lang.startsWith('ko'))
-}
+export { hasKoreanVoice }
+

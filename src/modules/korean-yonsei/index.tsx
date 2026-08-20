@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Search, BookOpen, GraduationCap, Volume2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { PageHeader } from '../../components/Layout'
-import { YONSEI_WORDS, YONSEI_TOPICS } from '../../data/yonseiVocab'
 import { usePronunciation } from '../../hooks/usePronunciation'
+import type { KoreanTopic } from '../../data/yonseiVocab'
 import type { VocabWord } from '../../types'
 
 const PAGE_SIZE = 50
+const EMPTY_WORDS: VocabWord[] = []
+const EMPTY_TOPICS: KoreanTopic[] = []
 
 interface OriginMeta {
   label: string
@@ -112,15 +114,35 @@ function Speakable({
 }
 
 export default function KoreanYonsei() {
+  const [data, setData] = useState<{ words: VocabWord[]; topics: KoreanTopic[] } | null>(null)
+  const [loadError, setLoadError] = useState(false)
   const [book, setBook] = useState<string>('')
   const [topic, setTopic] = useState<string>('')
   const [origin, setOrigin] = useState<string>('')
   const [q, setQ] = useState('')
   const [page, setPage] = useState(1)
 
+  // 延世教材数据约 2MB，仅在进入教材路由时下载，避免首屏把教材 JSON 打进主包。
+  useEffect(() => {
+    let cancelled = false
+    import('../../data/yonseiVocab')
+      .then((module) => {
+        if (!cancelled) setData({ words: module.YONSEI_WORDS, topics: module.YONSEI_TOPICS })
+      })
+      .catch(() => {
+        if (!cancelled) setLoadError(true)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const YONSEI_WORDS = data?.words ?? EMPTY_WORDS
+  const YONSEI_TOPICS = data?.topics ?? EMPTY_TOPICS
+
   const books = useMemo(
     () => Array.from(new Set(YONSEI_WORDS.map((w) => w.book).filter(Boolean))).sort() as string[],
-    []
+    [YONSEI_WORDS]
   )
 
   const topics = useMemo(() => {
@@ -129,11 +151,11 @@ export default function KoreanYonsei() {
       list = Array.from(new Set(YONSEI_WORDS.filter((w) => w.book === book).map((w) => w.topic)))
     }
     return list.sort()
-  }, [book])
+  }, [book, YONSEI_TOPICS, YONSEI_WORDS])
 
   const originTypes = useMemo(
     () => Array.from(new Set(YONSEI_WORDS.map((w) => w.originType).filter(Boolean))).sort() as string[],
-    []
+    [YONSEI_WORDS]
   )
 
   const filtered = useMemo(() => {
@@ -152,7 +174,7 @@ export default function KoreanYonsei() {
       )
     }
     return list
-  }, [book, topic, origin, q])
+  }, [YONSEI_WORDS, book, topic, origin, q])
 
   // 筛选条件变化时回到第一页（避免在 useMemo 里 setState）
   useEffect(() => {
@@ -164,6 +186,17 @@ export default function KoreanYonsei() {
     const safePage = Math.min(page, totalPages)
     return filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
   }, [filtered, page, totalPages])
+
+  if (!data) {
+    return (
+      <div className="fade-in">
+        <PageHeader title="延世韩国语 1-6" desc="按教材册次、课次顺序学习；教材数据按需加载，不影响首屏速度。" />
+        <div className={`rounded-card p-8 text-center text-sm shadow-card ${loadError ? 'bg-red-50 text-red-600' : 'bg-white text-gray-400'}`}>
+          {loadError ? '教材数据加载失败，请刷新页面重试。' : '正在加载延世韩国语词库…'}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="fade-in">
@@ -237,7 +270,7 @@ export default function KoreanYonsei() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="搜索韩文 / 罗马音 / 中文 / 英文"
-            className="inp w-full pl-9"
+            className="inp inp-leading-icon w-full"
           />
         </div>
       </div>

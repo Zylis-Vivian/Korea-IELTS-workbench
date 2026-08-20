@@ -1,8 +1,42 @@
 import { useState } from 'react'
+import { ChevronDown } from 'lucide-react'
 import { PageHeader } from '../../components/Layout'
 import { grammarItems, longSentences, type LongSentence } from '../../data/ieltsGrammar'
 
 const connectors = ['although', 'though', 'because', 'since', 'if', 'that', 'which', 'who', 'whom', 'when', 'where', 'while', 'whereas', 'but', 'and', 'or', 'so', 'after', 'before']
+
+type LayerKey = 'main' | 'clause' | 'nonfinite' | 'modifier' | 'translation'
+
+function ExpandableLayer({
+  layer,
+  title,
+  content,
+  open,
+  onToggle,
+}: {
+  layer: LayerKey
+  title: string
+  content: string
+  open: boolean
+  onToggle: (layer: LayerKey) => void
+}) {
+  const panelId = `long-sentence-${layer}`
+  return (
+    <div className="rounded-xl border border-lavender-light/70 bg-cream/40">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => onToggle(layer)}
+        className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-sm font-medium text-lavender-deep"
+      >
+        <span>{title}</span>
+        <ChevronDown size={16} className={`shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && <div id={panelId} className="border-t border-lavender-light/60 px-3 py-2 text-sm leading-relaxed text-gray-700">{content}</div>}
+    </div>
+  )
+}
 
 export default function IeltsGrammar() {
   const [open, setOpen] = useState(grammarItems[0].id)
@@ -93,6 +127,34 @@ function LongSentenceAnalyzer() {
   const [sel, setSel] = useState<LongSentence>(longSentences[0])
   const [input, setInput] = useState('')
   const [analyzed, setAnalyzed] = useState<string[] | null>(null)
+  const [openLayers, setOpenLayers] = useState<Record<LayerKey, boolean>>({
+    main: true,
+    clause: false,
+    nonfinite: false,
+    modifier: false,
+    translation: false,
+  })
+
+  const toggleLayer = (layer: LayerKey) => setOpenLayers((current) => ({ ...current, [layer]: !current[layer] }))
+  const selectSentence = (id: string) => {
+    const next = longSentences.find((l) => l.id === id)
+    if (!next) return
+    setSel(next)
+    setOpenLayers({ main: true, clause: false, nonfinite: false, modifier: false, translation: false })
+  }
+
+  const clauseNotes = sel.modifiers.filter((modifier) => /从句|which|that|who|where|when|although|while|whereas/i.test(modifier))
+  const nonfiniteNotes = [
+    ...sel.grammarPoints.filter((point) => /非谓语|分词|动名词|不定式|比较级/.test(point)),
+    ...sel.modifiers.filter((modifier) => /非谓语|for |to |before |after |having /i.test(modifier)),
+  ]
+  const layerRows: { key: LayerKey; title: string; content: string }[] = [
+    { key: 'main', title: '1. 主干', content: sel.mainClause },
+    { key: 'clause', title: '2. 从句', content: clauseNotes.length ? clauseNotes.join('；') : '本句没有单独标注从句。' },
+    { key: 'nonfinite', title: '3. 非谓语', content: nonfiniteNotes.length ? nonfiniteNotes.join('；') : '本句没有单独标注非谓语结构。' },
+    { key: 'modifier', title: '4. 修饰成分', content: sel.modifiers.join('；') || '暂无修饰成分标注。' },
+    { key: 'translation', title: '5. 中文翻译', content: sel.translation },
+  ]
 
   const analyze = () => {
     const s = input.trim()
@@ -104,22 +166,21 @@ function LongSentenceAnalyzer() {
 
   return (
     <div className="mt-6 bg-white rounded-card shadow-card p-5">
-      <div className="font-medium text-lavender-deep mb-3">🔬 长难句拆解引擎</div>
+       <div className="font-medium text-lavender-deep mb-1">🔬 长难句拆解引擎</div>
+       <div className="mb-3 text-xs text-gray-400">按「主干 → 从句 → 非谓语 → 修饰成分 → 中文翻译」逐层展开，先抓主干再补细节。</div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <div className="text-sm text-gray-500 mb-1">从真题库选择（含完整拆解）</div>
-          <select className="inp w-full mb-2" value={sel.id} onChange={(e) => setSel(longSentences.find((l) => l.id === e.target.value)!)}>
+          <select className="inp w-full mb-2" value={sel.id} onChange={(e) => selectSentence(e.target.value)}>
             {longSentences.map((l) => (
               <option key={l.id} value={l.id}>[{l.difficulty}] {l.sentence.slice(0, 40)}…</option>
             ))}
           </select>
           <div className="text-sm font-medium text-gray-800">{sel.sentence}</div>
-          <div className="mt-2 text-sm space-y-1">
-            <div><span className="text-lavender-deep">主干：</span><span className="text-gray-700">{sel.mainClause}</span></div>
-            {sel.modifiers.map((m, i) => <div key={i} className="text-gray-600">↳ 修饰：{m}</div>)}
-            <div><span className="text-lavender-deep">逻辑：</span>{sel.logic}</div>
-            <div><span className="text-lavender-deep">翻译：</span>{sel.translation}</div>
-            <div className="flex flex-wrap gap-1 pt-1">
+           <div className="mt-3 space-y-2">
+             {layerRows.map((row) => <ExpandableLayer key={row.key} layer={row.key} title={row.title} content={row.content} open={openLayers[row.key]} onToggle={toggleLayer} />)}
+             <div className="rounded-xl bg-lavender-light/35 px-3 py-2 text-sm"><span className="text-lavender-deep">逻辑：</span>{sel.logic}</div>
+             <div className="flex flex-wrap gap-1 pt-1">
               {sel.grammarPoints.map((g) => <span key={g} className="text-[11px] bg-cream rounded-full px-2 py-0.5 text-gray-500">{g}</span>)}
             </div>
             <div className="text-xs text-gray-400">出处：{sel.source}</div>

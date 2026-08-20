@@ -4,9 +4,13 @@ import Sidebar from './components/Sidebar'
 import PetalBackground from './components/PetalBackground'
 import Layout from './components/Layout'
 import PronunciationStatus from './components/PronunciationStatus'
+import PwaUpdatePrompt from './components/PwaUpdatePrompt'
 import { useStore } from './stores/useStore'
 
 const Dashboard = lazy(() => import('./modules/dashboard'))
+const Review = lazy(() => import('./modules/review'))
+const Shadowing = lazy(() => import('./modules/shadowing'))
+const Dictation = lazy(() => import('./modules/dictation'))
 const KoreanAlphabet = lazy(() => import('./modules/korean-alphabet'))
 const KoreanGrammar = lazy(() => import('./modules/korean-grammar'))
 const KoreanDialogue = lazy(() => import('./modules/korean-dialogue'))
@@ -27,10 +31,12 @@ const IeltsScoring = lazy(() => import('./modules/ielts-scoring'))
 const Checkin = lazy(() => import('./modules/checkin'))
 const Settings = lazy(() => import('./modules/settings'))
 const BoardView = lazy(() => import('./modules/board/BoardView'))
-const BookCenter = lazy(() => import('./modules/book-center'))
-const PDFReader = lazy(() => import('./modules/book-center/PDFReader'))
 
-const pageFallback = <div className="p-8 text-center text-gray-400">加载中…</div>
+const pageFallback = (
+  <div className="p-8 text-center text-gray-400" role="status" aria-live="polite">
+    加载中…
+  </div>
+)
 
 function NotFound() {
   return <div className="p-8 text-center text-gray-500">页面不存在，请从左侧导航重新选择。</div>
@@ -68,10 +74,16 @@ export default function App() {
   }, [setPronStatus])
 
   return (
-    <div className="flex h-full">
+    <div className="app-shell flex min-h-[100dvh]">
       <PetalBackground />
       <Sidebar />
       <div className="relative z-10 flex-1 h-full overflow-y-auto">
+        <a
+          href="#main-content"
+          className="sr-only z-50 rounded-lg bg-white px-3 py-2 text-sm text-lavender-deep shadow-soft focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
+        >
+          跳到主要内容
+        </a>
         <Layout>
           <Suspense fallback={pageFallback}>
             <Routes>
@@ -94,14 +106,15 @@ export default function App() {
               <Route path="/ielts/writing" element={<IeltsWriting />} />
               <Route path="/ielts/scoring" element={<IeltsScoring />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/review" element={<Review />} />
+              <Route path="/shadowing" element={<Shadowing />} />
+              <Route path="/dictation" element={<Dictation />} />
               <Route path="/korean/wordbook" element={<BoardView category="korean" kind="word" />} />
               <Route path="/korean/wrong" element={<BoardView category="korean" kind="wrong" />} />
               <Route path="/ielts/wordbook" element={<BoardView category="ielts" kind="word" />} />
               <Route path="/ielts/wrong" element={<BoardView category="ielts" kind="wrong" />} />
               <Route path="/wordbook" element={<BoardView category="korean" kind="word" />} />
               <Route path="/checkin" element={<Checkin />} />
-              <Route path="/books" element={<BookCenter />} />
-              <Route path="/books/reader/:id" element={<PDFReader />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
@@ -109,6 +122,7 @@ export default function App() {
         </Layout>
       </div>
       <PronunciationStatus />
+      <PwaUpdatePrompt />
     </div>
   )
 }

@@ -19,7 +19,7 @@ export default function PronunciationStatus() {
   const spinning = status.level === 'unknown'
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 select-none">
+    <div className="pronunciation-status fixed right-4 z-50 select-none">
       {open && (
         <div className="mb-2 w-72 bg-white rounded-card shadow-card p-4 text-sm animate-fade">
           <div className="font-medium text-lavender-deep mb-2">发音引擎状态</div>

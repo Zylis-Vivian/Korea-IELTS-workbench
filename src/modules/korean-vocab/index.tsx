@@ -1,17 +1,18 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import { Search, RotateCcw, Check, X } from 'lucide-react'
 import { PageHeader } from '../../components/Layout'
 import SpeakerButton from '../../components/SpeakerButton'
 import AddWordButton from '../../components/AddWordButton'
 import WordDeck from '../../components/WordDeck'
-import DictionarySwitcher from '../../components/DictionarySwitcher'
+import Pagination from '../../components/Pagination'
 import { VOCAB } from '../../data/vocab'
-import { type KoreanTopic, type DictMeta } from '../../data/yonseiVocab'
-import { FLASH_TOPICS, FLASH_WORDS } from '../../data/flashcardsVocab'
+import { type KoreanTopic } from '../../data/yonseiVocab'
 import { TOPIC_TOPICS, TOPIC_WORDS } from '../../data/topikVocab'
 import type { VocabWord } from '../../types'
 import { useStore } from '../../stores/useStore'
 import { todayStr, getDailyWords, getDailyProgress } from '../../utils/dailyWords'
+import useDebouncedValue from '../../hooks/useDebouncedValue'
+import useUrlSearchState from '../../hooks/useUrlSearchState'
 
 const LEVELS = ['1', '2', '3', '4', '5', '6']
 const DAILY_COUNT = 12
@@ -41,18 +42,19 @@ function mergeDuplicateTopics(topics: KoreanTopic[]): KoreanTopic[] {
   return [...merged.values()]
 }
 
-// 三套韩语词库数据源（核心 / flashcards / TOPIK），不修改 VOCAB 现有词条，仅切换。
-// 延世韩国语已独立为 /korean/yonsei 教材页，避免四库混用导致面板混乱。
-const LIB_MAP: Record<Lib, KoreanTopic[]> = {
-  core: mergeDuplicateTopics(CORE_TOPICS),
-  flashcards: mergeDuplicateTopics(FLASH_TOPICS),
-  topik: mergeDuplicateTopics(TOPIC_TOPICS),
-}
+// 核心词库与 TOPIK 词库保持轻量同步导入；2MB+ 的 Korean Flashcards 在用户选择后再加载。
+const CORE_LIBRARY = mergeDuplicateTopics(CORE_TOPICS)
+const TOPIK_LIBRARY = mergeDuplicateTopics(TOPIC_TOPICS)
+const CORE_WORD_COUNT = CORE_LIBRARY.reduce((sum, topic) => sum + topic.words.length, 0)
+const TOPIK_WORD_COUNT = TOPIC_WORDS.length
+const FLASHCARD_WORD_COUNT = 4243
 
 function ModeTab({ id, label, active, onSelect }: { id: Mode; label: string; active: boolean; onSelect: (id: Mode) => void }) {
   return (
     <button
       onClick={() => onSelect(id)}
+      type="button"
+      aria-pressed={active}
       className={`px-3 py-1.5 rounded-full text-sm transition ${
         active ? 'bg-lavender text-white shadow-card' : 'bg-white text-gray-500 hover:bg-lavender-light/60'
       }`}
@@ -65,20 +67,62 @@ function ModeTab({ id, label, active, onSelect }: { id: Mode; label: string; act
 export default function KoreanVocab() {
   const [mode, setMode] = useState<Mode>('preview')
   const [lib, setLib] = useState<Lib>('core')
-
-  // 当前词库数据源（不修改 VOCAB 现有词条，仅切换数据源）
-  const activeVocab: KoreanTopic[] = LIB_MAP[lib]
-
-  // 切换词库时重置主题与搜索
-  useEffect(() => {
-    setTopic(activeVocab[0]?.topic || '')
-    setQ('')
-  }, [activeVocab])
-
-  // —— 词汇预览（主题学习） ——
   const [topic, setTopic] = useState(VOCAB[0].topic)
   const [level, setLevel] = useState<string>('all')
-  const [q, setQ] = useState('')
+  const [q, setQ] = useUrlSearchState('korean_q')
+  const debouncedQ = useDebouncedValue(q)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(20)
+  const [flashTopics, setFlashTopics] = useState<KoreanTopic[] | null>(null)
+  const [flashLoading, setFlashLoading] = useState(false)
+  const [flashError, setFlashError] = useState(false)
+  const previousLib = useRef<Lib | null>(null)
+
+  // 当前词库数据源（不修改 VOCAB 现有词条，仅切换数据源）。Flashcards 只在需要时下载。
+  const activeVocab: KoreanTopic[] = useMemo(
+    () => (lib === 'core' ? CORE_LIBRARY : lib === 'topik' ? TOPIK_LIBRARY : flashTopics || []),
+    [flashTopics, lib]
+  )
+
+  useEffect(() => {
+    if (lib !== 'flashcards' || flashTopics || flashLoading) return
+    let cancelled = false
+    setFlashLoading(true)
+    setFlashError(false)
+    import('../../data/flashcardsVocab')
+      .then((module) => {
+        if (!cancelled) setFlashTopics(mergeDuplicateTopics(module.FLASH_TOPICS))
+      })
+      .catch(() => {
+        if (!cancelled) setFlashError(true)
+      })
+      .finally(() => {
+        if (!cancelled) setFlashLoading(false)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [flashLoading, flashTopics, lib])
+
+  // 切换词库时重置主题与筛选条件，避免把旧词库的主题带到新词库。
+  useEffect(() => {
+    if (previousLib.current === null) {
+      previousLib.current = lib
+      return
+    }
+    if (previousLib.current === lib) return
+    previousLib.current = lib
+    setTopic('')
+    setQ('')
+    setLevel('all')
+    setPage(1)
+  }, [lib])
+
+  useEffect(() => {
+    if (activeVocab.length && !activeVocab.some((item) => item.topic === topic)) setTopic(activeVocab[0].topic)
+  }, [activeVocab, topic])
+
+  // —— 词汇预览（主题学习） ——
 
   // —— 刷词状态 ——
   const dailyState = useStore((s) => s.dailyState)
@@ -108,8 +152,8 @@ export default function KoreanVocab() {
   const topicWords = useMemo(() => {
     let list = data?.words || []
     if (level !== 'all') list = list.filter((w) => w.level === level)
-    if (q.trim()) {
-      const kw = q.trim().toLowerCase()
+    if (debouncedQ.trim()) {
+      const kw = debouncedQ.trim().toLowerCase()
       list = list.filter(
         (w) =>
           w.korean.toLowerCase().includes(kw) ||
@@ -118,19 +162,20 @@ export default function KoreanVocab() {
       )
     }
     return list
-  }, [data, level, q])
+  }, [data, debouncedQ, level])
+  const isFiltering = q !== debouncedQ
 
-  // 词库清单（按三套数据源动态填数量）
-  const dictionaries: DictMeta[] = useMemo(
-    () => [
-      { id: 'core', name: '核心词库', category: '韩语', length: CORE_TOPICS.flatMap((t) => t.words).length, language: 'ko' },
-      { id: 'flashcards', name: 'Korean Flashcards', category: '韩语日常', length: FLASH_WORDS.length, language: 'ko' },
-      { id: 'topik', name: 'TOPIK 词库', category: '韩语考试', length: TOPIC_WORDS.length, language: 'ko' },
-    ],
-    []
+  const pageCount = Math.max(1, Math.ceil(topicWords.length / pageSize))
+  const pageItems = useMemo(
+    () => topicWords.slice((page - 1) * pageSize, page * pageSize),
+    [page, pageSize, topicWords]
   )
+  useEffect(() => {
+    if (page > pageCount) setPage(pageCount)
+  }, [page, pageCount])
 
   const libName = lib === 'flashcards' ? 'Korean Flashcards' : lib === 'topik' ? 'TOPIK 词库' : '核心词库'
+  const isLoading = lib === 'flashcards' && flashLoading && !flashTopics
 
   return (
     <div className="fade-in">
@@ -139,81 +184,106 @@ export default function KoreanVocab() {
         desc={`按主题 + TOPIK 等级分类，当前词库「${libName}」共 ${activeVocab.length} 个主题 / ${TOTAL_WORDS} 词。支持「词汇预览」浏览、「学习模式」翻卡自测、「每日刷新」每日自动更新、「单词总汇」滑卡刷词；点击 🔊 听发音，可一键收藏到单词本。延世韩国语教材学习请使用侧边栏「延世韩国语」。`}
       />
 
-      {/* 词库切换器 */}
-      <div className="mb-4">
-        <DictionarySwitcher dictionaries={dictionaries} activeId={lib} onSelect={(id) => setLib(id as Lib)} />
-      </div>
-
-      {/* 四栏切换（预览 + 学习模式 + 每日 + 总汇） */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        <ModeTab id="preview" label="词汇预览" active={mode === 'preview'} onSelect={setMode} />
-        <ModeTab id="study" label="学习模式" active={mode === 'study'} onSelect={setMode} />
-        <ModeTab id="daily" label="每日刷新" active={mode === 'daily'} onSelect={setMode} />
-        <ModeTab id="all" label="单词总汇" active={mode === 'all'} onSelect={setMode} />
-      </div>
+      {/* 先选词库，再选学习模式；把原来混在一起的多排按钮收敛为两个清晰层级。 */}
+      <section className="mb-4 rounded-card bg-white/80 shadow-card p-3 sm:p-4" aria-label="词汇学习筛选">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-wrap gap-2" role="tablist" aria-label="词库来源">
+            {([
+              ['core', '核心词库', CORE_WORD_COUNT],
+              ['flashcards', 'Korean Flashcards', FLASHCARD_WORD_COUNT],
+              ['topik', 'TOPIK 词库', TOPIK_WORD_COUNT],
+            ] as const).map(([id, label, count]) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                aria-selected={lib === id}
+                onClick={() => setLib(id)}
+                className={`rounded-full px-3 py-1.5 text-xs transition ${lib === id ? 'bg-lavender text-white shadow-card' : 'bg-lavender-light/40 text-gray-600 hover:bg-lavender-light'}`}
+              >
+                {label} <span className="opacity-75">{count.toLocaleString()}</span>
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-2" role="tablist" aria-label="学习模式">
+            <ModeTab id="preview" label="词汇预览" active={mode === 'preview'} onSelect={setMode} />
+            <ModeTab id="study" label="学习模式" active={mode === 'study'} onSelect={setMode} />
+            <ModeTab id="daily" label="每日刷新" active={mode === 'daily'} onSelect={setMode} />
+            <ModeTab id="all" label="单词总汇" active={mode === 'all'} onSelect={setMode} />
+          </div>
+        </div>
+      </section>
 
       {/* 延世韩国语已独立为 /korean/yonsei，此处不再混入，避免面板混乱 */}
 
       {/* —— 词汇预览 —— */}
       {mode === 'preview' && (
         <>
-          <div className="flex flex-col sm:flex-row gap-2 mb-3">
-            <div className="relative flex-1">
-              <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="搜索韩文 / 罗马音 / 中文"
-                className="inp w-full pl-9"
-              />
+          <div className="mb-4 rounded-card bg-white/70 shadow-card p-3 sm:p-4">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-[minmax(0,1fr)_minmax(180px,260px)]">
+              <label className="relative block">
+                <span className="sr-only">搜索韩文、罗马音或中文</span>
+                <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="search"
+                  aria-label="搜索韩文、罗马音或中文"
+                  inputMode="search"
+                  enterKeyHint="search"
+                  value={q}
+                  onChange={(e) => {
+                    setQ(e.target.value)
+                    setPage(1)
+                  }}
+                  placeholder="搜索韩文 / 罗马音 / 中文"
+                  className="inp inp-leading-icon inp-trailing-icon w-full"
+                />
+                {q && (
+                  <button type="button" aria-label="清空搜索" onClick={() => setQ('')} className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-lavender-light">
+                    <X size={14} />
+                  </button>
+                )}
+              </label>
+              <label className="flex items-center gap-2 text-xs text-gray-500">
+                <span className="whitespace-nowrap">主题</span>
+                <select value={topic} onChange={(e) => { setTopic(e.target.value); setQ(''); setPage(1) }} className="inp min-w-0 flex-1">
+                  {activeVocab.map((item) => <option key={item.topic} value={item.topic}>{item.topic}</option>)}
+                </select>
+              </label>
             </div>
-            <div className="inline-flex rounded-full bg-white shadow-card p-1 overflow-x-auto">
-              <button
-                onClick={() => setLevel('all')}
-                className={`px-3 py-1 rounded-full text-xs whitespace-nowrap ${level === 'all' ? 'bg-lavender text-white' : 'text-gray-500'}`}
-              >
-                全部
-              </button>
-              {LEVELS.map((lv) => (
-                <button
-                  key={lv}
-                  onClick={() => setLevel(lv)}
-                  className={`px-3 py-1 rounded-full text-xs whitespace-nowrap ${level === lv ? 'bg-lavender text-white' : 'text-gray-500'}`}
-                >
-                  TOPIK {lv}
-                </button>
-              ))}
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <label className="flex items-center gap-2 text-xs text-gray-500">
+                <span>TOPIK 等级</span>
+                <select value={level} onChange={(e) => { setLevel(e.target.value); setPage(1) }} className="inp py-1.5">
+                  <option value="all">全部</option>
+                  {LEVELS.map((lv) => <option key={lv} value={lv}>TOPIK {lv}</option>)}
+                </select>
+              </label>
+              <span className="text-xs text-gray-400">{activeVocab.length} 个主题 · {TOTAL_WORDS.toLocaleString()} 词</span>
+              {(q || level !== 'all') && <button type="button" onClick={() => { setQ(''); setLevel('all'); setPage(1) }} className="inline-flex items-center gap-1 rounded-full bg-lavender-light/60 px-2.5 py-1 text-xs text-lavender-deep hover:bg-lavender-light"><RotateCcw size={12} />清除筛选</button>}
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-2 mb-4">
-            {activeVocab.map((t) => (
-              <button
-                key={t.topic}
-                onClick={() => {
-                  setTopic(t.topic)
-                  setQ('')
-                }}
-                className={`px-3 py-1.5 rounded-full text-xs transition ${
-                  topic === t.topic ? 'bg-lavender text-white' : 'bg-white text-gray-500 hover:bg-lavender-light/60'
-                }`}
-              >
-                {t.topic}
-              </button>
-            ))}
-          </div>
+          {isLoading && <div className="rounded-card bg-white p-8 text-center text-sm text-gray-400 shadow-card">正在加载 Korean Flashcards…</div>}
+          {flashError && <div className="rounded-card bg-red-50 p-4 text-center text-sm text-red-600">词库加载失败，请稍后重试或切换其他词库。</div>}
 
-          <div className="text-xs text-gray-400 mb-2">
-            {topic} · {topicWords.length} 词
-            {level !== 'all' && ` · TOPIK ${level}`}
-            {q.trim() && ` · 搜索「${q.trim()}」`}
-          </div>
+          {!isLoading && !flashError && (
+            <div className="text-xs text-gray-400 mb-2" aria-live="polite">
+              {isFiltering ? '正在筛选…' : (
+                <>
+                  {topic} · {topicWords.length} 词
+                  {level !== 'all' && ` · TOPIK ${level}`}
+                  {debouncedQ.trim() && ` · 搜索「${debouncedQ.trim()}」`}
+                </>
+              )}
+            </div>
+          )}
 
-          {topicWords.length === 0 ? (
+          {!isLoading && !flashError && topicWords.length === 0 ? (
             <div className="text-center text-gray-400 py-12">没有匹配的单词，换个条件试试～</div>
-          ) : (
+          ) : !isLoading && !flashError ? (
+            <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {topicWords.map((w, i) => (
+              {pageItems.map((w, i) => (
                 <div key={i} className="bg-white rounded-card shadow-card p-4 flex flex-col gap-1">
                   <div className="flex items-center justify-between">
                     <span className="text-2xl korean-font font-bold text-lavender-deep">{w.korean}</span>
@@ -240,7 +310,9 @@ export default function KoreanVocab() {
                 </div>
               ))}
             </div>
-          )}
+            <Pagination page={page} total={topicWords.length} pageSize={pageSize} onPageChange={setPage} onPageSizeChange={(size) => { setPageSize(size); setPage(1) }} />
+            </>
+          ) : null}
         </>
       )}
 
