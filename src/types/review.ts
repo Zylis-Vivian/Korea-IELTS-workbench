@@ -3,6 +3,15 @@ import type { Card } from 'ts-fsrs'
 export type ReviewLanguage = 'ko' | 'en'
 export type ReviewKind = 'sentence' | 'listening' | 'word' | 'grammar'
 export type ReviewRating = 'again' | 'hard' | 'good' | 'easy'
+export type DictationErrorType = 'omission' | 'substitution' | 'spacing' | 'punctuation' | 'spelling' | 'unknown'
+
+export interface DictationStats {
+  attempts: number
+  correct: number
+  wrong: number
+  errorTypes: Partial<Record<DictationErrorType, number>>
+  lastErrorType?: DictationErrorType
+}
 
 /**
  * FSRS 的 Card 使用 Date，不能直接安全地序列化到 localStorage。
@@ -23,9 +32,9 @@ export interface ReviewItem {
   translation?: string
   source?: string
   href?: string
+  /** 听写专用统计；可选以兼容已有本地复习卡。 */
+  dictation?: DictationStats
   card: SerializedCard
   createdAt: number
   updatedAt: number
 }
-
-
