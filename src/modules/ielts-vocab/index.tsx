@@ -205,7 +205,7 @@ function Browse() {
               value={q}
               onChange={(e) => { setQ(e.target.value); setPage(1) }}
               placeholder="搜索英文 / 中文 / 音标"
-              className="inp w-full pl-9 pr-9"
+              className="inp inp-leading-icon inp-trailing-icon w-full"
             />
             {q && <button type="button" aria-label="清空搜索" onClick={resetFilters} className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-lavender-light"><span aria-hidden>×</span></button>}
           </label>
