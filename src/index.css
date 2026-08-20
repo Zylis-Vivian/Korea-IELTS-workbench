@@ -251,3 +251,13 @@ textarea {
 .inp:focus {
   border-color: var(--lavender);
 }
+
+/* .inp 使用自定义 padding，不能依赖 Tailwind pl-9/pr-9 覆盖 shorthand；
+   图标输入框显式声明内边距，避免占位文字与图标重叠。 */
+.inp-leading-icon {
+  padding-left: 2.25rem;
+}
+
+.inp-trailing-icon {
+  padding-right: 2.25rem;
+}
