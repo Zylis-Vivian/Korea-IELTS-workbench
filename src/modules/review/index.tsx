@@ -5,7 +5,7 @@ import { PageHeader } from '../../components/Layout'
 import SpeakerButton from '../../components/SpeakerButton'
 import { createPersonalReviewItems, DEFAULT_REVIEW_ITEMS } from '../../data/reviewSeeds'
 import { useStore } from '../../stores/useStore'
-import type { ReviewRating } from '../../types'
+import type { ReviewItem, ReviewRating } from '../../types'
 import { createReviewItem, dueDateLabel, isDue } from '../../utils/review'
 
 const RATINGS: Array<{ value: ReviewRating; label: string; hint: string; color: string }> = [
@@ -23,6 +23,7 @@ export default function Review() {
   const review = useStore((s) => s.review)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [revealed, setRevealed] = useState(false)
+  const [sessionDoneIds, setSessionDoneIds] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     const known = new Set(reviewItems.map((item) => item.id))
@@ -35,7 +36,15 @@ export default function Review() {
 
   const now = new Date()
   const dueItems = useMemo(() => reviewItems.filter((item) => isDue(item, now)), [reviewItems, now])
-  const current = reviewItems.find((item) => item.id === selectedId) || dueItems[0] || reviewItems[0]
+  const remainingDueItems = useMemo(
+    () => dueItems.filter((item) => !sessionDoneIds.has(item.id)),
+    [dueItems, sessionDoneIds],
+  )
+  const queueItems = useMemo(() => {
+    const dueIds = new Set(remainingDueItems.map((item) => item.id))
+    return [...remainingDueItems, ...reviewItems.filter((item) => !dueIds.has(item.id))].slice(0, 80)
+  }, [remainingDueItems, reviewItems])
+  const current = reviewItems.find((item) => item.id === selectedId && !sessionDoneIds.has(item.id)) || remainingDueItems[0]
 
   useEffect(() => {
     if (!selectedId && current) setSelectedId(current.id)
@@ -43,9 +52,10 @@ export default function Review() {
 
   const chooseRating = (rating: ReviewRating) => {
     if (!current) return
+    const next = remainingDueItems.find((item) => item.id !== current.id)
     review(current.id, rating)
+    setSessionDoneIds((ids) => new Set(ids).add(current.id))
     setRevealed(false)
-    const next = reviewItems.find((item) => item.id !== current.id && isDue(item, new Date()))
     setSelectedId(next?.id || null)
   }
 
@@ -60,6 +70,10 @@ export default function Review() {
         <SummaryCard icon={<Sparkles size={18} />} label="跟读入口" value="可用" />
       </div>
 
+      <div className="mb-5 rounded-card bg-lavender-light/45 p-3 text-sm text-lavender-deep" role="status" aria-live="polite">
+        本轮进度：已完成 {sessionDoneIds.size} 条，剩余 {remainingDueItems.length} 条到期内容。收藏、自测、听写和影子跟读会继续共用这条复习队列。
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-5">
         <div className="bg-white rounded-card shadow-card p-3">
           <div className="flex items-center justify-between px-2 pb-2">
@@ -67,7 +81,7 @@ export default function Review() {
             <span className="text-xs text-gray-400">{dueItems.length} 条到期</span>
           </div>
           <div className="space-y-1 max-h-[480px] overflow-y-auto">
-            {reviewItems.slice(0, 80).map((item) => (
+            {queueItems.map((item) => (
               <button
                 key={item.id}
                 type="button"
@@ -81,7 +95,10 @@ export default function Review() {
                   <span className="truncate text-sm">{item.title}</span>
                   {isDue(item, now) ? <span className="h-2 w-2 shrink-0 rounded-full bg-coral" title="现在到期" /> : null}
                 </div>
-                <div className="mt-1 truncate text-xs text-gray-400">{item.prompt}</div>
+                <div className="mt-1 flex items-center gap-2 truncate text-xs text-gray-400">
+                  <span className="shrink-0 rounded-full bg-cream px-1.5 py-0.5">{kindLabel(item.kind)}</span>
+                  <span className="truncate">{item.prompt}</span>
+                </div>
               </button>
             ))}
           </div>
@@ -117,9 +134,12 @@ export default function Review() {
             <div className="border-t border-lavender-light pt-4">
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs text-gray-400">
                 <span>下次：{dueDateLabel(current)}</span>
-                <Link to={`/shadowing?item=${encodeURIComponent(current.id)}`} className="text-lavender-deep hover:underline">
-                  <span className="inline-flex items-center gap-1"><Volume2 size={13} />进入影子跟读</span>
-                </Link>
+                <div className="flex flex-wrap items-center gap-3">
+                  {current.href ? <Link to={current.href} className="text-lavender-deep hover:underline">查看来源</Link> : null}
+                  <Link to={`/shadowing?item=${encodeURIComponent(current.id)}`} className="text-lavender-deep hover:underline">
+                    <span className="inline-flex items-center gap-1"><Volume2 size={13} />进入影子跟读</span>
+                  </Link>
+                </div>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {RATINGS.map((rating) => (
@@ -145,6 +165,10 @@ export default function Review() {
       </div>
     </div>
   )
+}
+
+function kindLabel(kind: ReviewItem['kind']) {
+  return kind === 'word' ? '词汇' : kind === 'sentence' ? '句子' : kind === 'listening' ? '听力' : '语法'
 }
 
 function SummaryCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {

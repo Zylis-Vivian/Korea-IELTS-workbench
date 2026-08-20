@@ -125,14 +125,18 @@ check('含长难句新真题', ig.length > 0)
 check('长难句分层面板已接入', ['1. 主干', '2. 从句', '3. 非谓语', '4. 修饰成分', '5. 中文翻译'].every((label) => ig.includes(label)))
 
 console.log('\n[UI-问题4] 雅思同义替换分页')
-// Synonym 内 useState 顺序：[page, pageSize, q, debouncedQ, category, practiceIndex, practiceRevealed]
-const synFirst = renderWith(mod.Synonym, [1, 20, '', '', 'all', 0, false])
-const synSecond = renderWith(mod.Synonym, [2, 20, '', '', 'all', 0, false])
-const synSearch = renderWith(mod.Synonym, [1, 20, 'cause', 'cause', 'all', 0, false])
+// Synonym 内 useState 顺序：[page, pageSize, q, debouncedQ, category, searchScope, practiceIndex, practiceRevealed, practiceFeedback]
+const synFirst = renderWith(mod.Synonym, [1, 20, '', '', 'all', 'all', 0, false, ''])
+const synSecond = renderWith(mod.Synonym, [2, 20, '', '', 'all', 'all', 0, false, ''])
+const synSearch = renderWith(mod.Synonym, [1, 20, 'cause', 'cause', 'all', 'all', 0, false, ''])
+const synReplacement = renderWith(mod.Synonym, [1, 20, 'lead to', 'lead to', 'all', 'replacement', 0, false, ''])
+const synReveal = renderWith(mod.Synonym, [1, 20, '', '', 'all', 'all', 0, true, ''])
 check('同义替换默认页渲染内容', synFirst.includes('替换自测') && synFirst.includes('increase'))
 check('同义替换接入分页控件', synFirst.includes('aria-label="分页"') && synFirst.includes('每页数量'))
 check('同义替换第二页内容变化', synSecond !== synFirst && synFirst.includes('显示 1–20 /') && synSecond.includes('显示 21–40 /'))
 check('同义替换搜索可命中基础词/替换词', synSearch.includes('cause') && synSearch.includes('lead to') && !synSearch.includes('increase'))
+check('同义替换可限定搜索范围', synReplacement.includes('搜索范围：替换词') && synReplacement.includes('cause') && !synReplacement.includes('increase'))
+check('同义替换内容拓展已接入', synReveal.includes('语境：') && synReveal.includes('搭配：') && synReveal.includes('记住了') && synReveal.includes('加入复习'))
 
 React.useState = realUseState
 rmSync(out, { force: true })

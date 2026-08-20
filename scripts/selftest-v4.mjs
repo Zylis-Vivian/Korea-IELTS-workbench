@@ -12,7 +12,10 @@ import { grammarItems, longSentences } from './src/data/ieltsGrammar'
 import { FULL_SCENE_GROUPS, FULL_TOPIC_GROUPS } from './src/data/ieltsVocabFull'
 import { sceneVocab, topicVocab } from './src/data/ieltsVocabData'
 import { PRONUNCIATION } from './src/data/pronunciation'
-export { GRAMMAR, grammarItems, longSentences, FULL_SCENE_GROUPS, FULL_TOPIC_GROUPS, sceneVocab, topicVocab, PRONUNCIATION }
+import { ALL_SYNONYMS } from './src/data/ieltsVocabNew'
+import { getSynonymEnrichment } from './src/data/ieltsSynonymEnrichment'
+import { createReviewItem, reviewItem, isDue } from './src/utils/review'
+export { GRAMMAR, grammarItems, longSentences, FULL_SCENE_GROUPS, FULL_TOPIC_GROUPS, sceneVocab, topicVocab, PRONUNCIATION, ALL_SYNONYMS, getSynonymEnrichment, createReviewItem, reviewItem, isDue }
 `
 
 const dir = mkdtempSync(join(tmpdir(), 'v4test-'))
@@ -105,6 +108,24 @@ check('全量话题分组非空', FT.length > 0, `${FT.length} 个话题`)
 check('内置场景库仍完整（未被覆盖）', SV.length > 0 && builtinSceneWords > 0, `内置 ${SV.length} 场景 / ${builtinSceneWords} 词`)
 check('内置话题库仍完整（未被覆盖）', TV.length > 0, `内置 ${TV.length} 话题`)
 check('词条字段完整（word+chinese）', FS.every((g) => g.words.every((w) => w.word && w.chinese)))
+
+// ───────── 问题4：同义替换内容 + 复习闭环数据层 ─────────
+console.log('\n[问题4] 同义替换内容与复习卡')
+const enriched = m.ALL_SYNONYMS.filter((group) => m.getSynonymEnrichment(group))
+check('同义替换总量 ≥400', m.ALL_SYNONYMS.length >= 400, `实际 ${m.ALL_SYNONYMS.length}`)
+check('高频同义替换已补语境', enriched.length >= 15, `实际 ${enriched.length} 组`)
+check('语境条目含搭配+例句+中文', enriched.every((group) => {
+  const detail = m.getSynonymEnrichment(group)
+  return !!detail?.context && detail.collocations.length >= 2 && detail.example && detail.exampleCn
+}))
+const practiceCard = m.createReviewItem({
+  id: 'selftest-synonym-card', language: 'en', kind: 'word', title: '同义替换自测',
+  prompt: 'increase', answer: 'rise / grow', translation: '表示上升', source: '自测', href: '/ielts/vocab?tab=synonym',
+})
+const practicedCard = m.reviewItem(practiceCard, 'good', new Date(Date.now() + 1000))
+check('同义替换可生成统一复习卡', practiceCard.card.due && practiceCard.source === '自测')
+check('复习评分会更新 FSRS 卡片', practicedCard.card.reps >= 1 && practicedCard.updatedAt >= practiceCard.updatedAt)
+check('新建复习卡立即可进入到期队列', m.isDue(practiceCard, new Date()))
 
 console.log('\n[全量场景 TOP10]')
 FS.slice(0, 10).forEach((g) => console.log(`  ${g.scene}（${g.words.length}）`))

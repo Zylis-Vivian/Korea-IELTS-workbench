@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import { Search, RotateCcw, Check, X } from 'lucide-react'
 import { PageHeader } from '../../components/Layout'
 import SpeakerButton from '../../components/SpeakerButton'
@@ -12,6 +12,7 @@ import type { VocabWord } from '../../types'
 import { useStore } from '../../stores/useStore'
 import { todayStr, getDailyWords, getDailyProgress } from '../../utils/dailyWords'
 import useDebouncedValue from '../../hooks/useDebouncedValue'
+import useUrlSearchState from '../../hooks/useUrlSearchState'
 
 const LEVELS = ['1', '2', '3', '4', '5', '6']
 const DAILY_COUNT = 12
@@ -68,13 +69,14 @@ export default function KoreanVocab() {
   const [lib, setLib] = useState<Lib>('core')
   const [topic, setTopic] = useState(VOCAB[0].topic)
   const [level, setLevel] = useState<string>('all')
-  const [q, setQ] = useState('')
+  const [q, setQ] = useUrlSearchState('korean_q')
   const debouncedQ = useDebouncedValue(q)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
   const [flashTopics, setFlashTopics] = useState<KoreanTopic[] | null>(null)
   const [flashLoading, setFlashLoading] = useState(false)
   const [flashError, setFlashError] = useState(false)
+  const previousLib = useRef<Lib | null>(null)
 
   // 当前词库数据源（不修改 VOCAB 现有词条，仅切换数据源）。Flashcards 只在需要时下载。
   const activeVocab: KoreanTopic[] = useMemo(
@@ -104,6 +106,12 @@ export default function KoreanVocab() {
 
   // 切换词库时重置主题与筛选条件，避免把旧词库的主题带到新词库。
   useEffect(() => {
+    if (previousLib.current === null) {
+      previousLib.current = lib
+      return
+    }
+    if (previousLib.current === lib) return
+    previousLib.current = lib
     setTopic('')
     setQ('')
     setLevel('all')

@@ -6,6 +6,7 @@ import Pagination from '../../components/Pagination'
 import { useStore } from '../../stores/useStore'
 import { sceneVocab, roots, topicVocab, type SceneWord, type SceneGroup, type TopicGroup } from '../../data/ieltsVocabData'
 import useDebouncedValue from '../../hooks/useDebouncedValue'
+import useUrlSearchState from '../../hooks/useUrlSearchState'
 
 type Tab = 'browse' | 'study' | 'synonym' | 'root' | 'speaking'
 const EMPTY_SCENE_GROUPS: SceneGroup[] = []
@@ -23,7 +24,8 @@ const allWords: SceneWord[] = [
 ]
 
 export default function IeltsVocab() {
-  const [tab, setTab] = useState<Tab>('browse')
+  const [tabParam, setTabParam] = useUrlSearchState('tab')
+  const tab: Tab = ['browse', 'study', 'synonym', 'root', 'speaking'].includes(tabParam as Tab) ? tabParam as Tab : 'browse'
   return (
     <div className="fade-in">
       <PageHeader title="📚 雅思词汇学习" desc="场景词库 + 同义替换 + 词根词缀 + 口语题库 + 多种练习模式，一键存入雅思单词本。" />
@@ -39,7 +41,7 @@ export default function IeltsVocab() {
             key={k}
             type="button"
             aria-pressed={tab === k}
-            onClick={() => setTab(k)}
+            onClick={() => setTabParam(k)}
             className={`flex-1 px-3 py-2 rounded-full text-sm whitespace-nowrap ${
               tab === k ? 'bg-lavender text-white shadow-soft' : 'text-gray-500'
             }`}
@@ -82,7 +84,7 @@ function Browse() {
   const [topic, setTopic] = useState(topicVocab[0]?.topic ?? '')
   const [view, setView] = useState<'scene' | 'topic'>('scene')
   const [src, setSrc] = useState<'builtin' | 'zhenting'>('builtin')
-  const [q, setQ] = useState('')
+  const [q, setQ] = useUrlSearchState('ielts_q')
   const debouncedQ = useDebouncedValue(q)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
