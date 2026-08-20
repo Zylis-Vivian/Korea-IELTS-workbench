@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import {
     Grid3x3,
@@ -115,7 +115,10 @@ function Item({ item, mobile, onNavigate }: { item: NavItem; mobile?: boolean; o
       }
     >
       {dot && (
-        <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-coral" />
+        <>
+          <span aria-hidden="true" className="absolute right-2 top-2 h-2 w-2 rounded-full bg-coral" />
+          <span className="sr-only">有可查看内容</span>
+        </>
       )}
       <item.icon size={mobile ? 20 : 18} />
       <span className="truncate">{item.label}</span>
@@ -130,6 +133,15 @@ export default function Sidebar() {
   const mins = studyMinutes[today] || 0
   const hh = Math.floor(mins / 60)
   const mm = mins % 60
+
+  useEffect(() => {
+    if (!mobileMoreOpen) return
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileMoreOpen(false)
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [mobileMoreOpen])
 
   return (
     <>
@@ -175,10 +187,17 @@ export default function Sidebar() {
 
       {mobileMoreOpen ? (
         <div className="fixed inset-0 z-20 bg-black/20 lg:hidden" onClick={() => setMobileMoreOpen(false)}>
-          <div id="mobile-more-menu" className="mobile-more-panel absolute bottom-0 left-0 right-0 rounded-t-3xl bg-white p-4 shadow-2xl" onClick={(event) => event.stopPropagation()}>
+          <div
+            id="mobile-more-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mobile-more-title"
+            className="mobile-more-panel absolute bottom-0 left-0 right-0 rounded-t-3xl bg-white p-4 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
             <div className="mb-3 flex items-center justify-between px-1">
-              <span className="font-semibold text-lavender-deep">更多功能</span>
-              <button type="button" onClick={() => setMobileMoreOpen(false)} className="rounded-full px-3 py-1 text-xs text-gray-500 hover:bg-cream">关闭</button>
+              <span id="mobile-more-title" className="font-semibold text-lavender-deep">更多功能</span>
+              <button type="button" aria-label="关闭更多功能" onClick={() => setMobileMoreOpen(false)} className="rounded-full px-3 py-1 text-xs text-gray-500 hover:bg-cream">关闭</button>
             </div>
             <div className="grid grid-cols-3 gap-2">
               {mobileMore.map((item) => (

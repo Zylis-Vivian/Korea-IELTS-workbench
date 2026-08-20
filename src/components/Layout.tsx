@@ -15,9 +15,9 @@ export default function Layout({ children }: { children: ReactNode }) {
   }, [location.pathname])
 
   return (
-    <div className="min-h-[100dvh] px-4 sm:px-6 py-5 pb-24 lg:pb-6 max-w-5xl mx-auto">
+    <main id="main-content" tabIndex={-1} className="min-h-[100dvh] px-4 sm:px-6 py-5 pb-24 lg:pb-6 max-w-5xl mx-auto outline-none">
       {children}
-    </div>
+    </main>
   )
 }
 
