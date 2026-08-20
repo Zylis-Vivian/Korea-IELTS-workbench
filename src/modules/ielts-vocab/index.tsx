@@ -5,6 +5,7 @@ import SpeakerButton from '../../components/SpeakerButton'
 import Pagination from '../../components/Pagination'
 import { useStore } from '../../stores/useStore'
 import { sceneVocab, roots, topicVocab, type SceneWord, type SceneGroup, type TopicGroup } from '../../data/ieltsVocabData'
+import useDebouncedValue from '../../hooks/useDebouncedValue'
 
 type Tab = 'browse' | 'study' | 'synonym' | 'root' | 'speaking'
 const EMPTY_SCENE_GROUPS: SceneGroup[] = []
@@ -82,6 +83,7 @@ function Browse() {
   const [view, setView] = useState<'scene' | 'topic'>('scene')
   const [src, setSrc] = useState<'builtin' | 'zhenting'>('builtin')
   const [q, setQ] = useState('')
+  const debouncedQ = useDebouncedValue(q)
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
   const [fullData, setFullData] = useState<{ sceneGroups: SceneGroup[]; topicGroups: TopicGroup[] } | null>(null)
@@ -115,12 +117,13 @@ function Browse() {
       ? (sceneGroups.find((g) => g.scene === safeScene)?.words ?? [])
       : (topicGroups.find((g) => g.topic === safeTopic)?.words ?? [])
   const filtered = useMemo(() => {
-    if (!q.trim()) return list
-    const kw = q.trim().toLowerCase()
+    if (!debouncedQ.trim()) return list
+    const kw = debouncedQ.trim().toLowerCase()
     return list.filter(
-      (w) => w.word.toLowerCase().includes(kw) || w.chinese.includes(q.trim()) || w.phonetic.toLowerCase().includes(kw)
+      (w) => w.word.toLowerCase().includes(kw) || w.chinese.includes(debouncedQ.trim()) || w.phonetic.toLowerCase().includes(kw)
     )
-  }, [list, q])
+  }, [debouncedQ, list])
+  const isFiltering = q !== debouncedQ
   const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize))
   const pageItems = useMemo(() => filtered.slice((page - 1) * pageSize, page * pageSize), [filtered, page, pageSize])
   useEffect(() => {
@@ -202,6 +205,10 @@ function Browse() {
             <span className="sr-only">搜索英文、中文或音标</span>
             <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
+              type="search"
+              aria-label="搜索英文、中文或音标"
+              inputMode="search"
+              enterKeyHint="search"
               value={q}
               onChange={(e) => { setQ(e.target.value); setPage(1) }}
               placeholder="搜索英文 / 中文 / 音标"
@@ -213,7 +220,7 @@ function Browse() {
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-400">
           {loadingFull && <span className="rounded-full bg-lavender-light/60 px-2.5 py-1 text-lavender-deep">正在加载全量词库…</span>}
           {fullError && <span className="rounded-full bg-red-50 px-2.5 py-1 text-red-600">全量词库加载失败，请切换后重试</span>}
-          <span>{filtered.length} 词</span>
+          <span aria-live="polite">{isFiltering ? '正在筛选…' : `${filtered.length} 词`}</span>
           <span>每页 {pageSize} 词</span>
           {(q || page > 1) && <button type="button" onClick={resetFilters} className="rounded-full bg-lavender-light/60 px-2.5 py-1 text-lavender-deep hover:bg-lavender-light">清除搜索</button>}
         </div>
