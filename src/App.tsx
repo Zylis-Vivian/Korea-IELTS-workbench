@@ -32,7 +32,11 @@ const Checkin = lazy(() => import('./modules/checkin'))
 const Settings = lazy(() => import('./modules/settings'))
 const BoardView = lazy(() => import('./modules/board/BoardView'))
 
-const pageFallback = <div className="p-8 text-center text-gray-400">加载中…</div>
+const pageFallback = (
+  <div className="p-8 text-center text-gray-400" role="status" aria-live="polite">
+    加载中…
+  </div>
+)
 
 function NotFound() {
   return <div className="p-8 text-center text-gray-500">页面不存在，请从左侧导航重新选择。</div>
@@ -74,6 +78,12 @@ export default function App() {
       <PetalBackground />
       <Sidebar />
       <div className="relative z-10 flex-1 h-full overflow-y-auto">
+        <a
+          href="#main-content"
+          className="sr-only z-50 rounded-lg bg-white px-3 py-2 text-sm text-lavender-deep shadow-soft focus:not-sr-only focus:fixed focus:left-3 focus:top-3"
+        >
+          跳到主要内容
+        </a>
         <Layout>
           <Suspense fallback={pageFallback}>
             <Routes>
