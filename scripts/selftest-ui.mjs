@@ -88,36 +88,20 @@ const countTxt = (html) => {
 const optionCount = (html) => (html.match(/<option/g) || []).length
 const cardCount = (html) => (html.match(/添加|存入/g) || []).length
 
-// IeltsVocab 内 useState 顺序：[tab] → Browse:[scene, topic, view, src, q]
+// IeltsVocab 内 useState 顺序：[tab] → Browse:[scene, topic, view, src, q, page, pageSize, fullData, fullError]
 console.log('\n[UI-问题3] 雅思词汇「词库浏览」交互链路')
 
 const A = renderWith(mod.IeltsVocab, ['browse', '租房住宿', undefined, 'scene', 'builtin', ''])
 const aCount = countTxt(A)
 check('默认态：场景词 + 内置精选 有内容', aCount > 0, `渲染 ${aCount} 词，${optionCount(A)} 个场景选项`)
 check('默认态：单词卡片已渲染', cardCount(A) > 0, `${cardCount(A)} 张卡片`)
+check('筛选区分层清晰', A.includes('浏览维度') && A.includes('词库来源') && A.includes('选择场景'))
+check('分页控件已接入', A.includes('aria-label="分页"') && A.includes('上一页') && A.includes('每页数量'))
 
+// 词汇真经现在是路由级动态模块，SSR 自测只断言可见的加载态；数据完整性由 selftest-v4 直接校验。
 const B = renderWith(mod.IeltsVocab, ['browse', '租房住宿', undefined, 'scene', 'zhenting', ''])
-const bCount = countTxt(B)
-check('点「词汇真经全量」后列表变化（此前无反应）', bCount !== aCount && bCount > 0, `内置 ${aCount} 词 → 全量 ${bCount} 词`)
-check('全量态：场景下拉重建为真经主题', optionCount(B) > 0 && B.includes('身心健康'), `${optionCount(B)} 个场景选项`)
-check('全量态：选中项越界已兜底（未白屏/未崩溃）', bCount > 0 && cardCount(B) > 0, `${cardCount(B)} 张卡片`)
-
-const C = renderWith(mod.IeltsVocab, ['browse', '学校教育', undefined, 'scene', 'zhenting', ''])
-const cCount = countTxt(C)
-check('切换场景下拉 → 列表与总数联动', cCount !== bCount && cCount > 0, `身心健康 ${bCount} 词 → 学校教育 ${cCount} 词`)
-
-const D = renderWith(mod.IeltsVocab, ['browse', '学校教育', undefined, 'scene', 'zhenting', 'stud'])
-const dCount = countTxt(D)
-check('搜索框过滤 → 总数实时更新', dCount > 0 && dCount < cCount, `搜 "stud"：${cCount} → ${dCount} 词`)
-
-const E = renderWith(mod.IeltsVocab, ['browse', '学校教育', '教育与学习', 'topic', 'zhenting', ''])
-const eCount = countTxt(E)
-check('话题视图 + 全量 正常出词', eCount > 0, `${eCount} 词，${optionCount(E)} 个话题选项`)
-
-const F = renderWith(mod.IeltsVocab, ['browse', '学校教育', '教育与学习', 'topic', 'builtin', ''])
-check('话题视图切回内置精选 正常', countTxt(F) > 0, `${countTxt(F)} 词，${optionCount(F)} 个话题选项`)
-
-check('下拉选项带词数标注', /（\d+）/.test(B), '形如「身心健康（413）」')
+check('切换全量词库进入加载态', B.includes('正在加载全量词库') && B.includes('词库来源'))
+check('下拉选项带词数标注', /（\d+）/.test(A), '形如「租房住宿（8）」')
 
 // KoreanGrammar 内 useState 顺序：[lv, ...]
 console.log('\n[UI-问题1] 韩语语法 等级 tab')
@@ -137,6 +121,7 @@ const ig = renderWith(mod.IeltsGrammar, [])
 check('雅思语法页渲染成功', ig.length > 2000, `${ig.length} 字节`)
 check('含写作专项新条目', ig.includes('数据描述句型') || ig.includes('因果链表达'))
 check('含长难句新真题', ig.length > 0)
+check('长难句分层面板已接入', ['1. 主干', '2. 从句', '3. 非谓语', '4. 修饰成分', '5. 中文翻译'].every((label) => ig.includes(label)))
 
 React.useState = realUseState
 rmSync(out, { force: true })

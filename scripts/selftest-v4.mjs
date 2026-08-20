@@ -11,7 +11,8 @@ import { GRAMMAR } from './src/data/grammar'
 import { grammarItems, longSentences } from './src/data/ieltsGrammar'
 import { FULL_SCENE_GROUPS, FULL_TOPIC_GROUPS } from './src/data/ieltsVocabFull'
 import { sceneVocab, topicVocab } from './src/data/ieltsVocabData'
-export { GRAMMAR, grammarItems, longSentences, FULL_SCENE_GROUPS, FULL_TOPIC_GROUPS, sceneVocab, topicVocab }
+import { PRONUNCIATION } from './src/data/pronunciation'
+export { GRAMMAR, grammarItems, longSentences, FULL_SCENE_GROUPS, FULL_TOPIC_GROUPS, sceneVocab, topicVocab, PRONUNCIATION }
 `
 
 const dir = mkdtempSync(join(tmpdir(), 'v4test-'))
@@ -77,6 +78,14 @@ check('长难句 15~20', LS.length >= 15 && LS.length <= 20, `实际 ${LS.length
 check('长难句 id 唯一', new Set(LS.map((s) => s.id)).size === LS.length)
 check('含 6.0 与 7.0+ 两档', LS.some((s) => s.difficulty === '6.0') && LS.some((s) => s.difficulty === '7.0+'), LS.reduce((a, s) => ((a[s.difficulty] = (a[s.difficulty] || 0) + 1), a), {}) && JSON.stringify(LS.reduce((a, s) => ((a[s.difficulty] = (a[s.difficulty] || 0) + 1), a), {})))
 check('每句含主干+修饰+译文+语法点', LS.every((s) => s.mainClause && s.modifiers.length >= 1 && s.translation && s.grammarPoints.length >= 1))
+
+// ───────── 问题2b：韩语音变重点规则 ─────────
+console.log('\n[问题2b] 韩语音变重点规则')
+const P = m.PRONUNCIATION
+const priority = ['link', 'final', 'nasal', 'liquid', 'tense', 'aspiration']
+check('音变规则 id 唯一', new Set(P.map((rule) => rule.id)).size === P.length)
+check('六类重点规则齐全', priority.every((id) => P.some((rule) => rule.id === id)), priority.join('、'))
+check('重点规则均含公式与例词', priority.every((id) => { const rule = P.find((item) => item.id === id); return !!rule?.formula && (rule.examples || []).length >= 3 }))
 
 // ───────── 问题3：雅思词汇「词汇真经全量」 ─────────
 console.log('\n[问题3] 雅思词汇全量切换')

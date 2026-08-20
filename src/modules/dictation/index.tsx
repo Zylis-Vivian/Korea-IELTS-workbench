@@ -5,7 +5,7 @@ import { PageHeader } from '../../components/Layout'
 import { createPersonalReviewItems, DEFAULT_REVIEW_ITEMS } from '../../data/reviewSeeds'
 import { usePronunciation } from '../../hooks/usePronunciation'
 import { useStore } from '../../stores/useStore'
-import type { ReviewItem } from '../../types'
+import type { DictationErrorType, ReviewItem } from '../../types'
 import { createReviewItem, isDue } from '../../utils/review'
 
 const DICTATION_KINDS = new Set<ReviewItem['kind']>(['word', 'sentence', 'listening'])
@@ -18,15 +18,42 @@ function normalizeAnswer(value: string) {
     .trim()
 }
 
+const ERROR_LABELS: Record<DictationErrorType, string> = {
+  omission: '漏词/少写',
+  substitution: '词形替换',
+  spacing: '空格或分词',
+  punctuation: '标点',
+  spelling: '拼写/音节',
+  unknown: '其他',
+}
+
+function classifyError(answer: string, expected: string): DictationErrorType {
+  if (!answer.trim()) return 'omission'
+  const normalizedAnswer = normalizeAnswer(answer)
+  const normalizedExpected = normalizeAnswer(expected)
+  if (normalizedAnswer === normalizedExpected) {
+    const withoutPunctuation = (value: string) => value.toLocaleLowerCase().replace(/[.,!?;:'"()[\]{}，。！？；：“”‘’、]/g, '').replace(/\s+/g, ' ').trim()
+    if (withoutPunctuation(answer) === withoutPunctuation(expected) && answer !== expected) return 'punctuation'
+    return answer.replace(/\s+/g, ' ') === expected.replace(/\s+/g, ' ') ? 'punctuation' : 'spacing'
+  }
+  const compactAnswer = normalizedAnswer.replace(/\s/g, '')
+  const compactExpected = normalizedExpected.replace(/\s/g, '')
+  if (compactAnswer === compactExpected) return 'spacing'
+  if (compactAnswer.length < compactExpected.length) return 'omission'
+  if (compactAnswer.length === compactExpected.length) return 'substitution'
+  return 'spelling'
+}
+
 export default function Dictation() {
   const reviewItems = useStore((s) => s.reviewItems)
   const wordbook = useStore((s) => s.wordbook)
   const wrongbook = useStore((s) => s.wrongbook)
   const upsertReviewItems = useStore((s) => s.upsertReviewItems)
-  const review = useStore((s) => s.review)
+  const recordDictation = useStore((s) => s.recordDictation)
   const { speak } = usePronunciation()
   const [answer, setAnswer] = useState('')
   const [result, setResult] = useState<'correct' | 'wrong' | null>(null)
+  const [errorType, setErrorType] = useState<DictationErrorType | null>(null)
   const [doneIds, setDoneIds] = useState<Set<string>>(new Set())
   const [activeId, setActiveId] = useState<string | null>(null)
 
@@ -45,6 +72,21 @@ export default function Dictation() {
   )
   const current = candidates.find((item) => item.id === activeId) || candidates.find((item) => isDue(item)) || candidates[0]
 
+  const dictationStats = useMemo(() => {
+    const stats = { attempts: 0, correct: 0, wrong: 0, errorTypes: {} as Partial<Record<DictationErrorType, number>> }
+    reviewItems.forEach((item) => {
+      if (!item.dictation) return
+      stats.attempts += item.dictation.attempts
+      stats.correct += item.dictation.correct
+      stats.wrong += item.dictation.wrong
+      Object.entries(item.dictation.errorTypes).forEach(([type, count]) => {
+        const key = type as DictationErrorType
+        stats.errorTypes[key] = (stats.errorTypes[key] || 0) + (count || 0)
+      })
+    })
+    return stats
+  }, [reviewItems])
+
   useEffect(() => {
     if (!current) {
       setActiveId(null)
@@ -56,14 +98,17 @@ export default function Dictation() {
   useEffect(() => {
     setAnswer('')
     setResult(null)
+    setErrorType(null)
   }, [current?.id])
 
   const submit = () => {
     if (!current || !answer.trim()) return
     const expected = current.answer || current.prompt
     const isCorrect = normalizeAnswer(answer) === normalizeAnswer(expected)
+    const nextErrorType = isCorrect ? null : classifyError(answer, expected)
     setResult(isCorrect ? 'correct' : 'wrong')
-    review(current.id, isCorrect ? 'good' : 'again')
+    setErrorType(nextErrorType)
+    recordDictation(current.id, { correct: isCorrect, errorType: nextErrorType || undefined })
   }
 
   const next = () => {
@@ -77,6 +122,7 @@ export default function Dictation() {
     setActiveId(null)
     setAnswer('')
     setResult(null)
+    setErrorType(null)
   }
 
   return (
@@ -84,7 +130,13 @@ export default function Dictation() {
       <PageHeader title="听写练习" desc="先听音，再输入你听到的内容；答对后延长间隔，答错会按‘重来’回流到复习队列。" />
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2 text-sm text-gray-500">
-        <span className="inline-flex items-center gap-2"><Headphones size={16} />本轮剩余 {candidates.length} 条</span>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-2"><Headphones size={16} />本轮剩余 {candidates.length} 条</span>
+          <span className="rounded-full bg-lavender-light/60 px-2.5 py-1 text-xs text-lavender-deep">累计错题回流 {dictationStats.wrong} 条</span>
+          {Object.entries(dictationStats.errorTypes).filter(([, count]) => count).slice(0, 3).map(([type, count]) => (
+            <span key={type} className="rounded-full bg-cream px-2.5 py-1 text-xs text-gray-500">{ERROR_LABELS[type as DictationErrorType]} {count}</span>
+          ))}
+        </div>
         <Link to="/review" className="text-lavender-deep hover:underline">查看今日任务</Link>
       </div>
 
@@ -131,9 +183,10 @@ export default function Dictation() {
               <div className={`mt-3 rounded-xl p-4 ${result === 'correct' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
                 <div className="flex items-center gap-2 font-medium">
                   {result === 'correct' ? <Check size={18} /> : <X size={18} />}
-                  {result === 'correct' ? '答对了，已按“正常”安排复习。' : '这次先按“重来”安排，记住正确答案：'}
+                  {result === 'correct' ? '答对了，已按“正常”安排复习。' : `这次先按“重来”安排，${ERROR_LABELS[errorType || 'unknown']}会在下一轮优先回流：`}
                 </div>
                 {result === 'wrong' ? <div className="mt-2 font-medium">{current.answer || current.prompt}</div> : null}
+                {result === 'wrong' && errorType ? <div className="mt-1 text-xs opacity-80">错误类型：{ERROR_LABELS[errorType]}</div> : null}
                 {current.translation ? <div className="mt-2 text-sm opacity-80">{current.translation}</div> : null}
               </div>
             )}
