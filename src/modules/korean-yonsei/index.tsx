@@ -1,13 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Search, BookOpen, GraduationCap, Volume2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
+import { BookOpen, ChevronLeft, ChevronRight, GraduationCap, Mic2, Search, Volume2 } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { PageHeader } from '../../components/Layout'
 import { usePronunciation } from '../../hooks/usePronunciation'
-import type { KoreanTopic } from '../../data/yonseiVocab'
-import type { VocabWord } from '../../types'
+import { yonseiSectionLabel, YONSEI_LESSONS, YONSEI_WORDS, type YonseiWord } from '../../data/yonseiVocab'
+import { loadYonseiAudioManifest, yonseiAudioFile, type YonseiAudioManifest } from '../../utils/yonseiAudio'
 
 const PAGE_SIZE = 50
-const EMPTY_WORDS: VocabWord[] = []
-const EMPTY_TOPICS: KoreanTopic[] = []
 
 interface OriginMeta {
   label: string
@@ -103,6 +102,7 @@ function Speakable({
   const { speak } = usePronunciation()
   return (
     <button
+      type="button"
       onClick={() => void speak(text, { lang })}
       className={`group inline-flex items-center gap-1 text-left hover:underline underline-offset-4 decoration-lavender focus:outline-none ${className}`}
       title={`点击朗读 ${text}`}
@@ -113,99 +113,104 @@ function Speakable({
   )
 }
 
+function unitLabel(word: Pick<YonseiWord, 'volume' | 'lesson' | 'unit' | 'chapterZh'>) {
+  return `${yonseiSectionLabel(word)}｜${word.chapterZh}`
+}
+
+function unitKey(volume: number, lesson: number, unit: number) {
+  return `${volume}-${lesson}-${unit}`
+}
+
 export default function KoreanYonsei() {
-  const [data, setData] = useState<{ words: VocabWord[]; topics: KoreanTopic[] } | null>(null)
-  const [loadError, setLoadError] = useState(false)
-  const [book, setBook] = useState<string>('')
-  const [topic, setTopic] = useState<string>('')
-  const [origin, setOrigin] = useState<string>('')
+  const [book, setBook] = useState<number | ''>('')
+  const [lesson, setLesson] = useState<number | ''>('')
+  const [unit, setUnit] = useState<number | ''>('')
+  const [origin, setOrigin] = useState('')
   const [q, setQ] = useState('')
   const [page, setPage] = useState(1)
+  const [audioManifest, setAudioManifest] = useState<YonseiAudioManifest | null>(null)
 
-  // 延世教材数据约 2MB，仅在进入教材路由时下载，避免首屏把教材 JSON 打进主包。
   useEffect(() => {
-    let cancelled = false
-    import('../../data/yonseiVocab')
-      .then((module) => {
-        if (!cancelled) setData({ words: module.YONSEI_WORDS, topics: module.YONSEI_TOPICS })
-      })
-      .catch(() => {
-        if (!cancelled) setLoadError(true)
-      })
+    let active = true
+    void loadYonseiAudioManifest().then((manifest) => {
+      if (active) setAudioManifest(manifest)
+    })
     return () => {
-      cancelled = true
+      active = false
     }
   }, [])
 
-  const YONSEI_WORDS = data?.words ?? EMPTY_WORDS
-  const YONSEI_TOPICS = data?.topics ?? EMPTY_TOPICS
-
-  const books = useMemo(
-    () => Array.from(new Set(YONSEI_WORDS.map((w) => w.book).filter(Boolean))).sort() as string[],
-    [YONSEI_WORDS]
+  const books = useMemo(() => YONSEI_LESSONS.filter((item, index, all) => all.findIndex((x) => x.volume === item.volume) === index), [])
+  const lessons = useMemo(
+    () => YONSEI_LESSONS.filter((item) => book === '' || item.volume === book),
+    [book]
   )
-
-  const topics = useMemo(() => {
-    let list = YONSEI_TOPICS.map((t) => t.topic)
-    if (book) {
-      list = Array.from(new Set(YONSEI_WORDS.filter((w) => w.book === book).map((w) => w.topic)))
-    }
-    return list.sort()
-  }, [book, YONSEI_TOPICS, YONSEI_WORDS])
-
+  const units = useMemo(() => {
+    const selectedLessons = lessons.filter((item) => lesson === '' || item.lesson === lesson)
+    return Array.from(new Set(selectedLessons.flatMap((item) => item.units))).sort((a, b) => a - b)
+  }, [lesson, lessons])
   const originTypes = useMemo(
-    () => Array.from(new Set(YONSEI_WORDS.map((w) => w.originType).filter(Boolean))).sort() as string[],
-    [YONSEI_WORDS]
+    () => Array.from(new Set(YONSEI_WORDS.map((word) => word.originType).filter(Boolean))).sort() as string[],
+    []
   )
 
   const filtered = useMemo(() => {
-    let list = [...YONSEI_WORDS]
-    if (book) list = list.filter((w) => w.book === book)
-    if (topic) list = list.filter((w) => w.topic === topic)
-    if (origin) list = list.filter((w) => w.originType === origin)
-    if (q.trim()) {
-      const kw = q.trim().toLowerCase()
-      list = list.filter(
-        (w) =>
-          w.korean.toLowerCase().includes(kw) ||
-          w.romanization.toLowerCase().includes(kw) ||
-          w.chinese.toLowerCase().includes(kw) ||
-          (w.english || '').toLowerCase().includes(kw)
+    const keyword = q.trim().toLowerCase()
+    return YONSEI_WORDS.filter((word) => {
+      if (book !== '' && word.volume !== book) return false
+      if (lesson !== '' && word.lesson !== lesson) return false
+      if (unit !== '' && word.unit !== unit) return false
+      if (origin && word.originType !== origin) return false
+      if (!keyword) return true
+      return [word.korean, word.romanization, word.chinese, word.english || ''].some((value) =>
+        value.toLowerCase().includes(keyword)
       )
-    }
-    return list
-  }, [YONSEI_WORDS, book, topic, origin, q])
+    })
+  }, [book, lesson, origin, q, unit])
 
-  // 筛选条件变化时回到第一页（避免在 useMemo 里 setState）
   useEffect(() => {
     setPage(1)
-  }, [book, topic, origin, q])
+  }, [book, lesson, origin, q, unit])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
-  const pageWords = useMemo(() => {
-    const safePage = Math.min(page, totalPages)
-    return filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
-  }, [filtered, page, totalPages])
+  const safePage = Math.min(page, totalPages)
+  const pageWords = useMemo(
+    () => filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
+    [filtered, safePage]
+  )
 
-  if (!data) {
-    return (
-      <div className="fade-in">
-        <PageHeader title="延世韩国语 1-6" desc="按教材册次、课次顺序学习；教材数据按需加载，不影响首屏速度。" />
-        <div className={`rounded-card p-8 text-center text-sm shadow-card ${loadError ? 'bg-red-50 text-red-600' : 'bg-white text-gray-400'}`}>
-          {loadError ? '教材数据加载失败，请刷新页面重试。' : '正在加载延世韩国语词库…'}
-        </div>
-      </div>
-    )
+  const selectedLesson = lessons.find((item) => item.lesson === lesson && (book === '' || item.volume === book))
+  const selectedUnit = unit === '' ? '' : `第${unit}单元`
+  const audioCoverage = useMemo(() => {
+    const result = new Map<string, { total: number; available: number }>()
+    for (const word of YONSEI_WORDS) {
+      const key = unitKey(word.volume, word.lesson, word.unit)
+      const current = result.get(key) || { total: 0, available: 0 }
+      current.total += 1
+      if (audioManifest && yonseiAudioFile(word.korean, audioManifest)) current.available += 1
+      result.set(key, current)
+    }
+    return result
+  }, [audioManifest])
+
+  const resetLessonAndUnit = (nextBook: number | '') => {
+    setBook(nextBook)
+    setLesson('')
+    setUnit('')
+  }
+
+  const resetUnit = (nextLesson: number | '') => {
+    setLesson(nextLesson)
+    setUnit('')
   }
 
   return (
     <div className="fade-in">
       <PageHeader
         title="延世韩国语 1-6"
-        desc={`按教材册次、课次顺序学习，共 ${YONSEI_WORDS.length} 词。表格左侧为韩语词与词性，中间为中文与英文释义，右侧标注词源与发音提示；点击韩语或英文即可朗读。`}
+        desc={`保留教材原始册次、课次、单元和学习顺序，共 ${YONSEI_WORDS.length} 条教材记录；点击韩语或英文即可朗读。`}
       />
 
-      {/* 图例 */}
       <div className="mb-4 flex flex-wrap gap-2">
         {Object.entries(ORIGIN_META).map(([key, meta]) => (
           <div
@@ -219,157 +224,220 @@ export default function KoreanYonsei() {
         ))}
       </div>
 
-      {/* 筛选器 */}
-      <div className="mb-3 flex flex-col sm:flex-row flex-wrap gap-2">
-        <div className="flex items-center gap-2">
-          <BookOpen size={15} className="text-gray-400" />
+      <div className="mb-3 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        <label className="flex items-center gap-2">
+          <BookOpen size={15} className="shrink-0 text-gray-400" />
           <select
+            aria-label="选择册次"
             value={book}
-            onChange={(e) => {
-              setBook(e.target.value)
-              setTopic('')
-            }}
-            className="inp text-sm py-1.5"
+            onChange={(event) => resetLessonAndUnit(event.target.value ? Number(event.target.value) : '')}
+            className="inp min-w-0 flex-1 text-sm py-1.5"
           >
             <option value="">全部册次</option>
-            {books.map((b) => (
-              <option key={b} value={b}>
-                {b}
+            {books.map((item) => (
+              <option key={item.volume} value={item.volume}>
+                第{item.volume}册
               </option>
             ))}
           </select>
-        </div>
+        </label>
 
-        <div className="flex items-center gap-2">
-          <GraduationCap size={15} className="text-gray-400" />
-          <select value={topic} onChange={(e) => setTopic(e.target.value)} className="inp text-sm py-1.5">
-            <option value="">全部主题</option>
-            {topics.map((t) => (
-              <option key={t} value={t}>
-                {t}
+        <label className="flex items-center gap-2">
+          <GraduationCap size={15} className="shrink-0 text-gray-400" />
+          <select
+            aria-label="选择课次"
+            value={lesson}
+            onChange={(event) => resetUnit(event.target.value ? Number(event.target.value) : '')}
+            className="inp min-w-0 flex-1 text-sm py-1.5"
+          >
+            <option value="">全部课次</option>
+            {lessons.map((item) => (
+              <option key={item.key} value={item.lesson}>
+                第{item.lesson}课 · {item.titleZh}
               </option>
             ))}
           </select>
-        </div>
+        </label>
 
-        <select value={origin} onChange={(e) => setOrigin(e.target.value)} className="inp text-sm py-1.5">
+        <label className="flex items-center gap-2">
+          <span className="w-[15px] shrink-0 text-center text-xs text-gray-400">单</span>
+          <select
+            aria-label="选择单元"
+            value={unit}
+            onChange={(event) => setUnit(event.target.value ? Number(event.target.value) : '')}
+            className="inp min-w-0 flex-1 text-sm py-1.5"
+          >
+            <option value="">全部单元</option>
+            {units.map((value) => (
+              <option key={value} value={value}>
+                第{value}单元
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <select aria-label="选择词源" value={origin} onChange={(event) => setOrigin(event.target.value)} className="inp text-sm py-1.5">
           <option value="">全部词源</option>
-          {originTypes.map((o) => {
-            const info = originInfo(o)
-            return (
-              <option key={o} value={o}>
-                {info.tag}·{info.label}
-              </option>
-            )
+          {originTypes.map((value) => {
+            const info = originInfo(value)
+            return <option key={value} value={value}>{info.tag}·{info.label}</option>
           })}
         </select>
+      </div>
 
-        <div className="relative flex-1 min-w-[200px]">
+      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="relative min-w-0 flex-1">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             value={q}
-            onChange={(e) => setQ(e.target.value)}
+            onChange={(event) => setQ(event.target.value)}
             placeholder="搜索韩文 / 罗马音 / 中文 / 英文"
+            aria-label="搜索延世词汇"
             className="inp inp-leading-icon w-full"
           />
         </div>
+        {selectedLesson && unit !== '' ? (
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <span className="text-xs text-gray-400">
+              {audioManifest
+                ? (() => {
+                    const coverage = audioCoverage.get(unitKey(selectedLesson.volume, selectedLesson.lesson, unit))
+                    return `本地音频 ${coverage?.available || 0}/${coverage?.total || 0}`
+                  })()
+                : '正在检查本地音频'}
+            </span>
+            <Link
+              to={`/shadowing?source=yonsei&volume=${selectedLesson.volume}&lesson=${selectedLesson.lesson}&unit=${unit}`}
+              className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-lavender px-3 py-2 text-sm text-white shadow-soft hover:bg-lavender-deep"
+            >
+              <Mic2 size={16} />
+              跟读本单元
+            </Link>
+          </div>
+        ) : null}
       </div>
 
-      <div className="text-xs text-gray-400 mb-2 flex items-center justify-between">
+      <div className="mb-2 flex flex-col gap-1 text-xs text-gray-400 sm:flex-row sm:items-center sm:justify-between">
         <span>
-          共 {filtered.length} 词
-          {book && ` · ${book}`}
-          {topic && ` · ${topic}`}
+          共 {filtered.length} 条
+          {book !== '' && ` · 第${book}册`}
+          {selectedLesson && ` · 第${selectedLesson.lesson}课 ${selectedLesson.titleZh}`}
+          {selectedUnit && ` · ${selectedUnit}`}
           {origin && ` · ${originInfo(origin).label}`}
           {q.trim() && ` · 搜索「${q.trim()}」`}
         </span>
-        <span>
-          第 {page}/{totalPages} 页
-        </span>
+        <span>第 {safePage}/{totalPages} 页</span>
       </div>
 
-      {/* 表格 */}
-      <div className="overflow-x-auto rounded-card shadow-card bg-white">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto rounded-card bg-white shadow-card">
+        <table className="w-full table-fixed text-sm sm:min-w-[760px]">
           <thead>
-            <tr className="bg-slate-800 text-white text-left">
-              <th className="px-4 py-3 font-semibold w-[28%]">한국어</th>
-              <th className="px-4 py-3 font-semibold w-[22%]">中文</th>
-              <th className="px-4 py-3 font-semibold w-[24%]">English</th>
-              <th className="px-4 py-3 font-semibold w-[26%]">词源 / 发音</th>
+            <tr className="bg-slate-800 text-left text-white">
+              <th className="w-[28%] px-4 py-3 font-semibold">한국어</th>
+              <th className="w-[22%] px-4 py-3 font-semibold">中文</th>
+              <th className="w-[24%] px-4 py-3 font-semibold">English</th>
+              <th className="w-[26%] px-4 py-3 font-semibold">词源 / 发音</th>
             </tr>
           </thead>
           <tbody>
-            {pageWords.map((w, i) => {
-              const info = originInfo(w.originType)
+            {pageWords.map((word, index) => {
+              const info = originInfo(word.originType)
+              const previous = pageWords[index - 1]
+              const showSection = !previous ||
+                previous.volume !== word.volume ||
+                previous.lesson !== word.lesson ||
+                previous.unit !== word.unit
               return (
-                <tr
-                  key={w.id || i}
-                  className={`border-b border-gray-100 hover:bg-lavender-light/30 transition border-l-4 ${info.rowBorder}`}
-                >
-                  <td className="px-4 py-3">
-                    <div className="flex items-start gap-2 flex-wrap">
-                      <Speakable text={w.korean} lang="ko-KR" className="text-lg font-bold korean-font text-slate-800">
-                        {w.korean}
-                      </Speakable>
-                      <span className="text-xs text-gray-500 mt-1 whitespace-nowrap">[{w.posZh || w.pos || '-'}]</span>
-                    </div>
-                    <div className="text-xs text-gray-400 mt-0.5">{w.romanization}</div>
-                  </td>
-                  <td className="px-4 py-3 text-slate-700">{w.chinese}</td>
-                  <td className="px-4 py-3">
-                    {w.english ? (
-                      <Speakable text={w.english.split(';')[0].trim()} lang="en-US" className="text-slate-600">
-                        {w.english}
-                      </Speakable>
-                    ) : (
-                      <span className="text-gray-300">-</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div
-                      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs ${info.bg} ${info.color} border ${info.border} mb-1`}
-                    >
-                      <span className="font-bold">{info.tag}</span>
-                      <span>{info.label}</span>
-                    </div>
-                    {w.originDetail && <div className="text-xs text-gray-500">{w.originDetail}</div>}
-                    {w.pronunciation && (
-                      <div className="text-xs text-gray-400 mt-0.5">发音 [{w.pronunciation}]</div>
-                    )}
-                  </td>
-                </tr>
+                <Fragment key={word.entryId}>
+                  {showSection ? (
+                    <tr key={`${word.entryId}-section`} className="border-y border-lavender-light bg-lavender-light/35">
+                      <td colSpan={4} className="px-4 py-2.5">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div>
+                            <div className="font-semibold text-lavender-deep">{unitLabel(word)}</div>
+                            <div className="mt-0.5 text-xs text-gray-500">{word.chapterKo} · {word.chapterEn}</div>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-[11px] text-gray-400">
+                              {audioManifest
+                                ? (() => {
+                                    const coverage = audioCoverage.get(unitKey(word.volume, word.lesson, word.unit))
+                                    return `音频 ${coverage?.available || 0}/${coverage?.total || 0}`
+                                  })()
+                                : '音频检查中'}
+                            </span>
+                            <Link
+                              to={`/shadowing?source=yonsei&volume=${word.volume}&lesson=${word.lesson}&unit=${word.unit}`}
+                              className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs text-lavender-deep shadow-sm hover:bg-lavender hover:text-white"
+                            >
+                              <Mic2 size={13} />跟读
+                            </Link>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : null}
+                  <tr
+                    key={word.entryId}
+                    className={`border-b border-gray-100 transition hover:bg-lavender-light/30 border-l-4 ${info.rowBorder}`}
+                  >
+                    <td className="px-4 py-3">
+                      <div className="flex flex-wrap items-start gap-2">
+                        <Speakable text={word.korean} lang="ko-KR" className="korean-font text-lg font-bold text-slate-800">
+                          {word.korean}
+                        </Speakable>
+                        <span className="mt-1 whitespace-nowrap text-xs text-gray-500">[{word.posZh || word.pos || '-'}]</span>
+                      </div>
+                      <div className="mt-0.5 text-xs text-gray-400">{word.romanization}</div>
+                    </td>
+                    <td className="px-4 py-3 text-slate-700">{word.chinese || '-'}</td>
+                    <td className="px-4 py-3">
+                      {word.english ? (
+                        <Speakable text={word.english.split(';')[0].trim()} lang="en-US" className="text-slate-600">
+                          {word.english}
+                        </Speakable>
+                      ) : <span className="text-gray-300">-</span>}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className={`mb-1 inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs ${info.bg} ${info.color} ${info.border}`}>
+                        <span className="font-bold">{info.tag}</span>
+                        <span>{info.label}</span>
+                      </div>
+                      {word.originDetail && <div className="text-xs text-gray-500">{word.originDetail}</div>}
+                      {word.pronunciation && <div className="mt-0.5 text-xs text-gray-400">发音 [{word.pronunciation}]</div>}
+                    </td>
+                  </tr>
+                </Fragment>
               )
             })}
           </tbody>
         </table>
-        {pageWords.length === 0 && (
-          <div className="text-center text-gray-400 py-12">没有匹配的单词，换个条件试试～</div>
-        )}
+        {pageWords.length === 0 && <div className="py-12 text-center text-gray-400">没有匹配的单词，换个条件试试～</div>}
       </div>
 
-      {/* 分页 */}
-      {filtered.length > PAGE_SIZE && (
-        <div className="mt-4 flex items-center justify-center gap-2">
+      {filtered.length > PAGE_SIZE ? (
+        <div className="relative z-10 mt-4 flex items-center justify-center gap-2 pb-4" aria-label="延世词汇分页">
           <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
-            className="px-2 py-1.5 rounded-lg bg-white shadow-card text-gray-600 disabled:opacity-40 hover:bg-lavender-light/60 transition"
+            type="button"
+            onClick={() => setPage((value) => Math.max(1, value - 1))}
+            disabled={safePage === 1}
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-white px-2 py-1.5 text-gray-600 shadow-card transition hover:bg-lavender-light/60 disabled:opacity-40"
+            aria-label="上一页"
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={18} />
           </button>
-          <span className="text-sm text-gray-500">
-            第 {page} / {totalPages} 页
-          </span>
+          <span className="min-w-[5rem] text-center text-sm text-gray-500">第 {safePage} / {totalPages} 页</span>
           <button
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
-            className="px-2 py-1.5 rounded-lg bg-white shadow-card text-gray-600 disabled:opacity-40 hover:bg-lavender-light/60 transition"
+            type="button"
+            onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+            disabled={safePage === totalPages}
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-white px-2 py-1.5 text-gray-600 shadow-card transition hover:bg-lavender-light/60 disabled:opacity-40"
+            aria-label="下一页"
           >
-            <ChevronRight size={16} />
+            <ChevronRight size={18} />
           </button>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

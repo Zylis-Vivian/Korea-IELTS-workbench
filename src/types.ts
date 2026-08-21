@@ -32,10 +32,14 @@ export interface VocabWord {
   topic: string
   // —— 词库扩展指令 V2 扩展字段（向后兼容，全部可选）——
   book?: string // 教材，如「延世韩国语1」
+  volume?: number // 教材册次
+  chapter?: number // 教材课次（兼容原始字段名）
+  lesson?: number // 教材课次
+  unit?: number // 教材单元
+  sequence?: number // 教材内学习顺序
+  sourceOrder?: number // 上游数据的原始顺序
   category?: string // 主分类，如「延世韩国语」
   source?: string // 数据来源
-  unit?: number // 单元号
-  lesson?: number // 课次
   topics?: string[] // 多标签
   audioSrc?: string // 对应 manifest.json 音频路径
   english?: string // 英文释义（延世等外源词库提供）

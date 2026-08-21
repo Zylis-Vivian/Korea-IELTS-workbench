@@ -13,7 +13,7 @@ const root = join(__dirname, '..')
 const OUT_DIR = join(root, 'public', 'audio', 'ko')
 const MANIFEST = join(OUT_DIR, 'manifest.json')
 const VOICE = 'ko-KR-SunHiNeural' // 标准首尔音（女声）；男声 ko-KR-InJoonNeural 可作扩展
-const CONCURRENCY = 6
+const CONCURRENCY = Number(process.env.AUDIO_CONCURRENCY || 6)
 
 // 1) 用 esbuild 把数据 + 音变函数打成可运行模块，提取字符串集合
 const collector = `
@@ -23,6 +23,7 @@ import { VOCAB } from './src/data/vocab'
 import { DIALOGUES } from './src/data/dialogue'
 import { GRAMMAR } from './src/data/grammar'
 import { DAILY_LESSONS } from './src/data/daily'
+import { YONSEI_WORDS } from './src/data/yonseiVocab'
 import { ANIMATIONS, KPOP, DRAMAS } from './src/data/entertainment'
 import { applyPhoneticsIfNeeded } from './src/utils/koreanPhonetics'
 
@@ -55,6 +56,15 @@ const add = (s) => {
   if (/[a-zA-Z→★·]/.test(t)) return
   out.add(applyPhoneticsIfNeeded(t))
 }
+const addYonsei = (s) => {
+  if (typeof s !== 'string') return
+  const t = s.trim().normalize('NFC')
+  if (!t) return
+  // 延世词条可能包含 MP3、KTX、WTO 等教材原文的一部分，不能按通用噪声规则丢弃。
+  out.add(applyPhoneticsIfNeeded(t))
+}
+// 优先生成延世教材词汇，确保长批处理在被中断时先完成用户当前需求。
+YONSEI_WORDS.forEach((w) => addYonsei(w.korean))
 ALPHABET.forEach((s) => { if (s.example && s.example.word) add(s.example.word); add(s.char); if (s.name) add(s.name); if (s.category === 'consonant') add(composeSyllable(s.char, 'ㅏ')); if (s.category === 'batchim') add(composeSyllable('ㅇ', 'ㅏ', s.char)) })
 PRONUNCIATION.forEach((r) => r.examples.forEach((e) => add(e.ko)))
 VOCAB.forEach((topic) => topic.words.forEach((w) => add(w.korean)))
@@ -96,6 +106,10 @@ function hash(s) {
 }
 
 let done = 0, skipped = 0, failed = 0
+function persistManifest() {
+  writeFileSync(MANIFEST, JSON.stringify(manifest, null, 0))
+}
+
 async function synthOne(text) {
   const file = hash(text) + '.mp3'
   if (manifest[text] && existing.has(file)) { skipped++; return }
@@ -108,6 +122,11 @@ async function synthOne(text) {
       writeFileSync(join(OUT_DIR, file), buf)
       manifest[text] = file
       done++
+      // 增量持久化：长批处理被网络或执行会话中断时，可以安全断点续跑。
+      if (done % 20 === 0) {
+        persistManifest()
+        console.log(`进度：新增 ${done}，失败 ${failed}`)
+      }
       return
     } catch (e) {
       if (attempt === 2) { failed++; console.error('FAIL:', text, e.message) }
@@ -126,7 +145,7 @@ async function worker() {
 }
 ;(async () => {
   await Promise.all(Array.from({ length: CONCURRENCY }, worker))
-  writeFileSync(MANIFEST, JSON.stringify(manifest, null, 0))
+  persistManifest()
   console.log(`完成：新增 ${done} / 跳过已存在 ${skipped} / 失败 ${failed}`)
   console.log(`manifest 共 ${Object.keys(manifest).length} 条`)
 })().catch((e) => { console.error('FATAL:', e.message); process.exit(1) })

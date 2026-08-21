@@ -14,8 +14,9 @@ import { sceneVocab, topicVocab } from './src/data/ieltsVocabData'
 import { PRONUNCIATION } from './src/data/pronunciation'
 import { ALL_SYNONYMS } from './src/data/ieltsVocabNew'
 import { getSynonymEnrichment } from './src/data/ieltsSynonymEnrichment'
+import { YONSEI_WORDS } from './src/data/yonseiVocab'
 import { createReviewItem, reviewItem, isDue } from './src/utils/review'
-export { GRAMMAR, grammarItems, longSentences, FULL_SCENE_GROUPS, FULL_TOPIC_GROUPS, sceneVocab, topicVocab, PRONUNCIATION, ALL_SYNONYMS, getSynonymEnrichment, createReviewItem, reviewItem, isDue }
+export { GRAMMAR, grammarItems, longSentences, FULL_SCENE_GROUPS, FULL_TOPIC_GROUPS, sceneVocab, topicVocab, PRONUNCIATION, ALL_SYNONYMS, getSynonymEnrichment, YONSEI_WORDS, createReviewItem, reviewItem, isDue }
 `
 
 const dir = mkdtempSync(join(tmpdir(), 'v4test-'))
@@ -89,6 +90,15 @@ const priority = ['link', 'final', 'nasal', 'liquid', 'tense', 'aspiration']
 check('音变规则 id 唯一', new Set(P.map((rule) => rule.id)).size === P.length)
 check('六类重点规则齐全', priority.every((id) => P.some((rule) => rule.id === id)), priority.join('、'))
 check('重点规则均含公式与例词', priority.every((id) => { const rule = P.find((item) => item.id === id); return !!rule?.formula && (rule.examples || []).length >= 3 }))
+
+// ───────── 延世韩国语词汇字段完整性 ─────────
+console.log('\n[延世韩国语词汇字段]')
+const missingYonseiPos = m.YONSEI_WORDS.filter((word) => !String(word.posZh || word.pos || '').trim())
+const missingYonseiRomanization = m.YONSEI_WORDS.filter((word) => !String(word.romanization || '').trim())
+check('延世词条已接入', m.YONSEI_WORDS.length >= 4000, `实际 ${m.YONSEI_WORDS.length} 条`)
+check('每条含中文词性', missingYonseiPos.length === 0, `缺失 ${missingYonseiPos.length} 条`)
+check('每条含罗马音', missingYonseiRomanization.length === 0, `缺失 ${missingYonseiRomanization.length} 条`)
+check('示例词性「네」可用', m.YONSEI_WORDS.some((word) => word.volume === 1 && word.korean === '네' && word.posZh === '叹'))
 
 // ───────── 问题3：雅思词汇「词汇真经全量」 ─────────
 console.log('\n[问题3] 雅思词汇全量切换')

@@ -19,7 +19,7 @@ const checks = [
   ['index links manifest', index.includes('rel="manifest"')],
   ['index has iOS safe viewport', index.includes('viewport-fit=cover')],
   ['index links apple touch icon', index.includes('apple-touch-icon')],
-  ['service worker caches shell', sw.includes('lavender-study-shell-v1') && sw.includes("request.mode === 'navigate'")],
+  ['service worker caches shell', sw.includes('lavender-study-shell-v2') && sw.includes("/audio/ko/manifest.json?v=2") && sw.includes("request.mode === 'navigate'")],
   ['service worker supports updates', sw.includes('SKIP_WAITING')],
   ['Vercel API entries exist', exists('api/tts.js') && exists('api/tts/health.js') && read('api/tts.js').includes("../server/index.js")],
   ['Vercel SPA rewrite keeps API paths', vercel.includes('"rewrites"') && vercel.includes('"destination": "/index.html"') && vercel.includes('(?!api')],

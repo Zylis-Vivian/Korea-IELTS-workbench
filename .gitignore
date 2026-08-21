@@ -10,10 +10,15 @@ dist_bak/
 dist_old_*/
 dist-verify/
 dist-deploy/
+# Personal print artifacts stay local; do not publish PDFs or render previews.
+output/pdf/
+tmp/pdfs/
 *.local
 
 # Temp / generated scripts
 tmp/
+__pycache__/
+*.pyc
 verify-pronunciation.mjs
 vite.config.ts.timestamp-*
 

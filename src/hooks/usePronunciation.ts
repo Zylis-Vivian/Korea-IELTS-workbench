@@ -14,8 +14,8 @@
 // 非韩语（如英语）直接走 Web Speech。
 import { useCallback } from 'react'
 import { useStore } from '../stores/useStore'
-import { applyPhoneticsIfNeeded } from '../utils/koreanPhonetics'
 import { getCachedAudio, cacheAudio } from '../utils/pronunciationCache'
+import { loadYonseiAudioManifest, yonseiAudioFile, yonseiAudioKey } from '../utils/yonseiAudio'
 // synthEdge 改为动态导入（避免 edge-tts-universal 在模块加载时触发 TDZ 崩溃）
 // 仅在用户点击发音、走到 Edge TTS 兜底路径时才加载
 import { hasKoreanVoice } from '../utils/speech'
@@ -39,22 +39,10 @@ if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
   window.speechSynthesis.onvoiceschanged = loadVoices
 }
 
-// ── 预生成音频 manifest（懒加载，仅一次） ──
-// 必须在调用 loadManifest() 之前声明，否则 let 的 TDZ 会在模块加载时抛错导致整页白屏
-let manifestPromise: Promise<Record<string, string>> | null = null
-function loadManifest(): Promise<Record<string, string>> {
-  if (!manifestPromise) {
-    manifestPromise = fetch('/audio/ko/manifest.json')
-      .then((r) => (r.ok ? r.json() : {}))
-      .catch(() => ({} as Record<string, string>))
-  }
-  return manifestPromise
-}
-
 // 应用启动即预取本地音频 manifest（仅一次），确保首次点击时无需等待网络，
 // 直接命中本地 MP3 播放，规避浏览器“用户手势后异步播放被拦截”的风险。
 if (typeof window !== 'undefined') {
-  void loadManifest()
+  void loadYonseiAudioManifest()
 }
 
 function pickVoice(lang = 'ko-KR'): SpeechSynthesisVoice | undefined {
@@ -156,12 +144,12 @@ export function usePronunciation() {
       }
 
       // 韩语：句子/短语先做音变预处理（单词与单字母自动跳过）；并 trim 以对齐音频 manifest 键名
-      const ttsText = applyPhoneticsIfNeeded(text.trim())
+      const ttsText = yonseiAudioKey(text)
 
       try {
         // 0) 预生成本地音频（同域 MP3，标准首尔音，优先且最稳）
-        const manifest = await loadManifest()
-        const file = manifest[ttsText]
+        const manifest = await loadYonseiAudioManifest()
+        const file = yonseiAudioFile(ttsText, manifest)
         if (file) {
           setPronStatus({ level: 'green', activeEngine: '本地音频(标准首尔音)' })
           await playUrl(`/audio/ko/${file}`)

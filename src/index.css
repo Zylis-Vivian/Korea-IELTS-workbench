@@ -69,6 +69,16 @@ textarea {
   min-height: 44px;
 }
 
+/*
+ * The mobile tab bar and the pronunciation-status pill are fixed overlays.
+ * Keep enough scrollable space after page content so bottom pagination and
+ * action buttons can be brought fully above both overlays on small screens.
+ */
+.mobile-content {
+  padding-bottom: calc(10.5rem + env(safe-area-inset-bottom));
+  scroll-padding-bottom: calc(10.5rem + env(safe-area-inset-bottom));
+}
+
 .mobile-more-panel {
   padding-bottom: max(1rem, calc(1rem + env(safe-area-inset-bottom)));
 }
@@ -107,6 +117,11 @@ textarea {
 }
 
 @media (min-width: 1024px) {
+  .mobile-content {
+    padding-bottom: 1.5rem;
+    scroll-padding-bottom: 1.5rem;
+  }
+
   .pronunciation-status {
     bottom: 1rem;
   }
