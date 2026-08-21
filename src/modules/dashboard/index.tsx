@@ -129,3 +129,4 @@ function Stat({ icon, label, value, color, sub }: { icon: React.ReactNode; label
     </div>
   )
 }
+
