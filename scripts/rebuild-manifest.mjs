@@ -1,7 +1,7 @@
 // scripts/rebuild-manifest.mjs
 // 从已生成的 MP3 反推 manifest：文件名即 sha1(文本) 前 24 位，直接重建映射，无需重新合成。
 import { build } from 'esbuild'
-import { writeFileSync, existsSync, readdirSync } from 'fs'
+import { writeFileSync, readdirSync, statSync, rmSync } from 'fs'
 import { createHash } from 'crypto'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { dirname, join } from 'path'
@@ -17,6 +17,7 @@ import { PRONUNCIATION } from './src/data/pronunciation'
 import { VOCAB } from './src/data/vocab'
 import { DIALOGUES } from './src/data/dialogue'
 import { GRAMMAR } from './src/data/grammar'
+import { YONSEI_WORDS } from './src/data/yonseiVocab'
 import { applyPhoneticsIfNeeded } from './src/utils/koreanPhonetics'
 
 const out = new Set()
@@ -28,6 +29,13 @@ const add = (s) => {
   if (/[a-zA-Z→★·]/.test(t)) return
   out.add(applyPhoneticsIfNeeded(t))
 }
+const addYonsei = (s) => {
+  if (typeof s !== 'string') return
+  const t = s.trim().normalize('NFC')
+  if (!t) return
+  out.add(applyPhoneticsIfNeeded(t))
+}
+YONSEI_WORDS.forEach((w) => addYonsei(w.korean))
 ALPHABET.forEach((s) => { if (s.example && s.example.word) add(s.example.word); add(s.char) })
 PRONUNCIATION.forEach((r) => r.examples.forEach((e) => add(e.ko)))
 VOCAB.forEach((topic) => topic.words.forEach((w) => add(w.korean)))
@@ -43,8 +51,9 @@ const res = await build({
 const collectPath = join(__dirname, '_collect.mjs')
 writeFileSync(collectPath, res.outputFiles[0].text)
 const { STRINGS } = await import(pathToFileURL(collectPath).href)
+rmSync(collectPath, { force: true })
 
-const files = new Set(readdirSync(OUT_DIR).filter((f) => f.endsWith('.mp3')))
+const files = new Set(readdirSync(OUT_DIR).filter((f) => f.endsWith('.mp3') && statSync(join(OUT_DIR, f)).size >= 2048))
 const hash = (s) => createHash('sha1').update(s, 'utf8').digest('hex').slice(0, 24)
 
 const manifest = {}

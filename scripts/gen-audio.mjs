@@ -3,7 +3,7 @@
 // 浏览器直接播放本地文件，彻底摆脱"运行时无后端 / 无系统韩文语音 / 网络被挡"导致的静默失败。
 import { build } from 'esbuild'
 import { EdgeTTS } from 'edge-tts-universal'
-import { writeFileSync, mkdirSync, existsSync, readFileSync, readdirSync } from 'fs'
+import { writeFileSync, mkdirSync, existsSync, readFileSync, readdirSync, statSync, rmSync } from 'fs'
 import { createHash } from 'crypto'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { dirname, join } from 'path'
@@ -14,6 +14,7 @@ const OUT_DIR = join(root, 'public', 'audio', 'ko')
 const MANIFEST = join(OUT_DIR, 'manifest.json')
 const VOICE = 'ko-KR-SunHiNeural' // 标准首尔音（女声）；男声 ko-KR-InJoonNeural 可作扩展
 const CONCURRENCY = Number(process.env.AUDIO_CONCURRENCY || 6)
+const MIN_AUDIO_BYTES = 2048 // 低于此值通常不足 0.35 秒，可能只有静音或被截断的单音节。
 
 // 1) 用 esbuild 把数据 + 音变函数打成可运行模块，提取字符串集合
 const collector = `
@@ -91,6 +92,7 @@ const res = await build({
 const collectPath = join(__dirname, '_collect.mjs')
 writeFileSync(collectPath, res.outputFiles[0].text)
 const { STRINGS } = await import(pathToFileURL(collectPath).href)
+rmSync(collectPath, { force: true })
 console.log(`收集到 ${STRINGS.length} 个待生成韩文串`)
 
 // 2) 逐个合成（支持增量：已存在则跳过）
@@ -112,14 +114,19 @@ function persistManifest() {
 
 async function synthOne(text) {
   const file = hash(text) + '.mp3'
-  if (manifest[text] && existing.has(file)) { skipped++; return }
+  const outputPath = join(OUT_DIR, file)
+  const usableExisting = manifest[text] && existing.has(file) && statSync(outputPath).size >= MIN_AUDIO_BYTES
+  if (usableExisting) { skipped++; return }
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const tts = new EdgeTTS(text, VOICE)
+      // Edge 偶尔会把极短单音节合成为近乎静音的 0.1~0.2 秒空壳；
+      // 重试时补句号只增加自然收尾停顿，不改变词本身的读音。
+      const synthText = attempt === 0 ? text : `${text}.`
+      const tts = new EdgeTTS(synthText, VOICE)
       const r = await tts.synthesize()
       const buf = Buffer.from(await r.audio.arrayBuffer())
-      if (!buf.length) throw new Error('empty audio')
-      writeFileSync(join(OUT_DIR, file), buf)
+      if (buf.length < MIN_AUDIO_BYTES) throw new Error(`audio too short (${buf.length} bytes)`)
+      writeFileSync(outputPath, buf)
       manifest[text] = file
       done++
       // 增量持久化：长批处理被网络或执行会话中断时，可以安全断点续跑。

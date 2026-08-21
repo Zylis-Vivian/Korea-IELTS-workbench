@@ -15,7 +15,14 @@
 import { useCallback } from 'react'
 import { useStore } from '../stores/useStore'
 import { getCachedAudio, cacheAudio } from '../utils/pronunciationCache'
-import { loadYonseiAudioManifest, yonseiAudioFile, yonseiAudioKey } from '../utils/yonseiAudio'
+import {
+  getLoadedYonseiAudioManifest,
+  loadYonseiAudioManifest,
+  yonseiAudioFile,
+  yonseiAudioKey,
+  yonseiAudioUrl,
+} from '../utils/yonseiAudio'
+import { AudioPlaybackError, playAudioBlob, playAudioUrl, stopAudioPlayback } from '../utils/audioPlayback'
 // synthEdge 改为动态导入（避免 edge-tts-universal 在模块加载时触发 TDZ 崩溃）
 // 仅在用户点击发音、走到 Edge TTS 兜底路径时才加载
 import { hasKoreanVoice } from '../utils/speech'
@@ -57,35 +64,31 @@ function pickVoice(lang = 'ko-KR'): SpeechSynthesisVoice | undefined {
   )
 }
 
-function webSpeak(text: string, lang = 'ko-KR', speed = 1) {
+function webSpeak(text: string, lang = 'ko-KR', speed = 1): Promise<boolean> {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
     console.warn('[发音] 当前环境不支持 Web Speech API，无法播放兜底发音')
-    return
+    return Promise.resolve(false)
   }
-  const synth = window.speechSynthesis
-  synth.cancel() // 先取消，避免队列堆积导致“静默 / 只播最后一条”
-  const u = new SpeechSynthesisUtterance(text)
-  u.lang = lang // 显式设置为韩语（标准首尔音由系统/引擎决定）
-  u.rate = speed
-  const v = pickVoice(lang)
-  if (v) u.voice = v
-  synth.speak(u) // 在用户 click 同步上下文中调用
-}
-
-function playUrl(url: string): Promise<void> {
   return new Promise((resolve) => {
-    const audio = new Audio(url)
-    audio.onended = () => resolve()
-    audio.onerror = () => resolve()
-    audio.play().catch(() => resolve())
+    const synth = window.speechSynthesis
+    synth.cancel() // 先取消，避免队列堆积导致“静默 / 只播最后一条”
+    const utterance = new SpeechSynthesisUtterance(text)
+    let settled = false
+    const timeout = window.setTimeout(() => finish(false), 30_000)
+    const finish = (ok: boolean) => {
+      if (settled) return
+      settled = true
+      window.clearTimeout(timeout)
+      resolve(ok)
+    }
+    utterance.lang = lang // 显式设置为韩语（标准首尔音由系统/引擎决定）
+    utterance.rate = speed
+    utterance.onend = () => finish(true)
+    utterance.onerror = () => finish(false)
+    const voice = pickVoice(lang)
+    if (voice) utterance.voice = voice
+    synth.speak(utterance) // 在用户 click 同步上下文中调用
   })
-}
-
-function playBlob(blob: Blob) {
-  const url = URL.createObjectURL(blob)
-  const audio = new Audio(url)
-  audio.onended = () => URL.revokeObjectURL(url)
-  audio.play().catch(() => URL.revokeObjectURL(url))
 }
 
 // 轻量提示（发音彻底失败时给出可见反馈，避免“静默失败”让用户以为坏了）
@@ -130,6 +133,11 @@ export function usePronunciation() {
   const ttsSpeed = useStore((s) => s.settings.ttsSpeed)
   const setPronStatus = useStore((s) => s.setPronStatus)
 
+  const stop = useCallback(() => {
+    stopAudioPlayback()
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) window.speechSynthesis.cancel()
+  }, [])
+
   const speak = useCallback(
     async (text: string, opts: { lang?: string; voice?: TtsGender; speed?: number; forceEngine?: TtsEngine } = {}): Promise<SpeakResult> => {
       const lang = opts.lang || 'ko-KR'
@@ -139,8 +147,7 @@ export function usePronunciation() {
 
       // 非韩语 → 直接 Web Speech
       if (!lang.toLowerCase().startsWith('ko')) {
-        webSpeak(text, lang, speed)
-        return 'web'
+        return await webSpeak(text, lang, speed) ? 'web' : 'failed'
       }
 
       // 韩语：句子/短语先做音变预处理（单词与单字母自动跳过）；并 trim 以对齐音频 manifest 键名
@@ -148,34 +155,46 @@ export function usePronunciation() {
 
       try {
         // 0) 预生成本地音频（同域 MP3，标准首尔音，优先且最稳）
-        const manifest = await loadYonseiAudioManifest()
+        // manifest 已预取时不经过 await，确保首次 audio.play() 仍处在用户点击手势内。
+        const manifest = getLoadedYonseiAudioManifest() || await loadYonseiAudioManifest()
         const file = yonseiAudioFile(ttsText, manifest)
         if (file) {
           setPronStatus({ level: 'green', activeEngine: '本地音频(标准首尔音)' })
-          await playUrl(`/audio/ko/${file}`)
-          return 'local'
+          try {
+            await playAudioUrl(yonseiAudioUrl(file), speed)
+            return 'local'
+          } catch (error) {
+            const message = error instanceof AudioPlaybackError ? error.message : '本地音频播放失败，请重试。'
+            console.warn('[发音] 本地音频播放失败', { text: ttsText, file, error })
+            setPronStatus({ level: 'red', activeEngine: '本地音频播放失败' })
+            toast(message)
+            return 'failed'
+          }
         }
 
         // 强制 Web Speech（最轻量，需系统韩文语音）
         if (engine === 'web') {
-          webSpeak(ttsText, 'ko-KR', speed)
-          return 'web'
+          return await webSpeak(ttsText, 'ko-KR', speed) ? 'web' : 'failed'
         }
 
         // 命中缓存（后端或 Edge 生成的音频 blob，记录来源引擎）
         const cacheKey = `${engine}:${voice}:${speed}:${ttsText}`
         const cached = await getCachedAudio(cacheKey)
         if (cached) {
-          playBlob(cached.blob)
-          setPronStatus({ level: 'green', activeEngine: cached.engine || '缓存音频' })
-          return (cached.engine as SpeakResult) || 'azure'
+          try {
+            await playAudioBlob(cached.blob, speed)
+            setPronStatus({ level: 'green', activeEngine: cached.engine || '缓存音频' })
+            return (cached.engine as SpeakResult) || 'azure'
+          } catch {
+            return 'failed'
+          }
         }
 
         // 1) 后端 /api/tts（本地 npm start 带密钥时可用，Azure/Google 神经网络语音，标准首尔音）
         if (engine !== 'edge') {
           try {
             const { blob, used } = await fetchTts(ttsText, engine, voice, speed)
-            playBlob(blob)
+            await playAudioBlob(blob, speed)
             void cacheAudio(cacheKey, blob, used)
             setPronStatus({ level: 'green', activeEngine: used })
             return used as SpeakResult
@@ -188,28 +207,27 @@ export function usePronunciation() {
         try {
           const { synthEdge: _synthEdge } = await import('../utils/edgeTts')
           const blob = await _synthEdge(ttsText, voice, speed)
-          playBlob(blob)
+          await playAudioBlob(blob, speed)
           void cacheAudio(cacheKey, blob, 'edge')
           setPronStatus({ level: 'green', activeEngine: 'Edge TTS' })
           return 'edge' as SpeakResult
         } catch {
           // 3) 最后降级到浏览器 Web Speech（需系统装有韩文语音）
-          webSpeak(ttsText, 'ko-KR', speed)
+          const ok = await webSpeak(ttsText, 'ko-KR', speed)
           setPronStatus({
             level: hasKoreanVoice() ? 'yellow' : 'red',
             activeEngine: hasKoreanVoice() ? 'Web Speech' : '无可用韩文语音',
           })
-          return 'web-fallback'
+          return ok ? 'web-fallback' : 'failed'
         }
       } catch {
         // 任何意外异常都尽量用 Web Speech 兜底
-        webSpeak(ttsText, 'ko-KR', speed)
-        return 'web-fallback'
+        return await webSpeak(ttsText, 'ko-KR', speed) ? 'web-fallback' : 'failed'
       }
     },
     [ttsEngine, ttsGender, ttsSpeed, setPronStatus]
   )
 
-  return { speak }
+  return { speak, stop }
 }
 

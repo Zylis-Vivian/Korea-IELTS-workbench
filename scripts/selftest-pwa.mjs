@@ -9,6 +9,8 @@ const manifest = JSON.parse(read('public/manifest.webmanifest'))
 const index = read('index.html')
 const sw = read('public/sw.js')
 const sidebar = read('src/components/Sidebar.tsx')
+const yonsei = read('src/modules/korean-yonsei/index.tsx')
+const pronunciation = read('src/hooks/usePronunciation.ts')
 const vercel = read('vercel.json')
 
 const checks = [
@@ -19,11 +21,13 @@ const checks = [
   ['index links manifest', index.includes('rel="manifest"')],
   ['index has iOS safe viewport', index.includes('viewport-fit=cover')],
   ['index links apple touch icon', index.includes('apple-touch-icon')],
-  ['service worker caches shell', sw.includes('lavender-study-shell-v2') && sw.includes("/audio/ko/manifest.json?v=2") && sw.includes("request.mode === 'navigate'")],
+  ['service worker caches shell', sw.includes('lavender-study-shell-v3') && sw.includes("/audio/ko/manifest.json?v=3") && sw.includes("request.mode === 'navigate'")],
   ['service worker supports updates', sw.includes('SKIP_WAITING')],
   ['Vercel API entries exist', exists('api/tts.js') && exists('api/tts/health.js') && read('api/tts.js').includes("../server/index.js")],
   ['Vercel SPA rewrite keeps API paths', vercel.includes('"rewrites"') && vercel.includes('"destination": "/index.html"') && vercel.includes('(?!api')],
   ['mobile primary nav includes review loop', ['/review', '/dictation', '/shadowing'].every((route) => sidebar.includes(`to: '${route}'`))],
+  ['Yonsei unit shadowing stays on the vocabulary page', yonsei.includes('页内跟读本单元') && !yonsei.includes('to={`/shadowing?source=yonsei')],
+  ['local MP3 uses the shared controllable player', pronunciation.includes('playAudioUrl(yonseiAudioUrl(file), speed)') && pronunciation.includes('stopAudioPlayback')],
 ]
 
 let failed = 0

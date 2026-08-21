@@ -2,7 +2,7 @@
 // 用法：node scripts/selftest-v4.mjs
 import esbuild from 'esbuild'
 import { pathToFileURL } from 'node:url'
-import { writeFileSync, mkdtempSync } from 'node:fs'
+import { writeFileSync, mkdtempSync, readFileSync, existsSync, statSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
@@ -15,8 +15,9 @@ import { PRONUNCIATION } from './src/data/pronunciation'
 import { ALL_SYNONYMS } from './src/data/ieltsVocabNew'
 import { getSynonymEnrichment } from './src/data/ieltsSynonymEnrichment'
 import { YONSEI_WORDS } from './src/data/yonseiVocab'
+import { yonseiAudioKey } from './src/utils/yonseiAudio'
 import { createReviewItem, reviewItem, isDue } from './src/utils/review'
-export { GRAMMAR, grammarItems, longSentences, FULL_SCENE_GROUPS, FULL_TOPIC_GROUPS, sceneVocab, topicVocab, PRONUNCIATION, ALL_SYNONYMS, getSynonymEnrichment, YONSEI_WORDS, createReviewItem, reviewItem, isDue }
+export { GRAMMAR, grammarItems, longSentences, FULL_SCENE_GROUPS, FULL_TOPIC_GROUPS, sceneVocab, topicVocab, PRONUNCIATION, ALL_SYNONYMS, getSynonymEnrichment, YONSEI_WORDS, yonseiAudioKey, createReviewItem, reviewItem, isDue }
 `
 
 const dir = mkdtempSync(join(tmpdir(), 'v4test-'))
@@ -99,6 +100,19 @@ check('延世词条已接入', m.YONSEI_WORDS.length >= 4000, `实际 ${m.YONSEI
 check('每条含中文词性', missingYonseiPos.length === 0, `缺失 ${missingYonseiPos.length} 条`)
 check('每条含罗马音', missingYonseiRomanization.length === 0, `缺失 ${missingYonseiRomanization.length} 条`)
 check('示例词性「네」可用', m.YONSEI_WORDS.some((word) => word.volume === 1 && word.korean === '네' && word.posZh === '叹'))
+
+const audioRoot = join(process.cwd(), 'public', 'audio', 'ko')
+const audioManifest = JSON.parse(readFileSync(join(audioRoot, 'manifest.json'), 'utf8'))
+const missingYonseiAudio = m.YONSEI_WORDS.filter((word) => !audioManifest[m.yonseiAudioKey(word.korean)])
+const manifestFiles = Array.from(new Set(Object.values(audioManifest)))
+const missingAudioFiles = manifestFiles.filter((file) => !existsSync(join(audioRoot, file)))
+const tooShortAudioFiles = manifestFiles.filter((file) => {
+  const path = join(audioRoot, file)
+  return existsSync(path) && statSync(path).size < 2048
+})
+check('每条延世词汇均有音频映射', missingYonseiAudio.length === 0, `缺失 ${missingYonseiAudio.length} 条`)
+check('manifest 引用的 MP3 均存在', missingAudioFiles.length === 0, `缺失 ${missingAudioFiles.length} 个文件`)
+check('MP3 不含异常短空壳', tooShortAudioFiles.length === 0, `异常 ${tooShortAudioFiles.length} 个文件`)
 
 // ───────── 问题3：雅思词汇「词汇真经全量」 ─────────
 console.log('\n[问题3] 雅思词汇全量切换')

@@ -85,7 +85,7 @@ function wait(ms: number) {
 
 export default function Shadowing() {
   const [params, setParams] = useSearchParams()
-  const { speak } = usePronunciation()
+  const { speak, stop } = usePronunciation()
   const upsertReviewItem = useStore((state) => state.upsertReviewItem)
   const review = useStore((state) => state.review)
   const source = (params.get('source') || 'all') as ShadowSource | 'all'
@@ -156,17 +156,19 @@ export default function Shadowing() {
     setRecordedUrl(null)
     setRecordError('')
     sequenceTokenRef.current += 1
+    stop()
     setIsSequencePlaying(false)
-  }, [initialIndex, source, volume, lesson, unit, itemId])
+  }, [initialIndex, source, volume, lesson, unit, itemId, stop])
 
   useEffect(() => {
     return () => {
       sequenceTokenRef.current += 1
+      stop()
       recorderRef.current?.stop()
       streamRef.current?.getTracks().forEach((track) => track.stop())
       if (recordedUrlRef.current) URL.revokeObjectURL(recordedUrlRef.current)
     }
-  }, [])
+  }, [stop])
 
   const setFilter = (name: 'source' | 'volume' | 'lesson' | 'unit', value: string) => {
     const next = new URLSearchParams(params)
@@ -208,6 +210,7 @@ export default function Shadowing() {
 
   const stopSequence = () => {
     sequenceTokenRef.current += 1
+    stop()
     setIsSequencePlaying(false)
   }
 
@@ -225,7 +228,14 @@ export default function Shadowing() {
       setIndex(itemIndex)
       for (let repeat = 0; repeat < repeatCount; repeat += 1) {
         if (sequenceTokenRef.current !== token) break
-        await speak(items[itemIndex].text, { lang: items[itemIndex].language === 'en' ? 'en-US' : 'ko-KR', speed })
+        const result = await speak(items[itemIndex].text, { lang: items[itemIndex].language === 'en' ? 'en-US' : 'ko-KR', speed })
+        if (result === 'failed') {
+          sequenceTokenRef.current += 1
+          stop()
+          setRecordError(`“${items[itemIndex].text}”播放失败，队列已暂停，没有静默跳过。请重新点击后继续。`)
+          setIsSequencePlaying(false)
+          return
+        }
         await wait(gap * 1000)
       }
     }

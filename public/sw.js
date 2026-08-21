@@ -1,12 +1,12 @@
 // 音频 manifest 会随词库批次更新；升级缓存版本，避免手机继续读取旧覆盖清单。
-const CACHE_NAME = 'lavender-study-shell-v2'
+const CACHE_NAME = 'lavender-study-shell-v3'
 const APP_SHELL = [
   '/',
   '/index.html',
   '/manifest.webmanifest',
   '/icons/lavender-study.svg',
   '/icons/lavender-study.jpg',
-  '/audio/ko/manifest.json?v=2',
+  '/audio/ko/manifest.json?v=3',
 ]
 
 self.addEventListener('install', (event) => {

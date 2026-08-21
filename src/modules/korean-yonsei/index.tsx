@@ -1,12 +1,32 @@
-import { Fragment, useEffect, useMemo, useState } from 'react'
-import { BookOpen, ChevronLeft, ChevronRight, GraduationCap, Mic2, Search, Volume2 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import { BookOpen, ChevronLeft, ChevronRight, CircleStop, GraduationCap, Mic2, Play, RotateCcw, Search, Volume2 } from 'lucide-react'
 import { PageHeader } from '../../components/Layout'
 import { usePronunciation } from '../../hooks/usePronunciation'
 import { yonseiSectionLabel, YONSEI_LESSONS, YONSEI_WORDS, type YonseiWord } from '../../data/yonseiVocab'
-import { loadYonseiAudioManifest, yonseiAudioFile, type YonseiAudioManifest } from '../../utils/yonseiAudio'
+import { loadYonseiAudioManifest, yonseiAudioFile, yonseiAudioUrl, type YonseiAudioManifest } from '../../utils/yonseiAudio'
+import { AudioPlaybackError, playAudioUrl, stopAudioPlayback } from '../../utils/audioPlayback'
 
 const PAGE_SIZE = 50
+const SPEEDS = [0.75, 0.9, 1, 1.1, 1.25]
+const REPEATS = [1, 2, 3]
+const GAPS = [1, 1.5, 2.5, 4]
+
+type UnitPlaybackStatus = 'playing' | 'stopped' | 'completed' | 'error'
+
+interface UnitPlayback {
+  key: string
+  volume: number
+  lesson: number
+  unit: number
+  words: YonseiWord[]
+  currentIndex: number
+  status: UnitPlaybackStatus
+  error?: string
+}
+
+function wait(ms: number) {
+  return new Promise<void>((resolve) => window.setTimeout(resolve, ms))
+}
 
 interface OriginMeta {
   label: string
@@ -129,6 +149,11 @@ export default function KoreanYonsei() {
   const [q, setQ] = useState('')
   const [page, setPage] = useState(1)
   const [audioManifest, setAudioManifest] = useState<YonseiAudioManifest | null>(null)
+  const [playbackSpeed, setPlaybackSpeed] = useState(1)
+  const [playbackRepeats, setPlaybackRepeats] = useState(1)
+  const [playbackGap, setPlaybackGap] = useState(1.5)
+  const [unitPlayback, setUnitPlayback] = useState<UnitPlayback | null>(null)
+  const playbackTokenRef = useRef(0)
 
   useEffect(() => {
     let active = true
@@ -138,6 +163,11 @@ export default function KoreanYonsei() {
     return () => {
       active = false
     }
+  }, [])
+
+  useEffect(() => () => {
+    playbackTokenRef.current += 1
+    stopAudioPlayback()
   }, [])
 
   const books = useMemo(() => YONSEI_LESSONS.filter((item, index, all) => all.findIndex((x) => x.volume === item.volume) === index), [])
@@ -192,6 +222,85 @@ export default function KoreanYonsei() {
     }
     return result
   }, [audioManifest])
+
+  const activePlaybackWord = unitPlayback?.words[unitPlayback.currentIndex]
+
+  const stopUnitPlayback = () => {
+    playbackTokenRef.current += 1
+    stopAudioPlayback()
+    setUnitPlayback((current) => current ? { ...current, status: 'stopped' } : current)
+  }
+
+  const startUnitPlayback = (volume: number, lessonNumber: number, unitNumber: number) => {
+    const key = unitKey(volume, lessonNumber, unitNumber)
+    if (unitPlayback?.key === key && unitPlayback.status === 'playing') {
+      stopUnitPlayback()
+      return
+    }
+
+    const words = YONSEI_WORDS.filter((word) =>
+      word.volume === volume && word.lesson === lessonNumber && word.unit === unitNumber
+    )
+    if (!words.length) return
+
+    if (!audioManifest) {
+      setUnitPlayback({
+        key,
+        volume,
+        lesson: lessonNumber,
+        unit: unitNumber,
+        words,
+        currentIndex: 0,
+        status: 'error',
+        error: '音频清单仍在加载，请稍等几秒后重新点击。',
+      })
+      return
+    }
+
+    playbackTokenRef.current += 1
+    const token = playbackTokenRef.current
+    stopAudioPlayback()
+    setUnitPlayback({ key, volume, lesson: lessonNumber, unit: unitNumber, words, currentIndex: 0, status: 'playing' })
+
+    // 不在第一次播放前 await 任何请求：第一词的 audio.play() 保持在用户点击手势中，
+    // 后续词复用同一个 HTMLAudioElement，避免 iPhone/iPad 间歇性拦截自动播放。
+    const run = async () => {
+      for (let wordIndex = 0; wordIndex < words.length; wordIndex += 1) {
+        if (playbackTokenRef.current !== token) return
+        const word = words[wordIndex]
+        const file = yonseiAudioFile(word.korean, audioManifest)
+        if (!file) throw new Error(`“${word.korean}”缺少本地音频。`)
+
+        setUnitPlayback((current) => current?.key === key
+          ? { ...current, currentIndex: wordIndex, status: 'playing', error: undefined }
+          : current)
+
+        for (let repeat = 0; repeat < playbackRepeats; repeat += 1) {
+          if (playbackTokenRef.current !== token) return
+          await playAudioUrl(yonseiAudioUrl(file), playbackSpeed)
+          if (playbackTokenRef.current !== token) return
+          await wait(playbackGap * 1000)
+        }
+      }
+
+      if (playbackTokenRef.current === token) {
+        setUnitPlayback((current) => current?.key === key
+          ? { ...current, currentIndex: words.length - 1, status: 'completed' }
+          : current)
+      }
+    }
+
+    void run().catch((error: unknown) => {
+      if (playbackTokenRef.current !== token) return
+      stopAudioPlayback()
+      const message = error instanceof AudioPlaybackError || error instanceof Error
+        ? error.message
+        : '音频播放失败，请重新点击跟读。'
+      setUnitPlayback((current) => current?.key === key
+        ? { ...current, status: 'error', error: `${message} 播放已暂停，没有静默跳过后续单词。` }
+        : current)
+    })
+  }
 
   const resetLessonAndUnit = (nextBook: number | '') => {
     setBook(nextBook)
@@ -306,16 +415,113 @@ export default function KoreanYonsei() {
                   })()
                 : '正在检查本地音频'}
             </span>
-            <Link
-              to={`/shadowing?source=yonsei&volume=${selectedLesson.volume}&lesson=${selectedLesson.lesson}&unit=${unit}`}
-              className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-lavender px-3 py-2 text-sm text-white shadow-soft hover:bg-lavender-deep"
+            <button
+              type="button"
+              onClick={() => startUnitPlayback(selectedLesson.volume, selectedLesson.lesson, unit)}
+              disabled={!audioManifest}
+              className="inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-xl bg-lavender px-3 py-2 text-sm text-white shadow-soft hover:bg-lavender-deep disabled:cursor-wait disabled:opacity-50"
             >
-              <Mic2 size={16} />
-              跟读本单元
-            </Link>
+              {unitPlayback?.key === unitKey(selectedLesson.volume, selectedLesson.lesson, unit) && unitPlayback.status === 'playing'
+                ? <CircleStop size={16} />
+                : <Mic2 size={16} />}
+              {unitPlayback?.key === unitKey(selectedLesson.volume, selectedLesson.lesson, unit) && unitPlayback.status === 'playing'
+                ? '停止跟读'
+                : '页内跟读本单元'}
+            </button>
           </div>
         ) : null}
       </div>
+
+      {unitPlayback ? (
+        <section className="mb-4 rounded-card border border-lavender-light bg-white p-4 shadow-card" aria-label="延世单元页内跟读">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0" aria-live="polite">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="font-semibold text-lavender-deep">
+                  第{unitPlayback.volume}册—第{unitPlayback.lesson}课—第{unitPlayback.unit}单元
+                </span>
+                <span className={`rounded-full px-2 py-0.5 text-[11px] ${
+                  unitPlayback.status === 'playing'
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : unitPlayback.status === 'completed'
+                      ? 'bg-lavender-light text-lavender-deep'
+                      : unitPlayback.status === 'error'
+                        ? 'bg-rose-100 text-rose-700'
+                        : 'bg-gray-100 text-gray-500'
+                }`}>
+                  {unitPlayback.status === 'playing'
+                    ? '正在页内跟读'
+                    : unitPlayback.status === 'completed'
+                      ? '本单元已播完'
+                      : unitPlayback.status === 'error'
+                        ? '播放已暂停'
+                        : '已停止'}
+                </span>
+              </div>
+              {activePlaybackWord ? (
+                <div className="mt-2">
+                  <span className="korean-font text-xl font-bold text-slate-800">{activePlaybackWord.korean}</span>
+                  <span className="ml-2 text-xs text-gray-400">{activePlaybackWord.romanization}</span>
+                  <div className="mt-1 text-sm text-gray-600">{activePlaybackWord.chinese}</div>
+                </div>
+              ) : null}
+              <div className="mt-2 text-xs text-gray-400">
+                第 {unitPlayback.currentIndex + 1} / {unitPlayback.words.length} 词 · 每词 {playbackRepeats} 次 · 停顿 {playbackGap} 秒
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => unitPlayback.status === 'playing'
+                ? stopUnitPlayback()
+                : startUnitPlayback(unitPlayback.volume, unitPlayback.lesson, unitPlayback.unit)}
+              className={`inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-xl px-4 py-2 text-sm text-white ${unitPlayback.status === 'playing' ? 'bg-coral' : 'bg-lavender hover:bg-lavender-deep'}`}
+            >
+              {unitPlayback.status === 'playing'
+                ? <><CircleStop size={16} />立即停止</>
+                : unitPlayback.status === 'completed'
+                  ? <><RotateCcw size={16} />重新跟读</>
+                  : <><Play size={16} />从头播放</>}
+            </button>
+          </div>
+
+          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-lavender-light/70" aria-hidden="true">
+            <div
+              className="h-full rounded-full bg-lavender transition-[width] duration-300"
+              style={{ width: `${unitPlayback.status === 'completed' ? 100 : ((unitPlayback.currentIndex + 1) / unitPlayback.words.length) * 100}%` }}
+            />
+          </div>
+
+          <div className="mt-3 grid grid-cols-3 gap-2 sm:max-w-xl">
+            <label className="text-xs text-gray-500">
+              语速
+              <select value={playbackSpeed} disabled={unitPlayback.status === 'playing'} onChange={(event) => setPlaybackSpeed(Number(event.target.value))} className="inp mt-1 w-full py-1 text-xs disabled:opacity-60">
+                {SPEEDS.map((value) => <option key={value} value={value}>{value}x</option>)}
+              </select>
+            </label>
+            <label className="text-xs text-gray-500">
+              每词次数
+              <select value={playbackRepeats} disabled={unitPlayback.status === 'playing'} onChange={(event) => setPlaybackRepeats(Number(event.target.value))} className="inp mt-1 w-full py-1 text-xs disabled:opacity-60">
+                {REPEATS.map((value) => <option key={value} value={value}>{value} 次</option>)}
+              </select>
+            </label>
+            <label className="text-xs text-gray-500">
+              跟读停顿
+              <select value={playbackGap} disabled={unitPlayback.status === 'playing'} onChange={(event) => setPlaybackGap(Number(event.target.value))} className="inp mt-1 w-full py-1 text-xs disabled:opacity-60">
+                {GAPS.map((value) => <option key={value} value={value}>{value} 秒</option>)}
+              </select>
+            </label>
+          </div>
+
+          {unitPlayback.error ? (
+            <div className="mt-3 rounded-xl bg-rose-50 px-3 py-2 text-xs text-rose-700" role="alert">
+              {unitPlayback.error}
+            </div>
+          ) : (
+            <div className="mt-3 text-xs text-gray-400">音频播完后会停顿，停顿期间跟读；全程留在当前延世词汇页面。</div>
+          )}
+        </section>
+      ) : null}
 
       <div className="mb-2 flex flex-col gap-1 text-xs text-gray-400 sm:flex-row sm:items-center sm:justify-between">
         <span>
@@ -366,12 +572,16 @@ export default function KoreanYonsei() {
                                   })()
                                 : '音频检查中'}
                             </span>
-                            <Link
-                              to={`/shadowing?source=yonsei&volume=${word.volume}&lesson=${word.lesson}&unit=${word.unit}`}
-                              className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs text-lavender-deep shadow-sm hover:bg-lavender hover:text-white"
+                            <button
+                              type="button"
+                              onClick={() => startUnitPlayback(word.volume, word.lesson, word.unit)}
+                              disabled={!audioManifest}
+                              className="inline-flex min-h-9 items-center gap-1 rounded-full bg-white px-2.5 py-1 text-xs text-lavender-deep shadow-sm hover:bg-lavender hover:text-white disabled:cursor-wait disabled:opacity-50"
                             >
-                              <Mic2 size={13} />跟读
-                            </Link>
+                              {unitPlayback?.key === unitKey(word.volume, word.lesson, word.unit) && unitPlayback.status === 'playing'
+                                ? <><CircleStop size={13} />停止</>
+                                : <><Mic2 size={13} />页内跟读</>}
+                            </button>
                           </div>
                         </div>
                       </td>
@@ -379,7 +589,8 @@ export default function KoreanYonsei() {
                   ) : null}
                   <tr
                     key={word.entryId}
-                    className={`border-b border-gray-100 transition hover:bg-lavender-light/30 border-l-4 ${info.rowBorder}`}
+                    aria-current={activePlaybackWord?.entryId === word.entryId ? 'true' : undefined}
+                    className={`border-b border-gray-100 transition hover:bg-lavender-light/30 border-l-4 ${info.rowBorder} ${activePlaybackWord?.entryId === word.entryId ? 'bg-lavender-light/60 ring-1 ring-inset ring-lavender' : ''}`}
                   >
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap items-start gap-2">
